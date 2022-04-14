@@ -11,6 +11,7 @@ We have just finished defining each team members roles as well as the general re
 
 ## Status of Frontend Sub-team
 (Frontend/UI) - Kevin & Riya
+
 Goals for the week:
 - Design essential screens (signup/login, main chat interface, messaging/DMs, user feed, my profile/statuses, etc.)
 - Design supplemental screens (creating chats, uploading content, mutual contacts, user profiles)
@@ -20,7 +21,8 @@ Next week:
 - Begin to implement essential screens
 
 ## Status of Backend Sub-team
-- David & Anna
+(Backend/Infrastructure) - David & Anna
+
 Goals for the week:
 - Come up with an initial system design
 - Create Firebase resources (eg Firestore, Cloud Functions, etc)
