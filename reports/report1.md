@@ -3,12 +3,6 @@
 ## Team Status
 We have just finished defining each team members roles as well as the general requirements for this project. We've decided to follow the Agile/Scrum delivery model. During Thursday's project meeting, we plan to take some time to define general user stories and add the to the backlog. If we get time, we will also take on user stories for the upcoming sprint.
 
-## Individual Statuses
-
-### David Roy, Backend
-- David set up the Firebase project for Sociable and has added collaborators. He will help set up the database, cloud functions, and any other environments so the team can jump into development as soon as possible
-
-
 ## Status of Frontend Sub-team
 (Frontend/UI) - Kevin & Riya
 
@@ -23,12 +17,17 @@ Next week:
 ## Status of Backend Sub-team
 (Backend/Infrastructure) - David & Anna
 
+What We've Done:
+- The Firebase project for Sociable has been set up and collaborators have been added.
+
 Goals for the week:
 - Come up with an initial system design
-- Create Firebase resources (eg Firestore, Cloud Functions, etc)
+- Provision Firebase resources (eg Firestore, Cloud Functions, etc) in order for the team to be able to jump into development as soon as possible
 
 Next week:
 - Start building basic APIs to handle messaging
+
+In the next couple weeks:
 - Build a vertical slice proof of concept with regard to sending a message from one user to another
 
 ## Status of Fullstack Sub-team
