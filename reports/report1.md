@@ -36,7 +36,7 @@ In the next couple weeks:
 Goals for the week: 
 - Help on designing the login and sign up screens. 
 - Help the backend crew with programming portions 
--
+
 Next Week: 
 - continue screen design 
 - continue writing, editing, and testing code
