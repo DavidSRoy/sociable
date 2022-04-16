@@ -1,50 +1,82 @@
-# This is a basic workflow to help you get started with Actions
+# # This is a basic workflow to help you get started with Actions
 
-name: Firebase function deploy
+# name: Firebase function deploy
 
-# Controls when the workflow will run
+# # Controls when the workflow will run
+# on:
+#   # Triggers the workflow on push or pull request events but only for the master branch
+#   push:
+#     branches: [ feature/functions-ci ]
+
+
+#   # Allows you to run this workflow manually from the Actions tab
+#   workflow_dispatch:
+
+# # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# jobs:
+#   # This workflow contains a single job called "build"
+#   build:
+#     # The type of runner that the job will run on
+#     runs-on: ubuntu-latest
+
+#     # Steps represent a sequence of tasks that will be executed as part of the job
+#     steps:
+#       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+#       - uses: actions/checkout@v3
+
+#       # Runs a single command using the runners shell
+#       - name: Run a one-line script
+#         run: echo Hello, world!
+
+#       # Runs a set of commands using the runners shell
+#       - name: Install npm packages
+#         run: |
+#           cd API/functions
+#           npm install
+#           cd ..
+
+#       - name: Deploy to Firebase
+#         uses: w9jds/firebase-action@master
+#         with:
+#           args: deploy
+#         env: 
+#           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+
+#       # name: Firebase Deploy
+#       # run: |
+#       #   sudo npm install -g firebase-tools
+#       #   firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
+
+
+name: Deploy to Firebase
+
+# Run this workflow every time a new commit pushed to your repository
 on:
-  # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ feature/functions-ci ]
 
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
+
     runs-on: ubuntu-latest
+    env:
+      working-directory: ./API/functions
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    strategy:
+      matrix:
+        node-version: [10.x]
+
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
-
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Install npm packages
-        run: |
-          cd API/functions
-          npm install
-          cd ..
-
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy
-        env: 
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-
-      # name: Firebase Deploy
-      # run: |
-      #   sudo npm install -g firebase-tools
-      #   firebase deploy --only functions --token ${{ secrets.FIREBASE_TOKEN }}
-
-
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: install libraries
+      run: npm install
+      working-directory: ${{env.working-directory}}
+    - name: install firebase
+      run: npm i firebase-tools -g  
+    - name: deploy
+      run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }}
