@@ -33,6 +33,7 @@ jobs:
         run: |
           cd API/functions
           npm install
+          cd ..
           
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
