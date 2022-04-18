@@ -3,7 +3,7 @@ name: Firebase Cloud Function Deploy
 
 on:
   push:
-    branches: [ feature/functions-ci, master ]
+    branches: [ master ]
 
 jobs:
   build:
