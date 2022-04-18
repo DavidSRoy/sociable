@@ -38,10 +38,11 @@ jobs:
       - name: Deploy to Firebase
         uses: w9jds/firebase-action@master
         with:
-          args: deploy --project sociable-messenger
+          args: deploy
         env: 
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
 
+      # --project sociable-messenger
       # name: Firebase Deploy
       # run: |
       #   sudo npm install -g firebase-tools
