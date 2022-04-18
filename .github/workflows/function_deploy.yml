@@ -79,5 +79,7 @@ jobs:
       working-directory: ${{env.working-directory}}
     - name: install firebase
       run: npm i firebase-tools -g  
+    - name: up a directory
+      run: cd ..
     - name: deploy
       run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }} --project sociable-messenger
