@@ -31,8 +31,8 @@ messaging_api.get('/getUsers', async (request, response) => {
 });
 
 messaging_api.get('/test', async (request, response) => {
-  response.json({"test":"message"});
-})
+  response.json({"test2":"message"});
+});
 
 
 
