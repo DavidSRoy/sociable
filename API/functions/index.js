@@ -10,7 +10,9 @@ const express = require('express');
 // });
 
 
+admin.initializeApp();
 const firestore = admin.firestore();
+
 
 const PROJECTID = 'sociable-messenger';
 const USERS = firestore.collection('test_users');
@@ -24,8 +26,12 @@ async function getUsers() {
     //.map(doc => doc.id);
   }
 
-messaging_api.get('/test', async (request, response) => {
+messaging_api.get('/getUsers', async (request, response) => {
     response.json(await getUsers());
+});
+
+messaging_api.get('/test', async (request, response) => {
+  response.json({"test2":"message"});
 });
 
 
