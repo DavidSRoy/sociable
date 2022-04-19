@@ -55,6 +55,10 @@ messaging_api.post('/send', (request, response) => {
   response.json({"req" : request.query.test});
 });
 
+messaging_api.get('/test', async (request, response) => {
+  response.json({"test2":"message"});
+});
+
 
 //check for new messages
 /*
