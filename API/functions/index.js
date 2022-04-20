@@ -56,7 +56,12 @@ messaging_api.post('/send', (request, response) => {
 });
 
 messaging_api.get('/test', async (request, response) => {
-  response.json({"test2":"message"});
+  const req_key = request.get('auth');
+  if (req_key == KEY) {
+    response.json({"test2":"message"});
+  } else {
+    response.status(401).send('Unauthorized');
+  }
 });
 
 
