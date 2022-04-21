@@ -16,3 +16,20 @@ Goals for the week:
 
 Next Week:
 - Once the proof-of-concept is complete, we will turn our focus to sending/receiving statuses. 
+
+### Frontend Team
+- Riya & Kevin
+
+Picked up user stories related to setting up Xcode project and coming up with initial designs
+
+Goals for the week:
+Build a UI that can make API calls to the messaging API
+
+
+### Fullstack Team
+- Sulaiman and Abas
+
+Picked up user stories related to setting up frontend of messaging proof-of-concept
+
+Goals for the week:
+Help the frontend team build the proof-of-concept
