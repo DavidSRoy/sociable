@@ -59,13 +59,19 @@ messaging_api.get('/test', async (request, response) => {
   response.json({"test2":"message"});
 });
 
+//check for new messages of uid
+messaging_api.get('/getMessages', async (request, response) => {
+  const req_key = request.get('auth');
+  if (req_key == KEY) {
+    await response.json(await getMessages());
+  } else {
+    response.status(401).send('Unauthorized');
+  }
+});
 
-//check for new messages
-/*
-UID
-check uid (new msgs)
-*/
-
-
+async function getMessages() {
+  const snapshot = await firestore.collection('test_users').doc(getUid()).get(); 
+  return snapshot.data().map;
+}
 
 exports.messaging_api = functions.https.onRequest(messaging_api)
