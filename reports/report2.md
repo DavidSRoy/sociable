@@ -3,6 +3,7 @@
 ## Team Status
 We have set up resources in Firebase and started dividing sub-tasks for our first milestone. We are working toward creating a messaging proof-of-concept where a user will be able to send a message from one device to another. This will require the backend infrastructure to be set up such that the frontend can make the appropriate API calls to send and read messages.
 We have also added more use cases to our requirements doc (as per feedback from the last project meeting).
+We have created a kanban board to keep track of progress. We have separated the board into "Frontend todos", "Backend todos", and have a column for our goals for each week. Team members will be moving tasks from the "todo" columns to "in progress" and "done" columns as they complete the task. Our goal is to update the board weekly.
 
 ## Sub-team Status
 ### Backend Team
