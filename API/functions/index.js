@@ -12,6 +12,7 @@ const express = require('express');
 admin.initializeApp();
 const firestore = admin.firestore();
 
+
 const PROJECTID = 'sociable-messenger';
 const USERS = firestore.collection('test_users');
 const KEY = functions.config().messaging.key;
@@ -25,10 +26,37 @@ async function getUsers() {
     //.map(doc => doc.id);
   }
 
-messaging_api.get('/test', async (request, response) => {
-    response.json(await getUsers());
+messaging_api.get('/getUsers', async (request, response) => {
+  const req_key = request.get('auth');
+  if (req_key == KEY) {
+    await response.json(await getUsers());
+  } else {
+    response.status(401).send('Unauthorized');
+  }
 });
 
+messaging_api.post('/send', (request, response) => {
+  
+  const req_key = request.get('auth');
+  if (req_key == KEY) {
+    response.status(200).send('OK');
+    // const uID = request.query.uid;
+    // USERS.doc('')
+    // await USERS.update({
+    //   msgs: 'test'
+    // })
+    // .then(() => {
+    //     console.log("Document successfully written!");
+    // });
+  } else {
+    response.status(401).send('Unauthorized');
+  }
+  response.json({"req" : request.query.test});
+});
+
+messaging_api.get('/test', async (request, response) => {
+  response.json({"test2":"message"});
+});
 
 //check for new messages of uid
 messaging_api.get('/getMessages', async (request, response) => {

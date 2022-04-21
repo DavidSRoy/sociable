@@ -1,5 +1,6 @@
 {
   "projects": {
-    "sociable": "sociable-messenger"
+    "sociable": "sociable-messenger",
+    "default": "sociable-messenger"
   }
 }
