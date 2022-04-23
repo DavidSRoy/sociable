@@ -3,7 +3,7 @@
 
 ## Software Architecture
 
-## Design Architecture
+## Software Design
 
 ## Coding Guideline
 
