@@ -70,7 +70,7 @@ messaging_api.get('/getMessages', async (request, response) => {
 
 async function getMessages(uid) {
   const snapshot = await firestore.collection('test_users').doc(uid).get(); 
-  return snapshot.data;
+  return snapshot.data();
 }
 
 exports.messaging_api = functions.https.onRequest(messaging_api)
