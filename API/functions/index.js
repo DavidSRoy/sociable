@@ -63,15 +63,15 @@ messaging_api.get('/test', async (request, response) => {
 messaging_api.get('/getMessages', async (request, response) => {
   const req_key = request.get('auth');
   if (req_key == KEY) {
-    response.json(await getMessages(request.query.uid));
+    await response.json(await getMessages());
   } else {
     response.status(401).send('Unauthorized');
   }
 });
 
-async function getMessages(uid) {
-  const snapshot = await firestore.collection('test_users').doc(uid).get(); 
-  return snapshot.data();
+async function getMessages() {
+  const snapshot = await firestore.collection('test_users').doc(getUid()).get(); 
+  return snapshot.data().map;
 }
 
 exports.messaging_api = functions.https.onRequest(messaging_api)
