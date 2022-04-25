@@ -33,6 +33,7 @@ User information will be collected upon creating an account. The messages field 
 ## Coding Guideline
 
 Swfit Style Guide: https://google.github.io/swift/ 
+<br> 
 Javascript Style Guide: https://google.github.io/styleguide/jsguide.html 
 
 ## Process Description (revisions)
