@@ -59,6 +59,43 @@ Javascript Style Guide: https://google.github.io/styleguide/jsguide.html
 
 ## Process Description (revisions)
 
+i. Risk assessment
+
+Risk 1: 
+
+Risk 2:
+
+Risk 3:
+
+Risk 4: 
+
+Risk 5:
+
+ii. Project schedule
+
+Currently we have all the separte teams ready with their setup - XCode for frontend and ... for backend. 
+
+We are working on the login and messaging UI ready by the frontend team and the API by the backend and the fullstack to integrate that in order to demonstrate the use case of messaging between 2 users by the end of this week!  
+
+iii. Team structure
+
+Frontend - 
+Frontend is mainly working on creatimg screens on figma and coding separte screens. 
+Kevin is done with creating the login screen and plans to worn on ... next. 
+Abas is working on the messaging screen.
+Riya is done with the XCode instalation and working on the setup and integration currently. Next milestone is to work on my profile/statuses screen. 
+
+Backend - 
+David is working on ...
+Anna is working on ... 
+
+Fullstack - 
+Sulaiman is working on ...
+
+iv. Test plan & bugs
+
+v. Documentation plan
+
 ## Other Revisions
 
 + Use cases provide a good sense of what the user experience will be like
