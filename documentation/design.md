@@ -20,14 +20,35 @@ Collections
 	- date of birth
 	- gender
 	- messages
-	- friends (uid's)
+		- message
+		- sender (uid)
+		- timestamp
+	- friends (uids)
 	- bio message (100 chars)
 	- profile pic reference
 - STATUS
 	- author (uid)
 	- content
 User information will be collected upon creating an account. The messages field will be constantly updated as new messages are sent and received. The profile pic field will be a reference to the actual image in Firebase Cloud Storage.
-	
+
+### Assumptions
+
+### Decisions and Alternatives
+- Using an Intermediate API
+	- We chose to have our frontend communicate with Firebase via our Messaging API. An alternative would have been to have the frontend communicate with Firebase directly. 
+		- Pros:
+			- Save development time by not having to implement an API
+			- Increased response times as the frontend can directly contact Firebase and receive a direct response as opposed to going through an API and having it make a request on behalf of the frontend.
+		- Cons:
+			- Having the frontend communicate directly with Firebase (i.e Firestore [database] and Cloud Storage) means that the frontend could potentially make dangerous requests without any checks by another party. For example, a bug in the frontend code could lead to data being deleted directly from the production database. 
+			- Cannot customize the response model. The frontend would be forced to parse the data in the format returned by Firebase. However, having an API allows the developers to customize the response model and only return the data that is necessary. 
+
+- Storing Messages within the each User Document
+	- We chose to have messages be stored in the recipient user's document as opposed to having a separate collection for messages.
+	- Pros:
+		- It is easy to see who a message belongs to (ie who the recipient is) since the message is already in that user's document (kind of like an inbox).
+	- Cons:
+		- It becomes harder to analyze messages from a large group of users (or implement a group chat functionality). For group chats, messages would now have to be deuplicated and stored in each user's document. If all messages were stored in one Messages collection, it would be easier to filter for messages addressed to users in a particular group chat.
 ## Software Design
 
 ## Coding Guideline
