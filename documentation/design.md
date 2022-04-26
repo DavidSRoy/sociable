@@ -81,23 +81,23 @@ We are working on the login and messaging UI ready by the frontend team and the 
 
 Frontend - 
 
-Frontend is mainly working on creating mockup screens on figma and coding their separte assigned screens. 
+	Frontend is mainly working on creating mockup screens on figma and coding their separte assigned screens. 
 
-Kevin is done with creating the login screen and plans to work on ... next. 
+	Kevin is done with creating the login screen and plans to work on ... next. 
 
-Abas is working on the messaging screen.
+	Abas is working on the messaging screen.
 
-Riya is done with the XCode instalation and working on the setup and integration currently. Next milestone is to work on my profile/statuses screen. 
+	Riya is done with the XCode instalation and working on the setup and integration currently. Next milestone is to work on my profile/statuses screen. 
 
 Backend - 
 
-David is working on ...
+	David is working on ...
 
-Anna is working on ... 
+	Anna is working on ... 
 
 Fullstack - 
 
-Sulaiman is working on ...
+	Sulaiman is working on ...
 
 ## iv. Test plan & bugs
 
