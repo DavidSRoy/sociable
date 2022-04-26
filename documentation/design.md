@@ -75,7 +75,9 @@ Risk 5:
 
 Currently we have all the separte teams ready with their setup - XCode for frontend and ... for backend. 
 
-We are working on the login and messaging UI ready by the frontend team and the API by the backend and the fullstack to integrate that in order to demonstrate the use case of messaging between 2 users by the end of this week!  
+We are working on the login and messaging UI ready by the frontend team and the API by the backend and the fullstack to integrate that in order to demonstrate the use case of messaging between 2 users by the end of this week! 
+
+We plan to release our beta version on or before 05/10. Frontend team should be ready with the screens UI and the workflow between them and the backend should be ready with the API. Integrarting all of that with the help of the fullstack team, we should be ready for our beta release.   
 
 ## iii. Team structure
 
