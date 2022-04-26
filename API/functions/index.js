@@ -1,4 +1,6 @@
 const admin = require('firebase-admin');
+const FieldValue = require('firebase-admin').firestore.FieldValue;
+const Timestamp = require('firebase-admin').firestore.Timestamp;
 const functions = require('firebase-functions');
 const express = require('express');
 // // Create and Deploy Your First Cloud Functions
@@ -35,19 +37,32 @@ messaging_api.get('/getUsers', async (request, response) => {
   }
 });
 
-messaging_api.post('/send', (request, response) => {
+messaging_api.post('/send', async (request, response) => {
   
   const req_key = request.get('auth');
   if (req_key == KEY) {
-    response.status(200).send('OK');
-    // const uID = request.query.uid;
-    // USERS.doc('')
-    // await USERS.update({
-    //   msgs: 'test'
-    // })
-    // .then(() => {
-    //     console.log("Document successfully written!");
-    // });
+    // response.status(200).send('OK');
+    const uid = request.query.uid;
+    const msg = request.query.msg;
+    const senderUid = request.query.sender;
+
+    const ref = USERS.doc(uid)
+    console.log("UID = " + uid);
+    console.log('msg = ' + msg)
+    console.log('senderUid = ' + senderUid);
+
+    await ref.update({
+      msgs: FieldValue.arrayUnion({
+        msg: msg,
+        sender: senderUid,
+        timestamp: Timestamp.now()
+      })
+    })
+    .then(() => {
+        console.log("Document successfully written!");
+        response.status(200).send('OK')
+    });
+
   } else {
     response.status(401).send('Unauthorized');
   }
