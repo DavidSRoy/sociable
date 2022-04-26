@@ -81,9 +81,9 @@ We are working on the login and messaging UI ready by the frontend team and the 
 
 Frontend - 
 
-Frontend is mainly working on creatimg screens on figma and coding separte screens. 
+Frontend is mainly working on creating mockup screens on figma and coding their separte assigned screens. 
 
-Kevin is done with creating the login screen and plans to worn on ... next. 
+Kevin is done with creating the login screen and plans to work on ... next. 
 
 Abas is working on the messaging screen.
 
