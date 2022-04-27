@@ -49,7 +49,11 @@ User information will be collected upon creating an account. The messages field 
 		- It is easy to see who a message belongs to (ie who the recipient is) since the message is already in that user's document (kind of like an inbox).
 	- Cons:
 		- It becomes harder to analyze messages from a large group of users (or implement a group chat functionality). For group chats, messages would now have to be deuplicated and stored in each user's document. If all messages were stored in one Messages collection, it would be easier to filter for messages addressed to users in a particular group chat.
+		
 ## Software Design
+
+For iOS App, we are using Xcode as the paltform to work on. We use figma to design different screems of the app and code them into Xcode.
+
 
 ## Coding Guideline
 
