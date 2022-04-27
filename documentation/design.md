@@ -109,10 +109,14 @@ Fullstack -
 
 + Use cases provide a good sense of what the user experience will be like
 	- We added use cases late last week to the living document. 
+	
 + Considers a lot of project-specific risks
 	- We considred potential issues with JSON data (since we are using JSON, it is crucial for JSON data to be organized appropriately or
 else it might lead to excessive layering, causing issues when we’re trying to
 retrieve data and write data). Details on this are in our living document.
+
++ Missing use policies for each communication channel
+	- This has been fixed in the living document.  
 
 
 
