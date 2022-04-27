@@ -52,7 +52,7 @@ User information will be collected upon creating an account. The messages field 
 		
 ## Software Design
 
-For iOS App, we are using Xcode as the paltform to work on. We use figma to design different screems of the app and code them into Xcode.
+For iOS App, we are using 'Xcode' as the paltform to work on for UI. We use 'figma' to design different screems of the app and code them into Xcode.
 
 
 ## Coding Guideline
