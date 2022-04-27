@@ -112,7 +112,7 @@ Fullstack -
 + Considers a lot of project-specific risks
 	- We considred potential issues with JSON data (since we are using JSON, it is crucial for JSON data to be organized appropriately or
 else it might lead to excessive layering, causing issues when we’re trying to
-retrieve data and write data)
+retrieve data and write data). Details on this are in our living document.
 
 
 
