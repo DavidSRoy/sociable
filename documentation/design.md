@@ -87,6 +87,8 @@ Medium Likelihood of occurring
 
 - Risk 5:
 
+Risk 1-4 are similar to what we expected while writing the Requirements document. Going forward, we didn't forsee any change from what we exepected at the start. 
+
 ## ii. Project schedule
 
 Currently we have all the separte teams ready with their setup - XCode for frontend and ... for backend. 
