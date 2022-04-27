@@ -132,6 +132,8 @@ Fullstack -
 
 ## v. Documentation plan
 
+We plan to have 'user guides' ready simultaneously as we implement UI and beackend features. Mainly they will be edited by the frontend team but necessary backend featires can be added by the backend team. However, the workflow will be that each person of the frontend team will contribute to it equally as they implement different screens, they will write the 'user guide' for that. Finally, the frontend will meet to integrate the workflow of different screens and document that in the 'user guide'. 
+
 ## Other Revisions
 
 + Use cases provide a good sense of what the user experience will be like
