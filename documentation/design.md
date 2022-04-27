@@ -32,7 +32,7 @@ Collections
 User information will be collected upon creating an account. The messages field will be constantly updated as new messages are sent and received. The profile pic field will be a reference to the actual image in Firebase Cloud Storage.
 
 ### Assumptions
-
+- sending a message via the Messaging API will facilitate near real-time communication. The message would be sent to Firestore via the API. The recipient device would call the API every period (maybe 30 seconds) to check for new messages.
 ### Decisions and Alternatives
 - Using an Intermediate API
 	- We chose to have our frontend communicate with Firebase via our Messaging API. An alternative would have been to have the frontend communicate with Firebase directly. 
