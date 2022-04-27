@@ -64,8 +64,16 @@ Javascript Style Guide: https://google.github.io/styleguide/jsguide.html
 Low likelihood of occuriing 
 
 - Risk 1: Database exceeds quota
+	- Impact: Medium
+	- Firebase states that we have a free tier quota of 11GB, which will be pretty hard to fill given that our strategy is to delete messages after they are read. However, it is possible for the 11GB to be filled if we have a very large amount of users using the app at the same time.
+	- Steps to avoid this: All messages will be deleted from the database after being read by the recipient and unread messages that are older than 4 weeks will be deleted (and the user will therefore not receive them).
+	- Plan: A storage alert will be set up in Firebase so that we will be notified if we are at 90% capacity. At that point, we will start deleting unread messages at a smaller interval (i.e 2 weeks).
 
 - Risk 2: Function exceeds quota 
+	- Impact: High
+	- Firebase states that we have a free tier limit on how many times we can invoke our function per month (2 million invocations). While the likelihood of this occuring is low, it could occur if we have a large user base. It could also occur if we keep calling a particular function (such as one that reads the database every second) on a short interval. 
+	- Steps to avoid this: We will avoid having intervals that would result in a high invocation count. In other words, if we choose to use the Messaging API to get updates from the database, we will avoid calling the API more than once per 30 seconds (or another interval if needed).
+	- Plan: We can monitor the function invocation count via the Firebase dashboard.
 
 Medium Likelihood of occurring 
 
