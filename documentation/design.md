@@ -61,15 +61,19 @@ Javascript Style Guide: https://google.github.io/styleguide/jsguide.html
 
 ## i. Risk assessment
 
-Risk 1: 
+Low likelihood of occuriing 
 
-Risk 2:
+- Risk 1: Database exceeds quota
 
-Risk 3:
+- Risk 2: Function exceeds quota 
 
-Risk 4: 
+Medium Likelihood of occurring 
 
-Risk 5:
+- Risk 3: Setbacks in building the backend infrastructure (i.e trouble with handling images or files, or issues with file compression)
+
+- Risk 4: Potential issues with JSON data
+
+- Risk 5:
 
 ## ii. Project schedule
 
