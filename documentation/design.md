@@ -99,7 +99,7 @@ Backend -
 
 Fullstack - 
 
-	Sulaiman is working on ...
+	Sulaiman is working on xcode setup as well as helping Abas on messaging screen.
 
 ## iv. Test plan & bugs
 
