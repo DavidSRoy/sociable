@@ -106,7 +106,7 @@ Frontend -
 
 Backend - 
 
-	David is working on ...
+	David is working on building and maintaining the Messaging API, so that it is capapble of delivering messages between users. He will also work on setting up the CI/CD pipelines for the Messaging API, such that test pipelines will run upon creating a pull request and anything pushed to master will be automatically deployed to production.
 
 	Anna is working on ... 
 
