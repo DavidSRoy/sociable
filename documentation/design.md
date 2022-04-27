@@ -101,7 +101,7 @@ We plan to release our beta version on or before 05/10. Frontend team should be 
 | -----------          | ----------- 				| ---------	    |-----------		     |------------	|----------- |
 | Messaging 	       | The user should be able to send messages to their friends       	| 04/28 	    | login screen, messaging screen | `sendMessage` and `getMessage` endpoints| integration|
 | Status       	       | The user will be able to update text or picture status which will last for 24 hours					| 05/05		    | status, my profile screens     |`sendStatus` and `getStatus` endpoints| integration|
-| Beta release         | In accordance to the assignment, we want to have a beta release ready by 05/10  for which documentation is ready					| 05/10             | -				     |                  | integration|
+| Beta release         | In accordance to the assignment, we want to have a beta release ready by 05/10  for which documentation is ready					| 05/10             | -				     |  -                | integration|
 | Adding friends       | Being able to add friends by searching their account names       				| 05/12             | profile, mutual friends screen |`addFriend` and `getFriends` endpoints| integration|
 
 The frontend and backend will work separately and the fullstack are dependent on the completion of both teams before integration. All milestones are independent of each other and are supposed to be completed in order. 
