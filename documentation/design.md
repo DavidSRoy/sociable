@@ -107,37 +107,37 @@ The frontend and backend will work separately and the fullstack are dependent on
 
 Frontend - 
 
-	Frontend is mainly working on creating mockup screens on Figma and coding their separate assigned screens. 
+Frontend is mainly working on creating mockup screens on Figma and coding their separate assigned screens. 
 
-	Kevin is done with creating the login and signup flow and plans to work on another set of essential screens next (e.g. main chat interface). 
+Kevin is done with creating the login and signup flow and plans to work on another set of essential screens next (e.g. main chat interface). 
 
-	Abas is working on the messaging screen.
+Abas is working on the messaging screen.
 
-	Riya is done with the Xcode installation and working on the setup and integration currently. Next milestone is to work on my profile/statuses screen. 
+Riya is done with the Xcode installation and working on the setup and integration currently. Next milestone is to work on my profile/statuses screen. 
 
 Backend - 
 
-	David and Anna are working on building and maintaining the Messaging API, so that it is capable of delivering messages between users. He will also work on setting up the CI/CD pipelines for the Messaging API, such that test pipelines will run upon creating a pull request and anything pushed to master will be automatically deployed to production.
+David and Anna are working on building and maintaining the Messaging API, so that it is capable of delivering messages between users. He will also work on setting up the CI/CD pipelines for the Messaging API, such that test pipelines will run upon creating a pull request and anything pushed to master will be automatically deployed to production.
 
 Fullstack - 
 
-	Sulaiman is working on Xcode setup as well as helping Abas on messaging screen.
+Sulaiman is working on Xcode setup as well as helping Abas on messaging screen.
 
 ## iv. Test plan & bugs
 
 Frontend -
 
-	Will mainly utilize hallway testing as usability testing for UI concerns and adjustments so that real world feedback is provided. Each member will do so such that there is a variety of feedback from different backgrounds. Written use cases will also be compared against the user interaction flow to ensure consistency with what has been proposed.
+Will mainly utilize hallway testing as usability testing for UI concerns and adjustments so that real world feedback is provided. Each member will do so such that there is a variety of feedback from different backgrounds. Written use cases will also be compared against the user interaction flow to ensure consistency with what has been proposed.
 	
 Backend -
 	
-	Will mainly be concerned about unit testing by creating atomic and combined use cases to ensure correct and expected behavior when communicating with Firebase such as handling user authentication and creation, and reading and writing to the database. May also be responsible for conducting unit tests with the messaging API, possibly with the support of the fullstack team.
+Will mainly be concerned about unit testing by creating atomic and combined use cases to ensure correct and expected behavior when communicating with Firebase such as handling user authentication and creation, and reading and writing to the database. May also be responsible for conducting unit tests with the messaging API, possibly with the support of the fullstack team.
 	
 Fullstack -
 	
-	Will mainly be concerned about testing integration from the perspective of the system and as the user. One example is ensuring the application correctly handles the backend responses (successes or various errors) that does not hinder the user experience.
+Will mainly be concerned about testing integration from the perspective of the system and as the user. One example is ensuring the application correctly handles the backend responses (successes or various errors) that does not hinder the user experience.
 
-** GitHub Issues will be used to track bugs that occur during use and testing. **
+**GitHub Issues will be used to track bugs that occur during use and testing.**
 	
 
 ## v. Documentation plan
