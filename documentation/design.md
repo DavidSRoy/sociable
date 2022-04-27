@@ -83,6 +83,14 @@ We are working on the login and messaging UI ready by the frontend team and the 
 
 We plan to release our beta version on or before 05/10. Frontend team should be ready with the screens UI and the workflow between them and the backend should be ready with the API. Integrarting all of that with the help of the fullstack team, we should be ready for our beta release.   
 
+| Milestone (use case) | Description 				| Date (Thursdays)  | Frontend  		     | Backend 		| Fullstack  |
+| -----------          | ----------- 				| ---------	    |-----------		     |------------	|----------- |
+| Messaging 	       | The user should be able to        	| 04/28 	    | login screen, messaging screen |	                | integration|
+| Status       	       | 					| 05/05		    | status, my profile screens     |                  | integration|
+| Beta release         | 					| 05/10             | -				     |
+| Adding friends       | Title       				| 05/12             | profile, mutual friends screen |
+
+
 ## iii. Team structure
 
 Frontend - 
