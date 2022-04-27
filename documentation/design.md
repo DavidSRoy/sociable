@@ -93,10 +93,10 @@ We plan to release our beta version on or before 05/10. Frontend team should be 
 
 | Milestone (use case) | Description 				| Date (Thursdays)  | Frontend  		     | Backend 		| Fullstack  |
 | -----------          | ----------- 				| ---------	    |-----------		     |------------	|----------- |
-| Messaging 	       | The user should be able to        	| 04/28 	    | login screen, messaging screen |	                | integration|
-| Status       	       | 					| 05/05		    | status, my profile screens     |                  | integration|
+| Messaging 	       | The user should be able to        	| 04/28 	    | login screen, messaging screen | `sendMessage` and `getMessage` endpoints| integration|
+| Status       	       | 					| 05/05		    | status, my profile screens     |`sendStatus` and `getStatus` endpoints| integration|
 | Beta release         | 					| 05/10             | -				     |                  | integration|
-| Adding friends       | Title       				| 05/12             | profile, mutual friends screen |			| integration|
+| Adding friends       | Title       				| 05/12             | profile, mutual friends screen |`addFriend` and `getFriends` endpoints| integration|
 
 The frontend and backend will work separately and the fullstack are dependent on the completion of both teams before integration. All milestones are independent of each other and are supposed to be completed in order. 
 
