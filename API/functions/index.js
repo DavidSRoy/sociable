@@ -37,11 +37,10 @@ messaging_api.get('/getUsers', async (request, response) => {
   }
 });
 
-messaging_api.post('/send', async (request, response) => {
+messaging_api.post('/sendMessage', async (request, response) => {
   
   const req_key = request.get('auth');
   if (req_key == KEY) {
-    // response.status(200).send('OK');
     const uid = request.query.uid;
     const msg = request.query.msg;
     const senderUid = request.query.sender;
