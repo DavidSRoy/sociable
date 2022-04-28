@@ -1,6 +1,6 @@
 # Sociable: Messaging API
 
- Important Endpoints
+## Important Endpoints
 
 ## `sendMessage`
 Parameters
