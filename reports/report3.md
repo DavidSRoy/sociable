@@ -1,12 +1,12 @@
-##Status Report 3: 04/27/2022
+# Status Report 3: `04/27/2022`
 
-##Team Status
+## Team Status
 
 We are making good progress toward creating the messaging proof-of-concept where a user will be able to send a message from one device to another, as mentioned in the last status report. The backend infrastructure is successfully set up such that the frontend can make the appropriate API calls. To aid the front end in doing so, we have provided documentation for Firebase, including useful functions. We have made the wireframes using Figma so we can kickstart building the actual app in Xcode. Our next step as a team is to coordinate with the front and back end teams so that the API endpoints can be called. Once that is done, which is our goal for this week, we will be done with our proof of concept.
 
-##Sub-team Status
+## Sub-team Status
 
-###Backend Team
+### Backend Team
 
 David & Anna
 
@@ -20,7 +20,7 @@ Next Week:
 - Once the proof-of-concept is complete, we will turn our focus to sending/receiving statuses.
 - Coordinate with front end to help them call the endpoints within the app. We will work on creating documentation including the function inputs, purposes, and return and error values.
 
-###Frontend Team
+### Frontend Team
 
 Riya & Kevin 
 
@@ -28,7 +28,7 @@ Built a UI for the login story, and app design in Figma including the UI for pro
 
 Goals for the week: make API calls to the messaging API
 
-###Fullstack Team
+### Fullstack Team
 
 Sulaiman and Abas
 Built the Figma deigns and UI, helped front team build the UI in Xcode. UI for proof of concept done.
