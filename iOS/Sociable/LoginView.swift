@@ -33,23 +33,23 @@ struct LoginView: View {
                         } label: {
                             HStack {
                                 Spacer()
-                                Text(isLoading ? "" : "Login")
-                                    .foregroundColor(username == "" || password == "" ? .gray : .black)
-                                    .padding(.vertical, isLoading ? 13 : 10)
                                 if isLoading {
-                                    ProgressView()
-                                        .progressViewStyle(CircularProgressViewStyle(tint: .gray))
+                                    ButtonLoadingView(username: $username, password: $password, isLoading: $isLoading)
+                                } else {
+                                    ButtonLoadingTextView(username: $username, password: $password, isLoading: $isLoading, text: "Login")
                                 }
                                 Spacer()
                             }
-                        }.border(username == "" || password == "" ? Color.gray : Color.black)
-                    }.disabled(username == "" || password == "")
+                        }
+                    }.disabled(username.isEmpty || password.isEmpty)
                     
                     if loginFail {
                         // dependent on firebase error
                         // e.g. incorrect user/pass
                         Text("Login Failed")
                             .foregroundColor(.red)
+                            .font(Font.system(size: 12, design: .default))
+                            .padding(.top, -10)
                     }
                     
                     NavigationLink(destination: RegisterView(
@@ -58,8 +58,13 @@ struct LoginView: View {
                         isSecureField: $isSecureField
                     ), label: { Text("Create Account")
                     })
+                    
+                    NavigationLink(destination: ForgotPasswordView(), label: { Text("Forgot Password?")
+                        .font(Font.system(size: 11, design: .default))
+                        .multilineTextAlignment(.trailing) })
+                        .padding(.bottom, -300)
                 }
-                .padding()
+                .padding(12)
             }
         }
     }
@@ -98,17 +103,15 @@ struct RegisterView: View {
                     } label: {
                         HStack {
                             Spacer()
-                            Text(isLoading ? "" : "Create Account")
-                                .foregroundColor(username == "" || password == "" ? .gray : .black)
-                                .padding(.vertical, isLoading ? 13 : 10)
                             if isLoading {
-                                ProgressView()
-                                    .progressViewStyle(CircularProgressViewStyle(tint: .gray))
+                                ButtonLoadingView(username: $username, password: $password, isLoading: $isLoading)
+                            } else {
+                                ButtonLoadingTextView(username: $username, password: $password, isLoading: $isLoading, text: "Register")
                             }
                             Spacer()
                         }
-                    }.border(username == "" || password == "" ? Color.gray : Color.black)
-                }.disabled(username == "" || password == "")
+                    }
+                }.disabled(username.isEmpty || password.isEmpty)
                 
                 if registerFail {
                     // dependent on firebase error
@@ -117,7 +120,7 @@ struct RegisterView: View {
                         .foregroundColor(.red)
                 }
             }
-            .padding()
+            .padding(12)
         }
     }
     
@@ -146,32 +149,32 @@ struct EditProfileView: View {
                 GeometryReader { _ in   // for removing keyboard lifting view
                     VStack() {
                         Spacer()
-                            HStack {
-                                if avatarImage == UIImage(systemName: "person.fill")! {
-                                    Text("add\n photo")
-                                        .foregroundColor(.blue)
-                                        .overlay(
-                                            Circle()
-                                                .strokeBorder(style: StrokeStyle(lineWidth: 0.5, dash: [2]))
-                                                .frame(width: 160, height: 80))
-                                        .frame(width: 160, height: 80)
-                                        .multilineTextAlignment(.center)
-                                        .onTapGesture { isShowingPhotoPicker = true }
-                                } else {
-                                    Image(uiImage: avatarImage)
-                                        .resizable()
-                                        .frame(width: 160, height: 80)
-                                        .clipShape(Circle())
-                                        .onTapGesture { isShowingPhotoPicker = true }
-                                }
-                                
-                                Text("Enter your name and add an optional profile picture")
-                                    .foregroundColor(.gray)
-                                    .font(Font.system(size: 16, design: .default))
-                                    .fixedSize(horizontal: false, vertical: true)
+                        HStack {
+                            if avatarImage == UIImage(systemName: "person.fill")! {
+                                Text("add\n photo")
+                                    .foregroundColor(.blue)
+                                    .overlay(
+                                        Circle()
+                                            .strokeBorder(style: StrokeStyle(lineWidth: 0.5, dash: [2]))
+                                            .frame(width: 160, height: 80))
+                                    .frame(width: 160, height: 80)
+                                    .multilineTextAlignment(.center)
+                                    .onTapGesture { isShowingPhotoPicker = true }
+                            } else {
+                                Image(uiImage: avatarImage)
+                                    .resizable()
+                                    .frame(width: 160, height: 80)
+                                    .clipShape(Circle())
+                                    .onTapGesture { isShowingPhotoPicker = true }
                             }
-                            .padding(.top, -80)
-                            .padding(.leading, -30)
+                            
+                            Text("Enter your name and add an optional profile picture")
+                                .foregroundColor(.gray)
+                                .font(Font.system(size: 16, design: .default))
+                                .fixedSize(horizontal: false, vertical: true)
+                        }
+                        .padding(.top, -80)
+                        .padding(.leading, -30)
                         Divider()
                             .padding(.top, 15)
                         HStack {
@@ -203,8 +206,54 @@ struct EditProfileView: View {
         })
         .toolbar {
             // Go to main screen / chat interface
-            NavigationLink(destination: Text("[insert main screen]"), label: { Text("Done") })
-                .disabled(profileName.count == 0)
+            NavigationLink(destination: Text("[Insert main screen here]"), label: { Text("Done") })
+                .disabled(profileName.isEmpty)
+        }
+    }
+}
+
+struct ForgotPasswordView: View {
+    // add support for phone #?
+    @State private var email = ""
+    @State private var didTap = false
+    
+    var body: some View {
+        ZStack {
+            GradientBackground()
+            VStack {
+                Text("Reset Password")
+                    .font(.largeTitle).fontWeight(.bold)
+                    .padding(.bottom, 10)
+                Text("If you do not know your current password, you may change it.")
+                    .font(Font.system(size: 14, design: .default))
+                    .multilineTextAlignment(.center)
+                    .padding(.bottom, 20)
+                Text("Email")
+                    .font(Font.system(size: 14, design: .default))
+                    .padding(.trailing, 260)
+                    .padding(.bottom, -5)
+                TextField(email, text: $email)
+                    .font(Font.system(size: 18, design: .default))
+                    .keyboardType(.emailAddress)
+                    .autocapitalization(.none)
+                    .disableAutocorrection(true)
+                    .textFieldStyle(RoundedBorderTextFieldStyle())
+                    .frame(height: 35)
+                    .onTapGesture { self.didTap = true}
+                Button("Submit") {
+                    print("Sent email link")
+                }
+                .disabled(email.isEmpty)
+                .frame(width: 100, height: 25, alignment: .center)
+                .padding(.vertical, 10)
+                .foregroundColor(Color.black)
+                .background(
+                    RoundedRectangle(cornerRadius: 30, style: .continuous)
+                        .fill(email.isEmpty ? Color.gray.opacity(0.3) : Color.green.opacity(0.3))
+                )
+            }
+            .padding(.bottom, 200)
+            .padding(12)
         }
     }
 }
@@ -222,6 +271,41 @@ struct GradientBackground: View {
                        endPoint: .bottomTrailing)
         .opacity(0.25)
         .ignoresSafeArea()
+    }
+}
+
+struct ButtonLoadingView: View {
+    @Binding var username: String
+    @Binding var password: String
+    @Binding var isLoading: Bool
+    
+    var body: some View {
+        ProgressView().progressViewStyle(CircularProgressViewStyle(tint: .gray))
+            .foregroundColor(username.isEmpty || password.isEmpty ? .gray : .black)
+            .padding(.vertical, isLoading ? 13 : 10)
+            .frame(width: 180, height: 50)
+            .background(
+                RoundedRectangle(cornerRadius: 30, style: .continuous)
+                    .fill(username.isEmpty || password.isEmpty ? Color.gray.opacity(0.3) : Color.green.opacity(0.3))
+            )
+    }
+}
+
+struct ButtonLoadingTextView: View {
+    @Binding var username: String
+    @Binding var password: String
+    @Binding var isLoading: Bool
+    var text: String
+    
+    var body: some View {
+        Text(text)
+            .foregroundColor(username.isEmpty || password.isEmpty ? .gray : .black)
+            .padding(.vertical, isLoading ? 13 : 10)
+            .frame(width: 180, height: 50)
+            .background(
+                RoundedRectangle(cornerRadius: 30, style: .continuous)
+                    .fill(username.isEmpty || password.isEmpty ? Color.gray.opacity(0.3) : Color.green.opacity(0.3))
+            )
     }
 }
 
