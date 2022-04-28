@@ -3,13 +3,6 @@ const FieldValue = require('firebase-admin').firestore.FieldValue;
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 const functions = require('firebase-functions');
 const express = require('express');
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
 
 admin.initializeApp();
 const firestore = admin.firestore();
@@ -31,7 +24,7 @@ async function getUsers() {
 messaging_api.get('/getUsers', async (request, response) => {
   const req_key = request.get('auth');
   if (req_key == KEY) {
-    await response.json(await getUsers());
+    response.json(await getUsers());
   } else {
     response.status(401).send('Unauthorized');
   }
