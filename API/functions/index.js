@@ -1,4 +1,6 @@
 const admin = require('firebase-admin');
+const FieldValue = require('firebase-admin').firestore.FieldValue;
+const Timestamp = require('firebase-admin').firestore.Timestamp;
 const functions = require('firebase-functions');
 const express = require('express');
 // // Create and Deploy Your First Cloud Functions
@@ -8,7 +10,6 @@ const express = require('express');
 //   functions.logger.info("Hello logs!", {structuredData: true});
 //   response.send("Hello from Firebase!");
 // });
-
 
 admin.initializeApp();
 const firestore = admin.firestore();
@@ -36,19 +37,31 @@ messaging_api.get('/getUsers', async (request, response) => {
   }
 });
 
-messaging_api.post('/send', (request, response) => {
+messaging_api.post('/sendMessage', async (request, response) => {
   
   const req_key = request.get('auth');
   if (req_key == KEY) {
-    response.status(200).send('OK');
-    // const uID = request.query.uid;
-    // USERS.doc('')
-    // await USERS.update({
-    //   msgs: 'test'
-    // })
-    // .then(() => {
-    //     console.log("Document successfully written!");
-    // });
+    const uid = request.query.uid;
+    const msg = request.query.msg;
+    const senderUid = request.query.sender;
+
+    const ref = USERS.doc(uid)
+    console.log("UID = " + uid);
+    console.log('msg = ' + msg)
+    console.log('senderUid = ' + senderUid);
+
+    await ref.update({
+      msgs: FieldValue.arrayUnion({
+        msg: msg,
+        sender: senderUid,
+        timestamp: Timestamp.now()
+      })
+    })
+    .then(() => {
+        console.log("Document successfully written!");
+        response.status(200).send('OK')
+    });
+
   } else {
     response.status(401).send('Unauthorized');
   }
@@ -63,15 +76,15 @@ messaging_api.get('/test', async (request, response) => {
 messaging_api.get('/getMessages', async (request, response) => {
   const req_key = request.get('auth');
   if (req_key == KEY) {
-    await response.json(await getMessages());
+    await response.json(await getMessages(request.query.uid));
   } else {
     response.status(401).send('Unauthorized');
   }
 });
 
-async function getMessages() {
-  const snapshot = await firestore.collection('test_users').doc(getUid()).get(); 
-  return snapshot.data().map;
+async function getMessages(uid) {
+  const snapshot = await firestore.collection('test_users').doc(uid).get(); 
+  return snapshot.data();
 }
 
 exports.messaging_api = functions.https.onRequest(messaging_api)
