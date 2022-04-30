@@ -28,7 +28,10 @@ Collections
 	- profile pic reference
 - STATUS
 	- author (uid)
-	- content
+	- content (photo format)
+	- time stamp 
+	- list of views (uid of viewer and time stamp)
+
 User information will be collected upon creating an account. The messages field will be constantly updated as new messages are sent and received. The profile pic field will be a reference to the actual image in Firebase Cloud Storage.
 
 ### Assumptions
