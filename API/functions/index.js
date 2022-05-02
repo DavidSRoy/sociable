@@ -87,4 +87,25 @@ async function getMessages(uid) {
   return snapshot.data();
 }
 
+//delete messages
+messaging_api.get('/deleteMessages', async (request, response) => {
+  const req_key = request.get('auth');
+  if (req_key == KEY) {
+    await response.json(await deleteMessages(request.query.uid));
+  } else {
+    response.status(401).send('Unauthorized');
+  }
+});
+
+async function deleteMessages(uid) {
+  const snapshot = await firestore.collection('test_users').doc(uid).update({
+    "msgs": admin.firestore.FieldValue.delete()})
+  
+  return snapshot;
+}
+
+//post status
+
+
+
 exports.messaging_api = functions.https.onRequest(messaging_api)
