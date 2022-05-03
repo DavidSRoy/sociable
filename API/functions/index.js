@@ -14,6 +14,7 @@ const uuid = require('uuid-v4');
 //   response.send("Hello from Firebase!");
 // });
 
+
 admin.initializeApp({storageBucket: "gs://sociable-messenger.appspot.com"});
 // Get a reference to the storage service, which is used to create references in storage bucket
 const storage = admin.storage();
@@ -110,6 +111,9 @@ async function deleteMessages(uid) {
     "msgs": admin.firestore.FieldValue.delete()})
   
   return snapshot;
+async function getMessages(uid) {
+  const snapshot = await firestore.collection('test_users').doc(uid).get(); 
+  return snapshot.data();
 }
 
 //post status-- image format
