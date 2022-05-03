@@ -28,19 +28,3 @@ jobs:
     - name: Run tests
       run: |
         pytest
-
-
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: install libraries
-      run: npm install
-      working-directory: ${{env.working-directory}}
-    - name: install firebase
-      run: npm i firebase-tools -g  
-    - name: deploy
-      working-directory: ./API
-      run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }} --project sociable-messenger
