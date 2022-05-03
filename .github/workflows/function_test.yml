@@ -1,0 +1,46 @@
+name: Firebase Cloud Function Test
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      working-directory: ./API/functions
+
+    strategy:
+      matrix:
+        python-version: ['3.8']
+
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v3
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Run tests
+      run: |
+        pytest
+
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: install libraries
+      run: npm install
+      working-directory: ${{env.working-directory}}
+    - name: install firebase
+      run: npm i firebase-tools -g  
+    - name: deploy
+      working-directory: ./API
+      run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }} --project sociable-messenger
