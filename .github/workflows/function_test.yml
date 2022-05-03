@@ -2,7 +2,7 @@ name: Firebase Cloud Function Test
 
 on:
   pull_request:
-    branches: [ master ]
+    branches: [ master, sandbox ]
 
 jobs:
   build:
