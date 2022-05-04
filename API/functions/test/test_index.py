@@ -26,9 +26,10 @@ class Test_Index:
         res = requests.get(url, headers=headers)
         assert res.status_code == 401
 
-    def test_messaging_getMessages_returns401WithAuth(self, auth_token):
+    def test_messaging_getMessages_doesNotReturn401WithAuth(self, auth_token):
         url = BASE_URL + "getMessages"
         headers = {'auth': auth_token}
+        params = {'uid':'abcde'}
         print(auth_token)
-        res = requests.get(url, headers=headers)
+        res = requests.get(url, headers=headers, params=params)
         assert res.status_code != 401

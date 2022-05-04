@@ -107,6 +107,8 @@ async function deleteMessages(uid) {
     "msgs": admin.firestore.FieldValue.delete()})
   
   return snapshot;
+}
+
 async function getMessages(uid) {
   const snapshot = await firestore.collection('test_users').doc(uid).get(); 
   return snapshot.data();
