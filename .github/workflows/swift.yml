@@ -12,8 +12,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - run: cd iOS
     - name: Build
-      run: xcodebuild clean build
+      run: |
+        cd iOS
+        xcodebuild clean build
     - name: Run tests
       run: xcodebuild clean test
