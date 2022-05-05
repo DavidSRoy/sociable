@@ -30,6 +30,7 @@ Goals for the week:
 - Continue working on essential screens
   - Kevin: main chat interface
   - Riya: my profile / statuses
+- Kevin: continue figuring out Xcode and Github Actions CI/CD...
 
 Next Week:
 - Finish any remaining essential screens and/or make essential flows more complete
