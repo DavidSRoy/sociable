@@ -2,7 +2,7 @@
 
 ## Team Status
 
-All the essential endpoints from the backend team have been created for messaging including sending and receiving messages. CI has been set up for both the backend and frontend via Github Actions and automatically runs for every commit at least on master. For next week's beta release, the demo will be a proof-of-concept at the minimum. It will have an ordinary messaging UI where a message can be typed in a textbox and message bubbles are displayed on screen upon send/receive. Ideally for the beta, we want to produce a basic but usable application that have the frontend screens integrated and components connected with the messaging API and this production will be the team's overarching goal and focus for the week. Afterwards, CD with TestFlight integration will need to be set up if it is not by then.
+All the essential endpoints from the backend team have been created for messaging including sending and receiving messages. CI has been set up for both the backend and frontend via Github Actions and automatically runs for every commit at least on `master`. For next week's beta release, the demo will be a proof-of-concept at the minimum. It will have an ordinary messaging UI where a message can be typed in a textbox and message bubbles are displayed on screen upon send/receive. Ideally for the beta, we want to produce a basic but usable application that have the frontend screens integrated and components connected with the messaging API and this production will be the team's overarching goal and focus for the week. Afterwards, CD with TestFlight integration will need to be set up if it is not by then.
 
 ## Sub-team Status
 
@@ -26,7 +26,7 @@ Next Week:
 
 Riya & Kevin
 
-Xcode CI has been set up.
+Xcode CI has been set up - separately builds and tests from the Xcode project and intiates upon creating pull request to `master`.
 
 Goals for the week:
 - Continue working on essential screens
