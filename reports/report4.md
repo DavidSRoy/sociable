@@ -41,3 +41,11 @@ Next Week:
 ### Fullstack Team
 
 Sulaiman and Abas
+
+- We have set up xcode and have it running sucessfuly. Builds and works correctly. 
+- We are working on implementing send functionality in the messaging page
+
+Goals for the week: 
+- Continue working on implementing send functionality in the messaging page
+- Work with the front end team to finish the remaining essential screens and connect the parts 
+
