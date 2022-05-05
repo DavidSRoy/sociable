@@ -2,9 +2,9 @@ name: App Testing
 
 on:
   push:
-    branches: [ main, feature/app-testing ]
+    branches: [ master, iOS ]
   pull_request:
-    branches: [ main ]
+    branches: [ master, iOS ]
 
 jobs:
   build:
