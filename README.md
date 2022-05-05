@@ -6,6 +6,11 @@ Introducing Sociable, a chat app that’s similar to Messenger or Whatsapp but o
 ## Living Document
 **[Living document](https://docs.google.com/document/d/18q35KYiigKOfsqSOqhWPQcTrDo5ftMfcEexdkJ5XZM0/edit?usp=sharing)**
 
+## Test Directories
+**[Backend](https://github.com/DavidSRoy/sociable/tree/master/API/functions/test)** - /API/functions/test
+
+**[Frontend](https://github.com/DavidSRoy/sociable/tree/master/iOS)** - /iOS/SociableTests & /iOS/SociableUITests
+
 ## Team Members
 **[David Roy](https://github.com/DavidSRoy)**, Backend
 
