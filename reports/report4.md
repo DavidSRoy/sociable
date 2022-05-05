@@ -42,7 +42,7 @@ Next Week:
 
 Sulaiman and Abas
 
-- We have created the messagign screen and the contacts screen 
+- We have created the messaging screen and the contacts screen 
 - We are still working on integrating the send endpoint into our messaging app
 
 Goals for the week: 
