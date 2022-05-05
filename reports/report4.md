@@ -2,7 +2,7 @@
 
 ## Team Status
 
-
+All the essential endpoints from the backend team have been created for messaging including sending and receiving messages. For next week's beta release,  the demo will be a proof-of-concept at the minimum. It will have an ordinary messaging UI where a message can be typed in a textbox and message bubbles are displayed on screen upon send/receive. Ideally for the beta, we want to produce a basic but usable application that have the frontend screens integrated and components connected with the messaging API and this production will be the team's overarching goal and focus for the week.
 
 ## Sub-team Status
 
