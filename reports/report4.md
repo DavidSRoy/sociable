@@ -42,8 +42,8 @@ Next Week:
 
 Sulaiman and Abas
 
-- We have set up xcode and have it running sucessfuly. Builds and works correctly. 
-- We are working on implementing send functionality in the messaging page
+- We have created the messagign screen and the contacts screen 
+- We are still working on integrating the send endpoint into our messaging app
 
 Goals for the week: 
 - Continue working on implementing send functionality in the messaging page
