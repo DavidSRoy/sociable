@@ -138,6 +138,8 @@ struct RegisterView: View {
 struct EditProfileView: View {
     @State private var profileName = ""
     @State private var isShowingPhotoPicker = false
+    @State private var showingAlert = false
+    @State private var userSelection = 0
     // you may need to download SF Symbols if error
     @State private var avatarImage = UIImage(systemName: "person.fill")!
     let PROFILE_NAME_CHAR_LIMIT = 25
@@ -151,21 +153,40 @@ struct EditProfileView: View {
                         Spacer()
                         HStack {
                             if avatarImage == UIImage(systemName: "person.fill")! {
-                                Text("add\n photo")
-                                    .foregroundColor(.blue)
-                                    .overlay(
-                                        Circle()
-                                            .strokeBorder(style: StrokeStyle(lineWidth: 0.5, dash: [2]))
-                                            .frame(width: 160, height: 80))
-                                    .frame(width: 160, height: 80)
-                                    .multilineTextAlignment(.center)
-                                    .onTapGesture { isShowingPhotoPicker = true }
+                                Button("add\n photo") {
+                                    showingAlert = true
+                                }
+                                .foregroundColor(.blue)
+                                .overlay(
+                                    Circle()
+                                        .strokeBorder(style: StrokeStyle(lineWidth: 0.5, dash: [2]))
+                                        .frame(width: 160, height: 80))
+                                .frame(width: 160, height: 80)
+                                .multilineTextAlignment(.center)
+                                .alert("Add Profile Picture", isPresented: $showingAlert) {
+                                    Button("Take Photo") {
+                                        isShowingPhotoPicker = true
+                                        userSelection = 1 }
+                                    Button("Select Photo") {
+                                        isShowingPhotoPicker = true
+                                        userSelection = 2 }
+                                    Button("Cancel") { }
+                                }
                             } else {
                                 Image(uiImage: avatarImage)
                                     .resizable()
                                     .frame(width: 160, height: 80)
                                     .clipShape(Circle())
-                                    .onTapGesture { isShowingPhotoPicker = true }
+                                    .onTapGesture { showingAlert = true }
+                                    .alert("Add Profile Picture", isPresented: $showingAlert) {
+                                        Button("Take Photo") {
+                                            isShowingPhotoPicker = true
+                                            userSelection = 1 }
+                                        Button("Select Photo") {
+                                            isShowingPhotoPicker = true
+                                            userSelection = 2 }
+                                        Button("Cancel") { }
+                                    }
                             }
                             
                             Text("Enter your name and add an optional profile picture")
@@ -202,7 +223,7 @@ struct EditProfileView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $isShowingPhotoPicker, content: {
-            PhotoPicker(avatarImage: $avatarImage).ignoresSafeArea()
+            PhotoPicker(avatarImage: $avatarImage, sourceType: userSelection == 1 ? .camera : .savedPhotosAlbum).ignoresSafeArea()
         })
         .toolbar {
             // Go to main screen / chat interface
@@ -344,6 +365,7 @@ struct UsernamePasswordView: View {
         .padding(12)
     }
 }
+
 struct DatePickerView: View {
     @State private var birthDate = Calendar.current.date(byAdding: .year, value: -18, to: Date())!
     
