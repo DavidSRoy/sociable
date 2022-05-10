@@ -22,6 +22,9 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - name: Install Node Dependencies
+      run: |
+        npm install -g firebase-tools
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
@@ -33,5 +36,5 @@ jobs:
         pip install requests
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
     - name: Run tests
-      run: pytest test_index.py --auth='${{ secrets.AUTH_TOKEN }}'
+      run: firebase emulators:exec \"pytest test_index.py --auth='${{ secrets.AUTH_TOKEN }}'\"
       working-directory: API/functions/test
