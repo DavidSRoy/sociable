@@ -76,10 +76,6 @@ messaging_api.post('/sendMessage', async (request, response) => {
   response.json({"req" : request.query.test});
 });
 
-messaging_api.get('/test', async (request, response) => {
-  response.json({"test2":"message"});
-});
-
 //check for new messages of uid
 messaging_api.get('/getMessages', async (request, response) => {
   const req_key = request.get('auth');
@@ -111,6 +107,9 @@ async function deleteMessages(uid) {
     "msgs": admin.firestore.FieldValue.delete()})
   
   return snapshot;
+
+}
+
 async function getMessages(uid) {
   const snapshot = await firestore.collection('test_users').doc(uid).get(); 
   return snapshot.data();
