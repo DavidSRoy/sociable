@@ -36,7 +36,7 @@ struct TitleRow: View {
                 .foregroundColor(.white)
                 .frame(width: 32.0, height: 32.0)
                 .padding(backbtn_insets)
-            
+
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
         }

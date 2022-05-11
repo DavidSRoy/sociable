@@ -10,7 +10,7 @@ import SwiftUI
 struct MessageContentView: View {
     var dexMsgs = ["Hey what's up. I'm excited to work on sociable. I love building apps.", "I'm glad that you've joined us! Excited for things to come! 🙂"]
     var mexMsgs = ["Nice to meet you David, I'm also excited about working on Sociable!", " and likewise! 👌"]
-    
+
     var body: some View {
         VStack {
         VStack {
@@ -30,7 +30,7 @@ struct MessageContentView: View {
         .background(Color("msgblue"))
         MessageField()
         }
-        
+
     }
 }
 

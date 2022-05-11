@@ -494,7 +494,11 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 3;
 				DEVELOPMENT_ASSET_PATHS = "\"Sociable/Preview Content\"";
+<<<<<<< HEAD
 				DEVELOPMENT_TEAM = X6V8TK6B35;
+=======
+				DEVELOPMENT_TEAM = WVY5WPB585;
+>>>>>>> master
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;

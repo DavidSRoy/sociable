@@ -5,7 +5,7 @@ const FieldValue = require('firebase-admin').firestore.FieldValue;
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 const functions = require('firebase-functions');
 const express = require('express');
-const uuid = require('uuid-v4');
+const {v4: uuid} = require('uuid');
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
@@ -107,6 +107,7 @@ async function deleteMessages(uid) {
     "msgs": admin.firestore.FieldValue.delete()})
   
   return snapshot;
+
 }
 
 async function getMessages(uid) {
