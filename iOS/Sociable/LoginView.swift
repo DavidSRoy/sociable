@@ -24,13 +24,14 @@ struct LoginView: View {
                 GradientBackground()
                 VStack(spacing: 16) {
                     UsernamePasswordView(username: $username, password: $password, isSecureField: $isSecureField)
-                    NavigationLink(destination: Text("[insert main screen here]"), tag: 1, selection: $selection) {
+                    NavigationLink(destination: MessageContentView(), tag: 1, selection: $selection) {
                         Button() {
-                            if spoofNetworkCall() {
+                            //if spoofNetworkCall() {
                                 // go to main screen / chat interface
                                 self.selection = 1
-                            }
-                        } label: {
+                            //}
+                        }
+                    label: {
                             HStack {
                                 Spacer()
                                 if isLoading {
@@ -44,8 +45,8 @@ struct LoginView: View {
                     }.disabled(username.isEmpty || password.isEmpty)
                     
                     if loginFail {
-                        // dependent on firebase error
-                        // e.g. incorrect user/pass
+//                         dependent on firebase error
+//                         e.g. incorrect user/pass
                         Text("Login Failed")
                             .foregroundColor(.red)
                             .font(Font.system(size: 12, design: .default))
@@ -74,7 +75,7 @@ struct LoginView: View {
         loginFail = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             isLoading = false
-            loginFail = true
+            loginFail = false
         }
         return false
     }

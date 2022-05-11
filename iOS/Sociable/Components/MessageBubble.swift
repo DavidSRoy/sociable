@@ -39,7 +39,7 @@ struct MessageBubble: View {
 
 struct MessageBubble_Previews: PreviewProvider {
     static var previews: some View {
-        MessageBubble(msg: Msg(id: 100, text: "Hey what's up. I'm excited to work on sociable. I love building apps.", recieved: false, time: Date()))
+        MessageBubble(msg: Msg(id: "100", text: "Hey what's up. I'm excited to work on sociable. I love building apps.", recieved: false, time: Date()))
     }
 }
 
