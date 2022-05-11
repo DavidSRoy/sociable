@@ -6,6 +6,16 @@ Introducing Sociable, a chat app that’s similar to Messenger or Whatsapp but o
 ## Living Document
 **[Living document](https://docs.google.com/document/d/18q35KYiigKOfsqSOqhWPQcTrDo5ftMfcEexdkJ5XZM0/edit?usp=sharing)**
 
+## Build and Testing System
+The backend can be tested by running `pytest --auth '<TOKEN>'` while in the directory API/functions. Replace `<TOKEN>` with the API key.
+  
+Install [Xcode](https://developer.apple.com/xcode/) and press (or long hold) on the play button on the top left to build and run tests.
+Build and testing the frontend can also be done via command-line using `xcodebuild` and appending `test` while in the iOS directory.
+
+## Running System
+Xcode has emulators that can run the project code and compile the app.
+The app can also be downloaded via TestFlight to a physical device, but a TestFlight invitation is required.
+
 ## Test Directories
 **[Backend](https://github.com/DavidSRoy/sociable/tree/master/API/functions/test)** - /API/functions/test
 
