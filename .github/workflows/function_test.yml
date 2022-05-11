@@ -15,13 +15,15 @@ jobs:
         python-version: ['3.8']
         node-version: [12.x]
 
-
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+    - name: Install Node Dependencies
+      run: |
+        npm install -g firebase-tools
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
@@ -32,6 +34,10 @@ jobs:
         pip install pytest
         pip install requests
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Create test script
+      run: |
+        echo "pytest test_index.py --auth='${{ secrets.AUTH_TOKEN }}'" > test.sh
+      working-directory: API/functions/test
     - name: Run tests
-      run: pytest test_index.py --auth='${{ secrets.AUTH_TOKEN }}'
+      run: pytest
       working-directory: API/functions/test
