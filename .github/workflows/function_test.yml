@@ -15,7 +15,6 @@ jobs:
         python-version: ['3.8']
         node-version: [12.x]
 
-
     steps:
     - uses: actions/checkout@v3
     - name: Use Node.js ${{ matrix.node-version }}
@@ -35,6 +34,10 @@ jobs:
         pip install pytest
         pip install requests
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+    - name: Create test script
+      run: |
+        echo "pytest test_index.py --auth='${{ secrets.AUTH_TOKEN }}'" > test.sh
+      working-directory: API/functions/test
     - name: Run tests
-      run: firebase emulators:exec \"pytest test_index.py --auth='${{ secrets.AUTH_TOKEN }}'\"
+      run: firebase emulators:exec \"./test.sh\"
       working-directory: API/functions/test
