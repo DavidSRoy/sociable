@@ -39,5 +39,5 @@ jobs:
         echo "pytest test_index.py --auth='${{ secrets.AUTH_TOKEN }}'" > test.sh
       working-directory: API/functions/test
     - name: Run tests
-      run: firebase emulators:exec --project sociable-messenger \"./test.sh\"
+      run: firebase emulators:exec --only functions --project sociable-messenger \"./test.sh\"
       working-directory: API/functions/test
