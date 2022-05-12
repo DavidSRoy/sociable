@@ -12,6 +12,9 @@ The backend can be tested by running `pytest --auth '<TOKEN>'` while in the dire
 Install [Xcode](https://developer.apple.com/xcode/) and press (or long hold) on the play button on the top left to build and run tests.
 Build and testing the frontend can also be done via command-line using `xcodebuild` and appending `test` while in the iOS directory.
 
+## Accessing Beta Version
+Beta testers have received an invite via TestFlight, where the beta version can be downloaded. If you have not received an invite and would like one, please contact a team member.
+
 ## Running System
 Xcode has emulators that can run the project code and compile the app.
 The app can also be downloaded via TestFlight to a physical device, but a TestFlight invitation is required.
