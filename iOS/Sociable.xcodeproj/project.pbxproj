@@ -465,6 +465,9 @@
 				DEVELOPMENT_TEAM = X6V8TK6B35;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This lets you do things like take photos and record videos. You can change this anytime in your device settings.";
+				INFOPLIST_KEY_NSContactsUsageDescription = "Your contacts will be uploaded to Sociable's servers so you and others can find friends, and to improve your experience.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Use your microphone to record audio, video chat, and more.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -497,6 +500,9 @@
 				DEVELOPMENT_TEAM = X6V8TK6B35;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This lets you do things like take photos and record videos. You can change this anytime in your device settings.";
+				INFOPLIST_KEY_NSContactsUsageDescription = "Your contacts will be uploaded to Sociable's servers so you and others can find friends, and to improve your experience.";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "Use your microphone to record audio, video chat, and more.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
