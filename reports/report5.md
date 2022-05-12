@@ -1,8 +1,7 @@
 # Status Report 5: `05/11/2022`
 
 ## Team Status
-
-Following the beta release, we will improve upon our messaging story and begin working on status posting. We have completed setting up the TestFlight integration.
+We just completed our beta release, which integrates the Messaging API with the frontend, and allows a user to send and receive messages. Following the beta release, we will improve upon our messaging story and begin working on status posting. We have completed setting up the TestFlight integration.
 
 ## Sub-team Status
 
@@ -10,8 +9,10 @@ Following the beta release, we will improve upon our messaging story and begin w
 
 David & Anna
 
+This week, we updated the test pipeline with a temporary fix to address a bug that resulted in failing tests. (The test pipeline pointed to production endpoints instead of local endpoints).
+
 Goals for the week:
-- Work on creating enpoint to receive statuses (get image from firebase storage) (and non-text messsages in general)
+- Work on creating endpoint to receive statuses (get image from firebase storage) (and non-text messsages in general)
 - Work on adding new users
 - Coordinate with front end to add new users
 
