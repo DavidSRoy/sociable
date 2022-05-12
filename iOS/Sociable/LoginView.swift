@@ -154,31 +154,36 @@ struct EditProfileView: View {
                         Spacer()
                         HStack {
                             if avatarImage == UIImage(systemName: "person.fill")! {
-                                Button("add\n photo") {
+                                VStack {
+                                    Text("add\n photo")
+                                        .foregroundColor(.blue)
+                                        .multilineTextAlignment(.center)
+                                        .overlay(
+                                            Circle()
+                                                .strokeBorder(style: StrokeStyle(lineWidth: 0.5, dash: [2]))
+                                                .frame(width: 160, height: 80))
+                                        .frame(width: 160, height: 160)
+                                        .alert("Add Profile Picture", isPresented: $showingAlert) {
+                                            Button("Take Photo") {
+                                                isShowingPhotoPicker = true
+                                                userSelection = 1 }
+                                            Button("Select Photo") {
+                                                isShowingPhotoPicker = true
+                                                userSelection = 2 }
+                                            Button("Cancel") { }
+                                        }
+                                }
+                                .contentShape(Rectangle())
+                                .onTapGesture {
                                     showingAlert = true
                                 }
-                                .foregroundColor(.blue)
-                                .overlay(
-                                    Circle()
-                                        .strokeBorder(style: StrokeStyle(lineWidth: 0.5, dash: [2]))
-                                        .frame(width: 160, height: 80))
-                                .frame(width: 160, height: 80)
-                                .multilineTextAlignment(.center)
-                                .alert("Add Profile Picture", isPresented: $showingAlert) {
-                                    Button("Take Photo") {
-                                        isShowingPhotoPicker = true
-                                        userSelection = 1 }
-                                    Button("Select Photo") {
-                                        isShowingPhotoPicker = true
-                                        userSelection = 2 }
-                                    Button("Cancel") { }
-                                }
                             } else {
+                                VStack {
                                 Image(uiImage: avatarImage)
                                     .resizable()
+                                    .aspectRatio(contentMode: .fill)
                                     .frame(width: 160, height: 80)
                                     .clipShape(Circle())
-                                    .onTapGesture { showingAlert = true }
                                     .alert("Add Profile Picture", isPresented: $showingAlert) {
                                         Button("Take Photo") {
                                             isShowingPhotoPicker = true
@@ -188,6 +193,12 @@ struct EditProfileView: View {
                                             userSelection = 2 }
                                         Button("Cancel") { }
                                     }
+                                }
+                                .contentShape(Rectangle())
+                                .frame(width: 160, height: 160)
+                                .onTapGesture {
+                                    showingAlert = true
+                                }
                             }
                             
                             Text("Enter your name and add an optional profile picture")
@@ -248,11 +259,12 @@ struct ForgotPasswordView: View {
                     .padding(.bottom, 10)
                 Text("If you do not know your current password, you may change it.")
                     .font(Font.system(size: 14, design: .default))
+                    .frame(width: .infinity, alignment: .center)
                     .multilineTextAlignment(.center)
                     .padding(.bottom, 20)
                 Text("Email")
                     .font(Font.system(size: 14, design: .default))
-                    .padding(.trailing, 260)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, -5)
                 TextField(email, text: $email)
                     .font(Font.system(size: 18, design: .default))
@@ -261,7 +273,7 @@ struct ForgotPasswordView: View {
                     .disableAutocorrection(true)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(height: 35)
-                    .onTapGesture { self.didTap = true}
+                    .onTapGesture { self.didTap = true }
                 Button("Submit") {
                     print("Sent email link")
                 }
@@ -276,6 +288,7 @@ struct ForgotPasswordView: View {
             }
             .padding(.bottom, 200)
             .padding(12)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
 }
