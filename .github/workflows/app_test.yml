@@ -1,0 +1,38 @@
+name: App Testing
+
+on:
+  push:
+    branches: [ master, iOS ]
+  pull_request:
+    branches: [ master, iOS ]
+
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: iOS
+        
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v3
+      - name: Build
+        uses: mxcl/xcodebuild@v1
+        with:
+          working-directory: iOS
+          scheme: Sociable
+          platform: iOS
+          action: build
+          mobile-provisioning-profiles-base64: |
+            ${{ secrets.IPHONE_PROVISIONING_PROFILE_BASE64 }}
+      - name: Test
+        uses: mxcl/xcodebuild@v1
+        with:
+          working-directory: iOS
+          scheme: Sociable
+          platform: iOS
+          action: test
+          mobile-provisioning-profiles-base64: |
+            ${{ secrets.IPHONE_PROVISIONING_PROFILE_BASE64 }}
+          

@@ -1,0 +1,40 @@
+[debug] [2022-05-02T21:03:11.155Z] ----------------------------------------------------------------------
+[debug] [2022-05-02T21:03:11.156Z] Command:       /usr/local/bin/firebase /Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase emulators:start --project sociable
+[debug] [2022-05-02T21:03:11.157Z] CLI Version:   10.7.2
+[debug] [2022-05-02T21:03:11.157Z] Platform:      darwin
+[debug] [2022-05-02T21:03:11.157Z] Node Version:  v12.18.1
+[debug] [2022-05-02T21:03:11.158Z] Time:          Mon May 02 2022 14:03:11 GMT-0700 (Pacific Daylight Time)
+[debug] [2022-05-02T21:03:11.158Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2022-05-02T21:03:11.211Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2022-05-02T21:03:11.211Z] > authorizing via signed-in user (anna.tina.thomas@gmail.com)
+[info] i  emulators: Starting emulators: functions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: functions"}}
+[debug] [2022-05-02T21:03:11.259Z] [hub] writing locator at /var/folders/mp/pb2975js0mjc_fjmq0jsx8h40000gn/T/hub-sociable.json
+[warn] ⚠  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: auth, firestore, database, hosting, pubsub, storage {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mauth, firestore, database, hosting, pubsub, storage\u001b[22m"}}
+[info] i  emulators: Shutting down emulators. {"metadata":{"emulator":{"name":"hub"},"message":"Shutting down emulators."}}
+[info] i  functions: Stopping Functions Emulator {"metadata":{"emulator":{"name":"functions"},"message":"Stopping Functions Emulator"}}
+[info] i  hub: Stopping emulator hub {"metadata":{"emulator":{"name":"hub"},"message":"Stopping emulator hub"}}
+[debug] [2022-05-02T21:03:11.341Z] Error: Cannot find module '/Users/athomas/Downloads/sociable/package.json'
+Require stack:
+- /Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/functionsEmulator.js
+- /Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/controller.js
+- /Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/commandUtils.js
+- /Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/commands/database-get.js
+- /Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/commands/index.js
+- /Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/index.js
+- /Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/bin/firebase.js
+    at Function.Module._resolveFilename (internal/modules/cjs/loader.js:964:15)
+    at Function._resolveFilename (pkg/prelude/bootstrap.js:1459:46)
+    at Function.Module._load (internal/modules/cjs/loader.js:840:27)
+    at Module.require (internal/modules/cjs/loader.js:1024:19)
+    at Module.require (pkg/prelude/bootstrap.js:1338:31)
+    at require (internal/modules/cjs/helpers.js:72:18)
+    at FunctionsEmulator.getNodeBinary (/Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/functionsEmulator.js:595:21)
+    at FunctionsEmulator.start (/Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/functionsEmulator.js:203:39)
+    at Function.start (/Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/registry.js:16:24)
+    at startEmulator (/Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/controller.js:99:39)
+    at Object.startAll (/Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/emulator/controller.js:329:15)
+    at processTicksAndRejections (internal/process/task_queues.js:97:5)
+    at async Command.actionFn (/Users/athomas/.cache/firebase/tools/lib/node_modules/firebase-tools/lib/commands/emulators-start.js:28:35)
+[error] 
+[error] Error: An unexpected error has occurred.
