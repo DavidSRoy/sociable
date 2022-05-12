@@ -11,7 +11,7 @@ struct TitleRow: View {
     var name = "David"
     var status = "online"
     var profile_insets = EdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0)
-    var backbtn_insets = EdgeInsets(top: 10, leading: 120, bottom: 10, trailing: 10)
+    var backbtn_insets = EdgeInsets(top: 10, leading: 60, bottom: 10, trailing: 0)
     var body: some View {
         HStack (spacing: 20) {
             AsyncImage(url: imgURL) { image in
@@ -36,7 +36,7 @@ struct TitleRow: View {
                 .foregroundColor(.white)
                 .frame(width: 32.0, height: 32.0)
                 .padding(backbtn_insets)
-            
+
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding()
         }

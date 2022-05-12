@@ -10,11 +10,13 @@ import SwiftUI
 struct PhotoPicker: UIViewControllerRepresentable {
     
     @Binding var avatarImage: UIImage
+    var sourceType: UIImagePickerController.SourceType = .photoLibrary
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.delegate = context.coordinator
-        picker.allowsEditing = true
+        picker.allowsEditing = true     // figure out how to overlay circle
+        picker.sourceType = sourceType
         return picker
     }
     
