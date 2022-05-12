@@ -7,9 +7,9 @@
 
 import Foundation
 
-struct Msg: Codable, Identifiable {
-    var id: Int
-    var text: String
-    var recieved: Bool
-    var time: Date
+public struct Msg: Hashable, Codable, Identifiable {
+    public var id: String
+    public var text: String
+    public var recieved: Bool
+    public var time: Date
 }
