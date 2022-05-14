@@ -29,21 +29,6 @@ const KEY = functions.config().messaging.key;
 const messaging_api = express();
 
 
-async function getUsers() {
-    const snapshot = await USERS.get();
-    return snapshot.docs.map(doc => doc.data());
-    //.map(doc => doc.id);
-  }
-
-messaging_api.get('/getUsers', async (request, response) => {
-  const req_key = request.get('auth');
-  if (req_key == KEY) {
-    await response.json(await getUsers());
-  } else {
-    response.status(401).send('Unauthorized');
-  }
-});
-
 messaging_api.post('/sendMessage', async (request, response) => {
   
   const req_key = request.get('auth');
