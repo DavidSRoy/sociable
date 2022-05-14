@@ -39,39 +39,54 @@ users_api.get('/getUsers', async (request, response) => {
 /**
  * createUser
  * request:
- * uid: user's UID
  * firstName: [required]
  * lastName: 
+ * password: [required]
  * email:
+ * phone:
  * dob: date of birth [required]
  */
 users_api.post('/createUser', async (request, response) => {
   const req_key = request.get('auth');
   if (req_key == KEY) {
-    const uid = request.query.uid;
     const firstName = request.query.firstName;
     const lastName = request.query.lastName;
-    const email = request.query.lastName;
-    const dob = request.query.dob
+    const password = request.query.password;
+    const email = request.query.email;
+    const phone = request.query.phone;
+    const dob = request.query.dob;
 
+    console.log(firstName);
+    console.log(lastName);
+    console.log(password);
+    console.log(email);
+    console.log(phone);
+    console.log(dob);
 
     admin.auth()
     .createUser({
-      email: 'user@example.com',
+      email: email,
       emailVerified: false,
-      phoneNumber: '+11234567890',
-      password: 'secretPassword',
-      displayName: 'John Doe',
+      password: password,
+      displayName: firstName + " " + lastName,
       photoURL: 'http://www.example.com/12345678/photo.png',
       disabled: false,
     })
     .then((userRecord) => {
       // See the UserRecord reference doc for the contents of userRecord.
       console.log('Successfully created new user:', userRecord.uid);
+      USERS.doc(userRecord.uid).set({
+        firstName: firstName,
+        lastName: lastName,
+        dob: dob
+      });
+      response.status(200).send("OK");
     })
     .catch((error) => {
       console.log('Error creating new user:', error);
+      response.status(500).send("Internal Server Error");
     });
+
 
   } else {
     response.status(401).send('Unauthorized');
