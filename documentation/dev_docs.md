@@ -97,4 +97,4 @@ func testValidateMessagingScreenUIInteractions() {
 Make sure you have npm installed. Also make sure you have the latest version 8.10.0.
 A sanity check you should perform after building a release is try calling the messaging endnpoints using an application such as Postman.
 
-For each app update to TestFlight, increment the build number by 1 under the Xcode project BEFORE pushing to GitHub. Use the same version number unless discussed prior with team members. Ideally validate expected behavior on physical device before pushing a release build to GitHub/TestFlight, and afterwards as a sanity check. Be sure to note any bugs or discrepancies.
+For each app update to TestFlight, increment the build number by 1 under the Xcode project BEFORE pushing to GitHub. Use the same version number as the prior release build unless discussed prior with team members. Ideally validate expected behavior on a physical device before pushing a release build to GitHub/TestFlight, and also afterwards as a sanity check. Be sure to note any bugs or discrepancies.
