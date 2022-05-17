@@ -4,13 +4,14 @@
 Introducing Sociable, a chat app that’s similar to Messenger or Whatsapp but one that’s more geared for social interaction. The application would support many of the same features as your typical chatting app such as adding contacts/friends, sending messages to other users, group chat capabilities etc. However, Sociable would also share a robust set of features that would enhance the social component of the application. Some of these features include allowing users to see and connect with mutual friends, creating profiles complete with bios and pictures, post statuses, seeing other users on a map and also interacting with them via location-based chat. 
 
 ## Living Document
-**[Living document](https://docs.google.com/document/d/18q35KYiigKOfsqSOqhWPQcTrDo5ftMfcEexdkJ5XZM0/edit?usp=sharing)**
+**[Living Document](https://docs.google.com/document/d/18q35KYiigKOfsqSOqhWPQcTrDo5ftMfcEexdkJ5XZM0/edit?usp=sharing)**
 
 ## Build and Testing System
 The backend can be tested by running `pytest --auth '<TOKEN>'` while in the directory API/functions. Replace `<TOKEN>` with the API key.
   
 Install [Xcode](https://developer.apple.com/xcode/) and press (or long hold) on the play button on the top left to build and run tests.
 Build and testing the frontend can also be done via command-line using `xcodebuild` and appending `test` while in the iOS directory.
+Refer to [dev docs](https://github.com/DavidSRoy/sociable/tree/master/documentation/dev_docs.md) for additional information.
 
 ## Accessing Beta Version
 Beta testers have received an invite via TestFlight, where the beta version can be downloaded. If you have not received an invite and would like one, please contact a team member.
