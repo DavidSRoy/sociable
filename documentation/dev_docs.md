@@ -8,11 +8,7 @@
 
 ## Layout of Directory
 
-Backend
-The API directory holds all the code pertaining to the backend APIs as well as some documentation 
-The API/functions directory holds the actual API files and corresponding tests.
-
-Frontend
+- Frontend
 
 
 ## How to Build
@@ -42,4 +38,5 @@ You can now use or try out the endpoints using the url provided after you run em
 ## How to Add New Tests
 
 ## How to Build Release
-Describe any tasks that are not automated. For example, should a developer update a version number (in code and documentation) prior to invoking the build system? Are there any sanity checks a developer should perform after building a release?
+Make sure you have npm installed. Also make sure you have the latest version 8.10.0.
+A sanity check you should perform after building a release is try calling the messaging endnpoints using an application such as Postman.
