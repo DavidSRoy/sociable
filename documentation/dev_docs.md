@@ -3,7 +3,7 @@
 ## Source code
 
 Clone the repo with git clone https://github.com/DavidSRoy/sociable.git
-Open you terminal/command prompt and paste the url and hit enter
+Open your terminal/command prompt and paste the url and hit enter
 The source code is copied or downloaded on your preferred location
 
 ## Layout of Directory
