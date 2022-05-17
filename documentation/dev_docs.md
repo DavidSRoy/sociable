@@ -2,9 +2,9 @@
 
 ## Source code
 
-Clone the repo with git clone https://github.com/DavidSRoy/sociable.git
-Open your terminal/command prompt and paste the url and hit enter
-The source code is copied or downloaded on your preferred location
+Clone the repo with git clone https://github.com/DavidSRoy/sociable.git \n
+Open your terminal/command prompt and paste the url and hit enter\n
+The source code is copied or downloaded on your preferred location\n
 
 ## Layout of Directory
 
