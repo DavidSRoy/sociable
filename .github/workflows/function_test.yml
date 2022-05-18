@@ -23,7 +23,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install Node Dependencies
       run: |
-        curl -sL https://firebase.tools | bash
+        npm install -g firebase-tools
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v3
       with:
@@ -40,6 +40,6 @@ jobs:
       working-directory: API/functions/test
     - name: Run tests
       run: |
-        firebase use sociable
-        firebase emulators:exec "pytest" --project sociable"
+        firebase use sociable --token "${{ secrets.FIREBASE_TOKEN }}
+        firebase emulators:exec "pytest" --project sociable --token "${{ secrets.FIREBASE_TOKEN }} "
       working-directory: API/functions/test
