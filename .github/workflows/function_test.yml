@@ -40,7 +40,6 @@ jobs:
       working-directory: API/functions/test
     - name: Run tests
       run: |
-        firebase login --no-localhost
         firebase use sociable
-        firebase emulators:exec "pytest" --token "${{ secrets.FIREBASE_TOKEN }} --project sociable"
+        firebase emulators:exec "pytest" --project sociable"
       working-directory: API/functions/test
