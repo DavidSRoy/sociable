@@ -36,30 +36,18 @@ The `API/functions` directory holds the actual API files and corresponding tests
                       |
                       |--- test:           holds the tests for the API files
        |
-       |--- IOS:    Bug-mining framework.
+       |--- IOS:    holds all the code pertaining to frontend
            |
-           |--- core:          The modules of the core framework.
+           |--- Sociable:       app screens, components, business logic (views, viewmodels); app icons
            |
-           |--- lib:           Libraries used in the core framework.
-
-          
-
-
-#### Frontend
-
-- .github: workflows for building, testing, and pushing to TestFlight
-
-- iOS/
-
-  - Sociable: app screens, components, business logic (views, viewmodels); app icons
-  
-  - SociableTests & SociableUITests: frontend tests
-  
-  - ExportOptions(-AdHoc).plist: used when exporting app
-    - Needed for automatic TestFlight deployment 
-    - (AdHoc export/installation requires device UDID to be added to developer profile, refer to this [guide](https://support.magplus.com/hc/en-us/articles/204270188-iOS-Creating-an-Ad-Hoc-Distribution-Provisioning-Profile))
-  
-  - Sociable.xcodeproj: metadata and build settings of Xcode project, detected as a file instead of directory on system
+           |--- SociableTests & SociableUITests:        frontend tests
+           |--- ExportOptions(-AdHoc).plist:            used when exporting app
+                                                        Needed for automatic TestFlight deployment 
+                                                        (AdHoc export/installation requires device UDID to be added to developer profile, 
+                                                        refer to this [guide]
+                                                        (https://support.magplus.com/hc/en-us/articles/204270188-iOS-Creating-an-Ad-Hoc-Distribution-Provisioning-Profile))
+           |--- Sociable.xcodeproj:                     metadata and build settings of Xcode project, detected as a file instead of directory on system
+         
 
 ## How to Build
 
@@ -73,8 +61,6 @@ To use the Cloud Functions emulator, first install the Firebase CLI:
 Then, 
 
 ```
-firebase serve
-firebase serve --only functions
 firebase emulators:start --only=functions
 firebase emulators:start
 ```
