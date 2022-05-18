@@ -26,4 +26,17 @@ Adding friends - Functionality is work in progress
 
 ## How to Report a Bug
 
+If a crash occurs while using the app downloaded from TestFlight, an alert may show asking to submit information to the developers.
+
+In the app details on TestFlight, you can report under `Send Beta Feedback`.
+
+Since GitHub Issues is being used to track and report bugs under development, you can open a new issue there as well.
+
+For any of these options, please include details and steps to reproduce the bug and any screenshots if necessary.
+
 ## Known Bugs
+
+- Messaging Screen displays messages in the incorrect order 
+- Messages Screen displays duplicate messages 
+- Messaging Screen View is not updated right away after the send button is pressed 
+- Login/User creation workflow has not yet been integrated with the endpoints
