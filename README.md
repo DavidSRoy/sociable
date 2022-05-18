@@ -30,9 +30,9 @@ Xcode has emulators that can run the project code and compile the app.
 The app can also be downloaded via TestFlight to a physical device, but a TestFlight invitation is required.
 
 ## Test Directories
-**[Backend](https://github.com/DavidSRoy/sociable/tree/master/API/functions/test)** - /API/functions/test
+**[Backend](https://github.com/DavidSRoy/sociable/tree/master/API/functions/test)** - `API/functions/test`
 
-**[Frontend](https://github.com/DavidSRoy/sociable/tree/master/iOS)** - /iOS/SociableTests & /iOS/SociableUITests
+**[Frontend](https://github.com/DavidSRoy/sociable/tree/master/iOS)** - `iOS/SociableTests` & `iOS/SociableUITests`
 
 ## How to Contribute
 Check out our [developer documentation](https://github.com/DavidSRoy/sociable/blob/docs/documentation/dev_docs.md) in the `documentation` directory
