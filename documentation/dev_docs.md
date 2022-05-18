@@ -43,9 +43,7 @@ The `API/functions` directory holds the actual API files and corresponding tests
            |--- SociableTests & SociableUITests:        frontend tests
            |--- ExportOptions(-AdHoc).plist:            used when exporting app
                                                         Needed for automatic TestFlight deployment 
-                                                        (AdHoc export/installation requires device UDID to be added to developer profile, 
-                                                        refer to this [guide]
-                                                        (https://support.magplus.com/hc/en-us/articles/204270188-iOS-Creating-an-Ad-Hoc-Distribution-Provisioning-Profile))
+                                                        (AdHoc export/installation requires device UDID to be added to developer profile)
            |--- Sociable.xcodeproj:                     metadata and build settings of Xcode project, detected as a file instead of directory on system
          
 
