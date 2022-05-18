@@ -9,18 +9,45 @@
 ## Layout of Directory
 
 ### General
-- `./reports` contains our weekly status updates
-- `./meeting notes` contains important notes for reference from certain meetings.
-- `./documentation` contains user and developer documentation
-- `./.github` contains CI/CD workflows
+|-- `./reports` contains our weekly status updates
+|-- `./meeting notes` contains important notes for reference from certain meetings.
+|-- `./documentation` contains user and developer documentation
+|-- `./.github` contains CI/CD workflows
 #### Backend
 
 The `API` directory holds all the code pertaining to the backend APIs as well as some documentation 
 The `API/functions` directory holds the actual API files and corresponding tests, which can be found in `API/functions/test`
 
-- API
-  - functions
-    - test
+
+    defects4j
+       |
+       |--- project_repos:     The version control repositories of the provided projects.
+       |
+       |--- major:             The Major mutation framework.
+       |
+       |--- framework:         Libraries and executables of the core, test execution,
+           |                   and bug-mining frameworks.
+           |
+           |--- bin:           Command line interface to Defects4J.
+           |
+           |--- bug-mining:    Bug-mining framework.
+           |
+           |--- core:          The modules of the core framework.
+           |
+           |--- lib:           Libraries used in the core framework.
+           |
+           |--- util:          Util scripts used by Defects4J.
+           |
+           |--- projects:      Project-specific resource files.
+           |
+           |--- test:          Scripts to test the framework.
+           
+
+defects4j
+       |
+       |--- project_repos:     The version control repositories of the provided projects.
+       |
+       |--- major:             The Major mutation framework.
 
 
 #### Frontend
