@@ -8,7 +8,20 @@
 
 ## Layout of Directory
 
+### General
+- `./reports` contains our weekly status updates
+- `./meeting notes` contains important notes for reference from certain meetings.
+- `./documentation` contains user and developer documentation
+- `./.github` contains CI/CD workflows
 #### Backend
+
+The `API` directory holds all the code pertaining to the backend APIs as well as some documentation 
+The `API/functions` directory holds the actual API files and corresponding tests, which can be found in `API/functions/test`
+
+- API
+  - functions
+    - test
+
 
 #### Frontend
 
