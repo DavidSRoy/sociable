@@ -3,6 +3,13 @@
 ## About
 Introducing Sociable, a chat app that’s similar to Messenger or Whatsapp but one that’s more geared for social interaction. The application would support many of the same features as your typical chatting app such as adding contacts/friends, sending messages to other users, group chat capabilities etc. However, Sociable would also share a robust set of features that would enhance the social component of the application. Some of these features include allowing users to see and connect with mutual friends, creating profiles complete with bios and pictures, post statuses, seeing other users on a map and also interacting with them via location-based chat. 
 
+## Operational Use Cases
+- create account using name, password and birthday
+- login using username and password  
+- reset password by clicking on "forgot password"
+- message a friend by typing in the message box and hitting send
+- chat can be done between 2 mutual friends  
+
 ## Living Document
 **[Living Document](https://docs.google.com/document/d/18q35KYiigKOfsqSOqhWPQcTrDo5ftMfcEexdkJ5XZM0/edit?usp=sharing)**
 
