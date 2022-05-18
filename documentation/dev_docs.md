@@ -19,35 +19,28 @@ The `API` directory holds all the code pertaining to the backend APIs as well as
 The `API/functions` directory holds the actual API files and corresponding tests, which can be found in `API/functions/test`
 
 
-    defects4j
+    root
        |
-       |--- project_repos:     The version control repositories of the provided projects.
+       |--- .github     The version control repositories of the provided projects.
        |
-       |--- major:             The Major mutation framework.
+       |--- documentation:             The Major mutation framework.
        |
-       |--- framework:         Libraries and executables of the core, test execution,
+       |--- reports:             The Major mutation framework.
+       |
+       |--- API:         Libraries and executables of the core, test execution,
            |                   and bug-mining frameworks.
            |
-           |--- bin:           Command line interface to Defects4J.
-           |
-           |--- bug-mining:    Bug-mining framework.
+           |--- functions:           Command line interface to Defects4J.
+                      |
+                      |--- test:           Command line interface to Defects4J.
+       |
+       |--- IOS:    Bug-mining framework.
            |
            |--- core:          The modules of the core framework.
            |
            |--- lib:           Libraries used in the core framework.
-           |
-           |--- util:          Util scripts used by Defects4J.
-           |
-           |--- projects:      Project-specific resource files.
-           |
-           |--- test:          Scripts to test the framework.
-           
 
-defects4j
-       |
-       |--- project_repos:     The version control repositories of the provided projects.
-       |
-       |--- major:             The Major mutation framework.
+          
 
 
 #### Frontend
