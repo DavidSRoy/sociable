@@ -34,6 +34,21 @@ The app can also be downloaded via TestFlight to a physical device, but a TestFl
 
 **[Frontend](https://github.com/DavidSRoy/sociable/tree/master/iOS)** - `iOS/SociableTests` & `iOS/SociableUITests`
 
+## Bug Tracking
+
+**[How to Report a Bug]
+If a crash occurs while using the app downloaded from TestFlight, an alert may show asking to submit information to the developers.
+In the app details on TestFlight, you can report under Send Beta Feedback.
+Since GitHub Issues is being used to track and report bugs under development, you can open a new issue there as well.
+For any of these options, please include details and steps to reproduce the bug and any screenshots if necessary.
+
+**[Known Bugs]
+* Messaging Screen displays messages in the incorrect order
+* Messages Screen displays duplicate messages
+* Messaging Screen View is not updated right away after the send button is pressed
+* Login/User creation workflow has not yet been integrated with the endpoints
+
+
 ## How to Contribute
 Check out our [developer documentation](https://github.com/DavidSRoy/sociable/blob/docs/documentation/dev_docs.md) in the `documentation` directory
 
