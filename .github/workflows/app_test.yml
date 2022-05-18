@@ -3,8 +3,10 @@ name: App Testing
 on:
   push:
     branches: [ master ]
+    paths: [ iOS/** ]
   pull_request:
     branches: [ master, iOS ]
+    paths: [ iOS/** ]
 
 jobs:
   build:
