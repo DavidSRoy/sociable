@@ -21,18 +21,20 @@ The `API/functions` directory holds the actual API files and corresponding tests
 
     root
        |
-       |--- .github     The version control repositories of the provided projects.
+       |--- .github:  contains CI/CD workflows
        |
-       |--- documentation:             The Major mutation framework.
+       |--- documentation:  contains user and developer documentation
        |
-       |--- reports:             The Major mutation framework.
+       |--- reports: contains our weekly status updates
        |
-       |--- API:         Libraries and executables of the core, test execution,
-           |                   and bug-mining frameworks.
+       |--- meeting notes: contains important notes for reference from certain meetings.
+       |
+       |--- API:         holds all the code pertaining to the backend APIs as well as some documentation
+           |                   
            |
-           |--- functions:           Command line interface to Defects4J.
+           |--- functions:           holds the actual API files
                       |
-                      |--- test:           Command line interface to Defects4J.
+                      |--- test:           holds the tests for the API files
        |
        |--- IOS:    Bug-mining framework.
            |
