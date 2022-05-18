@@ -13,6 +13,9 @@ Introducing Sociable, a chat app that’s similar to Messenger or Whatsapp but o
 ## Living Document
 **[Living Document](https://docs.google.com/document/d/18q35KYiigKOfsqSOqhWPQcTrDo5ftMfcEexdkJ5XZM0/edit?usp=sharing)**
 
+## User Documentation
+https://github.com/DavidSRoy/sociable/blob/docs/documentation/user_docs.md
+
 ## Build and Testing System
 The backend can be tested by running `pytest --auth '<TOKEN>'` while in the directory API/functions. Replace `<TOKEN>` with the API key.
   
@@ -31,6 +34,9 @@ The app can also be downloaded via TestFlight to a physical device, but a TestFl
 **[Backend](https://github.com/DavidSRoy/sociable/tree/master/API/functions/test)** - /API/functions/test
 
 **[Frontend](https://github.com/DavidSRoy/sociable/tree/master/iOS)** - /iOS/SociableTests & /iOS/SociableUITests
+
+## How to Contribute
+Check out our [developer documentation](https://github.com/DavidSRoy/sociable/blob/docs/documentation/dev_docs.md) in the `documentation` directory
 
 ## Team Members
 **[David Roy](https://github.com/DavidSRoy)**, Backend
