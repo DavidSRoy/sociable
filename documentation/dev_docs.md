@@ -7,27 +7,14 @@
 - The source code is copied or downloaded on your preferred location
 
 ## Layout of Directory
-
-### General
-|-- `./reports` contains our weekly status updates
-|-- `./meeting notes` contains important notes for reference from certain meetings.
-|-- `./documentation` contains user and developer documentation
-|-- `./.github` contains CI/CD workflows
-#### Backend
-
-The `API` directory holds all the code pertaining to the backend APIs as well as some documentation 
-The `API/functions` directory holds the actual API files and corresponding tests, which can be found in `API/functions/test`
-
-
     root
+       |--- .github: contains CI/CD workflows
        |
-       |--- .github:  contains CI/CD workflows
-       |
-       |--- documentation:  contains user and developer documentation
-       |
-       |--- reports: contains our weekly status updates
+       |--- documentation: contains user and developer documentation
        |
        |--- meeting notes: contains important notes for reference from certain meetings.
+       |
+       |--- reports: contains our weekly status updates
        |
        |--- API:         holds all the code pertaining to the backend APIs as well as some documentation
            |                   
@@ -36,18 +23,23 @@ The `API/functions` directory holds the actual API files and corresponding tests
                       |
                       |--- test:           holds the tests for the API files
        |
-       |--- IOS:    holds all the code pertaining to frontend
+       |--- iOS:    holds all the code pertaining to frontend
            |
            |--- Sociable:       app screens, components, business logic (views, viewmodels); app icons
            |
            |--- SociableTests & SociableUITests:        frontend tests
-           |--- ExportOptions(-AdHoc).plist:            used when exporting app
-                                                        Needed for automatic TestFlight deployment 
-                                                        (AdHoc export/installation requires device UDID to be added to developer profile, 
-                                                        refer to this [guide]
-                                                        (https://support.magplus.com/hc/en-us/articles/204270188-iOS-Creating-an-Ad-Hoc-Distribution-Provisioning-Profile))
-           |--- Sociable.xcodeproj:                     metadata and build settings of Xcode project, detected as a file instead of directory on system
-         
+           |--- ExportOptions(-AdHoc).plist:          * used when exporting app
+                                                        needed for automatic TestFlight deployment
+           |--- Sociable.xcodeproj:                     metadata and build settings of Xcode project, 
+                                                        detected as a file instead of directory on system
+
+#### Backend
+The `API` directory holds all the code pertaining to the backend APIs as well as some documentation 
+The `API/functions` directory holds the actual API files and corresponding tests, which can be found in `API/functions/test`
+
+#### Frontend
+\*AdHoc export/installation requires device UDID to be added to developer profile,
+refer to this [guide](https://support.magplus.com/hc/en-us/articles/204270188-iOS-Creating-an-Ad-Hoc-Distribution-Provisioning-Profile)
 
 ## How to Build
 
