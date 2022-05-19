@@ -1,7 +1,8 @@
 # Status Report 6: `05/18/2022`
 
 ## Team Status
-
+From the big picture, we are still ironing out the bugs present with messaging and 
+connecting frontend and backend together to create a minimum viable product.
 
 ## Sub-team Status
 
@@ -20,7 +21,6 @@ Next Week:
 - Work on enabling users to send images to other users
 
 ### Frontend Team
-
 Riya & Kevin
 
 Goals for the week:
@@ -34,8 +34,7 @@ Next Week:
 - Assign supplemental screens (creating chats, uploading content, mutual contacts, user profiles)
 
 ### Fullstack Team
-
-Sulaiman & Abas:
+Sulaiman & Abas
 
 Goals for the week:
 - Contuinue working on screens and help with endpoints
