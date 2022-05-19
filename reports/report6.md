@@ -45,5 +45,3 @@ Next Week:
 - Implement both front end and backend tests
 - Work on the flow leading into the messaging screen
 - Delegate additional screens and endpoints amongst ourselves 
-
-Goals for the week:
