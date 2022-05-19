@@ -35,6 +35,15 @@ Next Week:
 
 ### Fullstack Team
 
-Sulaiman & Abas
+Sulaiman & Abas:
+
+Goals for the week:
+- Contuinue working on screens and help with endpoints
+  - Abas and Sulaiman: Fixing the messaging screen issues(duplicate messages, incorrect order of messages, etc) and help with essential endpoints
+
+Next Week:
+- Implement both front end and backend tests
+- Work on the flow leading into the messaging screen
+- Delegate additional screens and endpoints amongst ourselves 
 
 Goals for the week:
