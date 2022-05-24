@@ -20,6 +20,7 @@ const storage = admin.storage();
 // Create a storage reference from our storage service
 const bucket = storage.bucket();
 
+
 const firestore = admin.firestore();
 
 const PROJECTID = 'sociable-messenger';
