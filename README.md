@@ -43,7 +43,7 @@ Building the project onto a physical device may not work. The current workaround
 **How to Report a Bug**
 If a crash occurs while using the app downloaded from TestFlight, an alert may show asking to submit information to the developers.
 
-In the app details on TestFlight, you can report under Send Beta Feedback.
+In the app details on TestFlight, you can report under `Send Beta Feedback`.
 
 Since GitHub Issues is being used to track and report bugs under development, you can open a new issue there as well.
 
