@@ -2,20 +2,22 @@ name: App Testing
 
 on:
   push:
-    branches: [ master, iOS ]
+    branches: [ master ]
+    paths: [ iOS/** ]
   pull_request:
     branches: [ master, iOS ]
+    paths: [ iOS/** ]
 
 jobs:
   build:
     defaults:
       run:
         working-directory: iOS
-        
+
     runs-on: macos-latest
 
     steps:
-      - name: Checkout Repo
+      - name: Checkout repository
         uses: actions/checkout@v3
       - name: Build
         uses: mxcl/xcodebuild@v1
@@ -35,4 +37,3 @@ jobs:
           action: test
           mobile-provisioning-profiles-base64: |
             ${{ secrets.IPHONE_PROVISIONING_PROFILE_BASE64 }}
-          

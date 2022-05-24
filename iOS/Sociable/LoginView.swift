@@ -24,13 +24,14 @@ struct LoginView: View {
                 GradientBackground()
                 VStack(spacing: 16) {
                     UsernamePasswordView(username: $username, password: $password, isSecureField: $isSecureField)
-                    NavigationLink(destination: Text("[insert main screen here]"), tag: 1, selection: $selection) {
+                    NavigationLink(destination: MessageContentView(), tag: 1, selection: $selection) {
                         Button() {
-                            if spoofNetworkCall() {
+                            //if spoofNetworkCall() {
                                 // go to main screen / chat interface
                                 self.selection = 1
-                            }
-                        } label: {
+                            //}
+                        }
+                    label: {
                             HStack {
                                 Spacer()
                                 if isLoading {
@@ -44,8 +45,8 @@ struct LoginView: View {
                     }.disabled(username.isEmpty || password.isEmpty)
                     
                     if loginFail {
-                        // dependent on firebase error
-                        // e.g. incorrect user/pass
+//                         dependent on firebase error
+//                         e.g. incorrect user/pass
                         Text("Login Failed")
                             .foregroundColor(.red)
                             .font(Font.system(size: 12, design: .default))
@@ -74,7 +75,7 @@ struct LoginView: View {
         loginFail = false
         DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
             isLoading = false
-            loginFail = true
+            loginFail = false
         }
         return false
     }
@@ -138,6 +139,8 @@ struct RegisterView: View {
 struct EditProfileView: View {
     @State private var profileName = ""
     @State private var isShowingPhotoPicker = false
+    @State private var showingAlert = false
+    @State private var userSelection = 0
     // you may need to download SF Symbols if error
     @State private var avatarImage = UIImage(systemName: "person.fill")!
     let PROFILE_NAME_CHAR_LIMIT = 25
@@ -151,21 +154,51 @@ struct EditProfileView: View {
                         Spacer()
                         HStack {
                             if avatarImage == UIImage(systemName: "person.fill")! {
-                                Text("add\n photo")
-                                    .foregroundColor(.blue)
-                                    .overlay(
-                                        Circle()
-                                            .strokeBorder(style: StrokeStyle(lineWidth: 0.5, dash: [2]))
-                                            .frame(width: 160, height: 80))
-                                    .frame(width: 160, height: 80)
-                                    .multilineTextAlignment(.center)
-                                    .onTapGesture { isShowingPhotoPicker = true }
+                                VStack {
+                                    Text("add\n photo")
+                                        .foregroundColor(.blue)
+                                        .multilineTextAlignment(.center)
+                                        .overlay(
+                                            Circle()
+                                                .strokeBorder(style: StrokeStyle(lineWidth: 0.5, dash: [2]))
+                                                .frame(width: 160, height: 80))
+                                        .frame(width: 160, height: 160)
+                                        .alert("Add Profile Picture", isPresented: $showingAlert) {
+                                            Button("Take Photo") {
+                                                isShowingPhotoPicker = true
+                                                userSelection = 1 }
+                                            Button("Select Photo") {
+                                                isShowingPhotoPicker = true
+                                                userSelection = 2 }
+                                            Button("Cancel") { }
+                                        }
+                                }
+                                .contentShape(Rectangle())
+                                .onTapGesture {
+                                    showingAlert = true
+                                }
                             } else {
+                                VStack {
                                 Image(uiImage: avatarImage)
                                     .resizable()
+                                    .aspectRatio(contentMode: .fill)
                                     .frame(width: 160, height: 80)
                                     .clipShape(Circle())
-                                    .onTapGesture { isShowingPhotoPicker = true }
+                                    .alert("Add Profile Picture", isPresented: $showingAlert) {
+                                        Button("Take Photo") {
+                                            isShowingPhotoPicker = true
+                                            userSelection = 1 }
+                                        Button("Select Photo") {
+                                            isShowingPhotoPicker = true
+                                            userSelection = 2 }
+                                        Button("Cancel") { }
+                                    }
+                                }
+                                .contentShape(Rectangle())
+                                .frame(width: 160, height: 160)
+                                .onTapGesture {
+                                    showingAlert = true
+                                }
                             }
                             
                             Text("Enter your name and add an optional profile picture")
@@ -202,7 +235,7 @@ struct EditProfileView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $isShowingPhotoPicker, content: {
-            PhotoPicker(avatarImage: $avatarImage).ignoresSafeArea()
+            PhotoPicker(avatarImage: $avatarImage, sourceType: userSelection == 1 ? .camera : .savedPhotosAlbum).ignoresSafeArea()
         })
         .toolbar {
             // Go to main screen / chat interface
@@ -226,11 +259,12 @@ struct ForgotPasswordView: View {
                     .padding(.bottom, 10)
                 Text("If you do not know your current password, you may change it.")
                     .font(Font.system(size: 14, design: .default))
+                    .frame(width: .infinity, alignment: .center)
                     .multilineTextAlignment(.center)
                     .padding(.bottom, 20)
                 Text("Email")
                     .font(Font.system(size: 14, design: .default))
-                    .padding(.trailing, 260)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.bottom, -5)
                 TextField(email, text: $email)
                     .font(Font.system(size: 18, design: .default))
@@ -239,7 +273,7 @@ struct ForgotPasswordView: View {
                     .disableAutocorrection(true)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .frame(height: 35)
-                    .onTapGesture { self.didTap = true}
+                    .onTapGesture { self.didTap = true }
                 Button("Submit") {
                     print("Sent email link")
                 }
@@ -254,6 +288,7 @@ struct ForgotPasswordView: View {
             }
             .padding(.bottom, 200)
             .padding(12)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
 }
@@ -344,6 +379,7 @@ struct UsernamePasswordView: View {
         .padding(12)
     }
 }
+
 struct DatePickerView: View {
     @State private var birthDate = Calendar.current.date(byAdding: .year, value: -18, to: Date())!
     

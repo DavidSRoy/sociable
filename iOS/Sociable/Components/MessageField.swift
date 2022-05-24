@@ -12,7 +12,7 @@ struct MessageField: View {
     
     var body: some View {
         HStack {
-            SendForm(tmp: Text("Type your message here"), text: $message)
+            SendFormm(tmp: Text("Type your message here"), text: $message)
         Button {
         print("Messaging not implemented yet")
         }
@@ -38,7 +38,7 @@ struct MessageField_Previews: PreviewProvider {
     }
 }
 
-struct SendForm: View {
+struct SendFormm: View {
     var tmp: Text
     @Binding var text: String
     var editingChanged: (Bool) -> () = {_ in}
