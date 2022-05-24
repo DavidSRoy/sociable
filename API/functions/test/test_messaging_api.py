@@ -8,11 +8,6 @@ BASE_URL = "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_
 API = ""
 
 class Test_Index:
-    def test_messaging_getUsers_returns401WithoutAuth(self):
-        url = BASE_URL + "getUsers"
-        headers = {}
-        res = requests.get(url, headers=headers)
-        assert res.status_code == 401
 
     def test_messaging_getMessages_returns401WithoutAuth(self):
         url = BASE_URL + "getMessages"
