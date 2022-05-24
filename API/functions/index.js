@@ -160,5 +160,42 @@ async function uploadImage(filePath, uid) {
 
 uploadImage().catch(console.error);
 
+//retrieve status-- image format
+messaging_api.get('/getImage', async (request, response) => {
+  const req_key = request.get('auth');
+  if (req_key == KEY) {
+    const fullPath = request.query.fullPath;
+    await response.json(await getImage(fullPath));
+    console.log("File successfully retrieved!");
+  } else {
+    response.status(401).send('Unauthorized');
+  }
+});
+
+// get the image from storage
+async function getImage(fullPath) {
+  console.log(fullPath);
+  var imageURL = storage.ref(fullPath).getDownloadURL();
+  console.log(`${filePath} download url retrieved.`);
+  return imageURL.data();
+};
+
+getImage().catch(console.error);
+
+
+//check for new statuses of uid
+messaging_api.get('/getStatuses', async (request, response) => {
+  const req_key = request.get('auth');
+  if (req_key == KEY) {
+    await response.json(await getMessages(request.query.uid));
+  } else {
+    response.status(401).send('Unauthorized');
+  }
+});
+
+async function getStatuses(uid) {
+  const snapshot = await STATUS.doc.where('uid', '==', uid).get();
+  return snapshot.data();
+}
 
 exports.messaging_api = functions.https.onRequest(messaging_api)
