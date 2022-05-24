@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  Sociable
 //
-//  Created by Abas Hersi on 4/27/22.
+//  Created by Abas Hersi & Sulaiman Mahmood on 4/27/22.
 //
 
 import SwiftUI
