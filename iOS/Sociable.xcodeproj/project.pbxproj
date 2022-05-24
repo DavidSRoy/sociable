@@ -23,7 +23,6 @@
 		DB8E7C54280F6A68001415D2 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB8E7C53280F6A68001415D2 /* Preview Assets.xcassets */; };
 		DB8E7C5E280F6A69001415D2 /* SociableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8E7C5D280F6A69001415D2 /* SociableTests.swift */; };
 		DB8E7C68280F6A69001415D2 /* SociableUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8E7C67280F6A69001415D2 /* SociableUITests.swift */; };
-		DB8E7C6A280F6A69001415D2 /* SociableUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8E7C69280F6A69001415D2 /* SociableUITestsLaunchTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,7 +62,6 @@
 		DB8E7C5D280F6A69001415D2 /* SociableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociableTests.swift; sourceTree = "<group>"; };
 		DB8E7C63280F6A69001415D2 /* SociableUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SociableUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB8E7C67280F6A69001415D2 /* SociableUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociableUITests.swift; sourceTree = "<group>"; };
-		DB8E7C69280F6A69001415D2 /* SociableUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociableUITestsLaunchTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -168,7 +166,6 @@
 			isa = PBXGroup;
 			children = (
 				DB8E7C67280F6A69001415D2 /* SociableUITests.swift */,
-				DB8E7C69280F6A69001415D2 /* SociableUITestsLaunchTests.swift */,
 			);
 			path = SociableUITests;
 			sourceTree = "<group>";
@@ -330,7 +327,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DB8E7C6A280F6A69001415D2 /* SociableUITestsLaunchTests.swift in Sources */,
 				DB8E7C68280F6A69001415D2 /* SociableUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
