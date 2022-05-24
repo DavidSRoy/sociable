@@ -1,10 +1,7 @@
 .DS_Store
 .runtimeconfig.json
-<<<<<<< HEAD
 firebase-debug.log
 *.log
-=======
 .github/secrets/decrypt_secrets.sh
 iOS/ExportOptions-AdHoc.plist
 iOS/ExportOptions.plist
->>>>>>> master
