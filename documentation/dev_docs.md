@@ -75,7 +75,10 @@ Run `pytest –auth=’<API_KEY>’` from the API or functions directory. Replac
 ### Frontend
 Long hold on the play (build) button for a test option in Xcode.
 
-`xcodebuild test` or `xcodebuild test-without-building` to execute the test files under `SociableTests` and `SociableUITests` directories.
+For command line, `xcodebuild test` or `xcodebuild test-without-building` to execute the test files under `SociableTests` and `SociableUITests` directories.
+Append option `-scheme Sociable` and if needed, `-destination 'platform=iOS Simulator,name=DEVICE'` where `DEVICE` should be substituted with an iOS device string such as `iPhone 13 Pro Max`. 
+
+For a list of `DEVICE` destinations, run `xcrun xctrace list devices`. iOS versions can be specified by adding key-value pair `OS=x.x` after `name=DEVICE`, but most likely the preinstalled destinations have the latest firmware (e.g. `OS=15.4`).
 
 Running a single unit test can be done by appending with flag `-only-testing <test-identifier>` where `<test-identifier>` is provided in the form: _TestTarget[/TestClass[/TestMethod]]_ (e.g. `SociableTests/SociableUITestsLaunchTests/testLaunch`)
 
