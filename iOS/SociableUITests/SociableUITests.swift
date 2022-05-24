@@ -2,7 +2,6 @@
 //  SociableUITests.swift
 //  SociableUITests
 //
-//  Created by stlp on 4/19/22.
 //
 
 import XCTest
