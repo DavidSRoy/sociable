@@ -15,7 +15,7 @@ Introducing Sociable, a chat app that’s similar to Messenger or Whatsapp but o
 
 **[User Manual](https://github.com/DavidSRoy/sociable/blob/master/documentation/user_docs.md)**
 
-**[Developer Docs](https://github.com/DavidSRoy/sociable/blob/master/documentation/developer_docs.md)**
+**[Developer Docs](https://github.com/DavidSRoy/sociable/blob/master/documentation/dev_docs.md)**
 
 ## Build and Testing System
 The backend can be tested by running `pytest --auth '<TOKEN>'` while in the directory API/functions. Replace `<TOKEN>` with the API key.
@@ -23,14 +23,15 @@ The backend can be tested by running `pytest --auth '<TOKEN>'` while in the dire
 Install [Xcode](https://developer.apple.com/xcode/), then be sure to choose and open the `iOS/` directory within the repository folder.
 Press (or long hold) on the play button on the top left to build and run tests.
 Build and testing the frontend can also be done via command-line using `xcodebuild` and appending `test` while in the iOS directory.
-Refer to [dev docs](https://github.com/DavidSRoy/sociable/blob/docs/documentation/dev_docs.md) for additional information.
+Refer to [dev docs](https://github.com/DavidSRoy/sociable/blob/master/documentation/dev_docs.md) for additional information.
 
 ## Accessing Beta Version
-Beta testers have received an invite via TestFlight, where the beta version can be downloaded. If you have not received an invite and would like one, please contact a team member. You will need to receive and accept two invites - one for App Store Connect and another for TestFlight (the first is required since the app has not gone through App Store Review process).
+Beta testers have received an invite via TestFlight, where the beta version can be downloaded. If you would like one, please contact a team member. You will need to receive and accept two invites - one for App Store Connect and another for TestFlight (the first is required since the app has not gone through the App Store Review process).
 
 ## Running System
 Xcode has emulators that can run the project code and compile the app.
 The app can also be downloaded via TestFlight to a physical device, but a TestFlight invitation is required.
+Building the project onto a physical device may not work. The current workaround is using an AdHoc .ipa export but requires the device's UDID to be added to the developer certificate.
 
 ## Test Directories
 **[Backend](https://github.com/DavidSRoy/sociable/tree/master/API/functions/test)** - `API/functions/test`
@@ -53,9 +54,6 @@ For any of these options, please include details and steps to reproduce the bug 
 * Messages Screen displays duplicate messages
 * Messaging Screen View is not updated right away after the send button is pressed
 * Login/User creation workflow has not yet been integrated with the endpoints
-
-## How to Contribute
-Check out our [developer documentation](https://github.com/DavidSRoy/sociable/blob/docs/documentation/dev_docs.md) in the `documentation` directory
 
 ## Team Members
 **[David Roy](https://github.com/DavidSRoy)**, Backend
