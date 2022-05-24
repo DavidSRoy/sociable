@@ -1,3 +1,4 @@
 .DS_Store
 .runtimeconfig.json
 firebase-debug.log
+*.log
