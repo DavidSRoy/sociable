@@ -8,15 +8,15 @@ const gc = require('@google-cloud/storage');
 const express = require('express');
 const {v4: uuid} = require('uuid');
 //var gcloud = require('google-cloud');
+//const serviceAccount = getServiceAccountKey();
 
 // // Create and Deploy Your First Cloud Functions
 // // https://firebase.google.com/docs/functions/write-firebase-functions
 //
 // exports.helloWorld = functions.https.onRequest((request, response) => {
 //   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
+//   response.send("Hello from Firebase!"); 
 // });
-
 admin.initializeApp({storageBucket: "sociable-messenger.appspot.com",
 credential: admin.credential.cert(serviceAccount)
 });
@@ -31,9 +31,27 @@ const PROJECTID = 'sociable-messenger';
 const USERS = firestore.collection('test_users');
 const STATUS = firestore.collection('status');
 const KEY = functions.config().messaging.key;
+const { Octokit } = require("@octokit/core");
 
 const messaging_api = express();
 
+// async function getServiceAccountKey() {
+//   // Octokit.js
+//   // https://github.com/octokit/core.js#readme
+//   const octokit = new Octokit({
+//     auth: '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'
+//   })
+
+//   const snapshot = await octokit.request('GET /repos/DavidSRoy/sociable/actions/secrets/SERVICE_ACCOUNT', {
+//     owner: 'DavidSRoy',
+//     repo: 'sociable',
+//     secret_name: 'SERVICE_ACCOUNT'
+//   })
+
+//   console.log("DATA " + data);
+
+//   return snapshot.data;
+// }
 
 messaging_api.post('/sendMessage', async (request, response) => {
   
