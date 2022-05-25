@@ -19,6 +19,7 @@ const firestore = admin.firestore();
 const PROJECTID = 'sociable-messenger';
 const USERS = firestore.collection('test_users');
 const KEY = functions.config().messaging.key;
+//const KEY = 'fa8183b09992df0844473872b19d64fa7c400842';
 const users_api = express();
 
 
