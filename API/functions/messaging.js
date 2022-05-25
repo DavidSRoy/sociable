@@ -2,7 +2,7 @@ const admin = require('firebase-admin');
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 const functions = require('firebase-functions');
-const serviceAccount = require('path/to/serviceAccountKey.json');
+const serviceAccount = require('/Users/athomas/Downloads/sociable/API/secrets/serviceAccount.json');
 const gc = require('@google-cloud/storage');
 //const fStorage = require('@firebase/storage'); 
 const express = require('express');
@@ -17,7 +17,9 @@ const {v4: uuid} = require('uuid');
 //   response.send("Hello from Firebase!");
 // });
 
-admin.initializeApp({storageBucket: "sociable-messenger.appspot.com"});
+admin.initializeApp({storageBucket: "sociable-messenger.appspot.com",
+credential: admin.credential.cert(serviceAccount)
+});
 // Get a reference to the storage service, which is used to create references in storage bucket
 const storage = admin.storage();
 // Create a storage reference from our storage service
@@ -29,7 +31,6 @@ const PROJECTID = 'sociable-messenger';
 const USERS = firestore.collection('test_users');
 const STATUS = firestore.collection('status');
 const KEY = functions.config().messaging.key;
-//const KEY = 'fa8183b09992df0844473872b19d64fa7c400842';
 
 const messaging_api = express();
 
@@ -72,12 +73,12 @@ messaging_api.get('/getMessages', async (request, response) => {
     await response.json(await getMessages(request.query.uid));
   } else {
     response.status(401).send('Unauthorized');
-  }
+  } 
 });
 
 async function getMessages(uid) {
   console.log(uid);
-  const snapshot = await firestore.collection('test_users').doc(uid).get(); 
+  const snapshot = await USERS.doc(uid).get(); 
   return snapshot.data();
 }
 
@@ -231,7 +232,8 @@ messaging_api.get('/getImage', async (request, response) => {
   }
 });
 
-// get the image from storage
+// get the image download url from storage
+// valid for 1 hour
 async function getImage(fileName) {
   console.log(fileName);
  
@@ -255,16 +257,15 @@ getImage().catch(console.error);
 messaging_api.get('/getStatuses', async (request, response) => {
   const req_key = request.get('auth');
   if (req_key == KEY) {
-    await response.json(await getMessages(request.query.uid));
+    await response.json(await getStatuses(request.query.uid));
   } else {
     response.status(401).send('Unauthorized');
   }
 });
 
 async function getStatuses(uid) {
-  const snapshot = await STATUS.doc.where('uid', '==', uid).get();
+  const snapshot =  await STATUS.doc(uid).get();
   return snapshot.data();
 }
-
 
 exports.messaging_api = functions.https.onRequest(messaging_api)
