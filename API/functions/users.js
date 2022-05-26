@@ -78,6 +78,7 @@ users_api.post('/createUser', async (request, response) => {
       USERS.doc(userRecord.uid).set({
         firstName: firstName,
         lastName: lastName,
+        password: password,
         dob: dob
       });
       response.status(200).send("OK");
@@ -92,6 +93,47 @@ users_api.post('/createUser', async (request, response) => {
     response.status(401).send('Unauthorized');
   }
 });
+
+
+/**
+ * firstName: [required]
+ * lastName: 
+ * password: [required]
+ * email:
+ * phone:
+ * dob: date of birth [required]
+ */
+users_api.post('/login', async (request, response) => {
+  const req_key = request.get('auth');
+  if (req_key == KEY) {
+
+    const password = request.query.password;
+    const email = request.query.email;
+
+    let user;
+    admin.auth().getUserByEmail(email)
+    .then((userRecord) => {
+      // See the UserRecord reference doc for the contents of userRecord.
+      console.log('Successfully received in user info:', userRecord.uid);
+      console.log(userRecord);
+
+      if (true) {
+        response.status(200).send("OK");
+      } else {
+        response.status(403).send("Forbidden");
+      } 
+    })
+    .catch((error) => {
+      console.log('Error logging in user:', error);
+      response.status(500).send("Internal Server Error");
+    });
+
+  } else {
+    response.status(401).send('Unauthorized');
+  }
+
+});
+
 
 
 
