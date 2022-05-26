@@ -21,13 +21,14 @@ Next Week:
 ### Frontend Team
 Riya & Kevin
 
-[General Status]
+Currently working on screens.
 
 Goals for the week:
-- Goals
+- Implement some basic tests
+- Have profile and main interface screen by final release
 
 Next Week:
-- Goals
+- Final release
 
 ### Fullstack Team
 Sulaiman & Abas
