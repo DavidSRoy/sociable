@@ -7,13 +7,13 @@
 ### Backend Team
 David & Anna
 
-[General Status]
+Anna just completed the getImage and getStatus endpoints. David worked on fixing deployment pipeline issues and updated API documentation. At this point, the backend team is done implementing features, and will be focused on maintaining the APIs.
 
 Goals for the week:
-- Goals
+- Make sure the APIs are up and running, fix any bugs that may pop up
 
 Next Week:
-- Goals
+- Final release
 
 ### Frontend Team
 Riya & Kevin
