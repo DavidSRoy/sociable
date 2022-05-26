@@ -32,10 +32,9 @@ Next Week:
 ### Fullstack Team
 Sulaiman & Abas
 
-[General Status]
-
+We have come quite close to completing the messaging screen. We are also working on the contact screen right now. 
 Goals for the week:
-- Goals
+- Finsh messaging screen
 
 Next Week:
-- Goals
+- Complete the contact screen 
