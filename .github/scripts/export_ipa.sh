@@ -2,9 +2,7 @@
 
 set -eo pipefail
 
-xcodebuild -scheme Sociable \
-	    -archivePath iOS/build/Sociable.xcarchive \
-            -workspace iOS/Sociable.xcodeproj/project.xcworkspace \
+xcodebuild -archivePath iOS/build/Sociable.xcarchive \
 	    -exportOptionsPlist iOS/exportOptions.plist \
             -exportPath iOS/build \
             -allowProvisioningUpdates \
