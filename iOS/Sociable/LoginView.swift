@@ -237,8 +237,7 @@ struct EditProfileView: View {
             PhotoPicker(avatarImage: $avatarImage, sourceType: userSelection == 1 ? .camera : .savedPhotosAlbum).ignoresSafeArea()
         })
         .toolbar {
-            // Go to main screen / chat interface
-            NavigationLink(destination: Text("[Insert main screen here]"), label: { Text("Done") })
+            NavigationLink(destination: MainMessagesView(), label: { Text("Done") })
                 .disabled(profileName.isEmpty)
         }
     }

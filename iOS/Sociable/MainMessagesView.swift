@@ -18,6 +18,7 @@ class MainMessagesViewModel: ObservableObject {
     }
     
     private func fetchCurrentUser() {
+        // TODO
         // need to convert username/email->uid to use for other endpoints
         // as uid is not generated locally
         let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/getMessages?uid=" + "john1") //username/email
@@ -38,7 +39,6 @@ class MainMessagesViewModel: ObservableObject {
                     let parsed = try decoder.decode(ChatUser.self, from: data)
                     self.chatUser = parsed
                     self.extractChatListData()
-        //            self.test = parsed.msgs
                     print(parsed)
                 }
                 catch {
