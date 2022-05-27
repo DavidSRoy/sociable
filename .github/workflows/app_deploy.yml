@@ -2,7 +2,7 @@ name: Deploy
 
 on:
   push:
-    branches: [ master, feature/app-testing ]
+    branches: [ master ]
     tags: v* # use tags to run & deploy to TestFlight
 
 jobs:
