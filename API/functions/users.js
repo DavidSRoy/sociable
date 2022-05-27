@@ -37,8 +37,8 @@ users_api.get('/getUsers', async (request, response) => {
 });
 
 /**
- * createUser
- * request:
+ * createUser params
+ * 
  * firstName: [required]
  * lastName: 
  * password: [required]
