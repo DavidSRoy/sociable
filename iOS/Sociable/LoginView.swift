@@ -2,7 +2,6 @@
 //  ContentView.swift
 //  Sociable
 //
-//  Created by 0xMango on 4/19/22.
 //
 
 import SwiftUI
@@ -24,12 +23,12 @@ struct LoginView: View {
                 GradientBackground()
                 VStack(spacing: 16) {
                     UsernamePasswordView(username: $username, password: $password, isSecureField: $isSecureField)
-                    NavigationLink(destination: MessageContentView(), tag: 1, selection: $selection) {
+                    NavigationLink(destination: MainMessagesView(), tag: 1, selection: $selection) {
                         Button() {
-                            //if spoofNetworkCall() {
+//                            if spoofNetworkCall() {
                                 // go to main screen / chat interface
                                 self.selection = 1
-                            //}
+//                            }
                         }
                     label: {
                             HStack {
@@ -238,8 +237,7 @@ struct EditProfileView: View {
             PhotoPicker(avatarImage: $avatarImage, sourceType: userSelection == 1 ? .camera : .savedPhotosAlbum).ignoresSafeArea()
         })
         .toolbar {
-            // Go to main screen / chat interface
-            NavigationLink(destination: Text("[Insert main screen here]"), label: { Text("Done") })
+            NavigationLink(destination: MainMessagesView(), label: { Text("Done") })
                 .disabled(profileName.isEmpty)
         }
     }
