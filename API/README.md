@@ -21,6 +21,10 @@ Parameters
 
 # Users API
 
+## 'getUsers'
+No Parameters
+returns everything about all users
+
 ## `createUser`
 Parameters
 
