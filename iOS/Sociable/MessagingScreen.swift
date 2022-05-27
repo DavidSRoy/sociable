@@ -22,8 +22,7 @@ struct Msg2Comp: Hashable, Codable {
 }
 
 struct Timestamp: Hashable, Codable {
-    let _seconds: Int
-    let _nanoseconds: Int
+    let _seconds, _nanoseconds: Int
 }
 
 public func fetchMessages(user: String) {
@@ -41,7 +40,7 @@ public func fetchMessages(user: String) {
         }
         
         guard let response = response,
-              let httpResponse = response as?  HTTPURLResponse else {
+              let httpResponse = response as? HTTPURLResponse else {
             return
         }
         
