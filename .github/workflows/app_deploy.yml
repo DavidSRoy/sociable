@@ -9,7 +9,7 @@ jobs:
   deploy:
     name: Deploying to Testflight
     runs-on: macOS-latest
-    # if: ${{ github.ref_type == 'tag' && github.event.base_ref=='refs/heads/master' }}
+    if: ${{ github.ref_type == 'tag' && github.event.base_ref=='refs/heads/master' }}
     steps:
       - name: Use latest stable Xcode
         uses: maxim-lobanov/setup-xcode@v1
