@@ -14,7 +14,7 @@ struct MessageBubble: View {
         VStack (alignment: msg.recieved ? .leading : .trailing) {
             HStack {
                 Text(msg.text)
-                    .padding()
+                    .padding(15)
                     .background(msg.recieved ? Color("gray") : Color("msgblue"))
                     .foregroundColor(msg.recieved ? .black : .white)
                     .cornerRadius(30)
@@ -25,7 +25,7 @@ struct MessageBubble: View {
             }
             
             if displayTime {
-                Text("\(msg.time.formatted(.dateTime.hour().minute()))")
+                Text("\(msg.time.formattedToDate())")
                     .font(.caption2)
                     .foregroundColor(.gray)
                     .padding(msg.recieved ? .leading : .trailing, 25)
@@ -33,13 +33,12 @@ struct MessageBubble: View {
         }
         .frame(maxWidth: .infinity, alignment: msg.recieved ? .leading : .trailing)
         .padding(msg.recieved ? .leading : .trailing)
-        .padding(.horizontal, 10)
     }
 }
 
 struct MessageBubble_Previews: PreviewProvider {
     static var previews: some View {
-        MessageBubble(msg: Msg(id: "100", text: "Hey what's up. I'm excited to work on sociable. I love building apps.", recieved: false, time: Date()))
+        MessageBubble(msg: Msg(id: "100", text: "Hey what's up. I'm excited to work on sociable. I love building apps.", recieved: false, time: Timestamp()))
     }
 }
 

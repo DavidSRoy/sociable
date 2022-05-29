@@ -15,6 +15,12 @@ class MainMessagesViewModel: ObservableObject {
     
     init() {
         fetchCurrentUser()
+//        fetchMessages(user: "john1") { response in
+//            print(response)
+//        }
+//        fetchMessages(user: "jane1") { response in
+//            print(response)
+//        }
     }
     
     private func fetchCurrentUser() {
@@ -27,7 +33,7 @@ class MainMessagesViewModel: ObservableObject {
         request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
         URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {
-                fatalError("There was an error with your network request: \(error.localizedDescription)")
+                fatalError("Failed to get current user information: \(error.localizedDescription)")
             }
             
             guard let data = data else {
@@ -37,6 +43,7 @@ class MainMessagesViewModel: ObservableObject {
                 let decoder = JSONDecoder()
                 do {
                     let parsed = try decoder.decode(ChatUser.self, from: data)
+                    // All the ChatUsers that John has DMed
                     self.chatUser = parsed
                     self.extractChatListData()
                     print(parsed)
@@ -65,12 +72,15 @@ class MainMessagesViewModel: ObservableObject {
 struct MainMessagesView: View {
     
     @State var status = "online"
+    @State var showFullScreen = false
+    @State var navigateToChatLogView = false
+    @State var chatUser: ChatUser?
+    
     
     @ObservedObject private var vm = MainMessagesViewModel()
     
     private var customNavBar: some View {
         HStack(spacing: 16) {
-            
             let imageUrl = vm.chatUser?.profileImageUrl
             if (imageUrl != nil) {
                 WebImage(url: URL(string:
@@ -110,11 +120,17 @@ struct MainMessagesView: View {
             }
             Spacer()
             Button {
-                
+                showFullScreen.toggle()
             } label: {
                 Image(systemName: "square.and.pencil")
                     .font(.system(size: 24, weight: .bold))
                     .foregroundColor(Color(.label))
+            }
+            .fullScreenCover(isPresented: $showFullScreen) {
+                CreateNewMessageView(didSelectNewUser: { user in
+                    self.navigateToChatLogView.toggle()
+                    self.chatUser = user
+                })
             }
         }
         .padding()
@@ -125,6 +141,10 @@ struct MainMessagesView: View {
             VStack {
                 customNavBar
                 messagesView
+                
+                NavigationLink("", isActive: $navigateToChatLogView) {
+                    Text("Chat Log View")
+                }
             }
             .navigationBarHidden(true)
         }
@@ -135,47 +155,52 @@ struct MainMessagesView: View {
         ScrollView {
             ForEach(vm.chatListData, id: \.self) { msg in
                 VStack {
-                    HStack(spacing: 16) {
-                        // TODO
-                        // need uid->url. msg.sender.profileImageUrl
-                        // technically possible with getMessages(uid)
-                        let imageUrl = vm.chatUser?.profileImageUrl
-                        if (imageUrl != nil) {
-                            WebImage(url: URL(string:
-                                imageUrl ?? ""))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 32, height: 32)
-                                .clipped()
-                                .cornerRadius(44)
-                                .overlay(RoundedRectangle(cornerRadius: 44)
-                                    .stroke(Color(.label), lineWidth: 1))
-                                .shadow(radius: 5)
-                        } else {
-                            Image(systemName: "person.fill")
-                                .font(.system(size: 32))
-                                .padding(8)
-                                .overlay(RoundedRectangle(cornerRadius: 44)
-                                    .stroke(Color(.label), lineWidth: 1))
-                        }
-                        
-                        VStack(alignment: .leading) {
+                    NavigationLink(destination: MessageContentView(), label: {
+                        HStack(spacing: 16) {
                             // TODO
-                            // should be name
-                            Text(msg.sender)
-                                .font(.system(size: 14,
-                                    weight: .bold))
-                            Text(msg.msg)
-                                .font(.system(size: 14))
-                                .foregroundColor(Color(
-                                    .lightGray))
+                            // need uid->url. msg.sender.profileImageUrl
+                            // technically possible with getMessages(uid)
+                            let imageUrl = vm.chatUser?.profileImageUrl
+                            if (imageUrl != nil) {
+                                WebImage(url: URL(string:
+                                    imageUrl ?? ""))
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 32, height: 32)
+                                    .clipped()
+                                    .cornerRadius(44)
+                                    .overlay(RoundedRectangle(cornerRadius: 44)
+                                        .stroke(Color(.label), lineWidth: 1))
+                                    .shadow(radius: 5)
+                            } else {
+                                Image(systemName: "person.fill")
+                                    .font(.system(size: 32))
+                                    .padding(8)
+                                    .overlay(RoundedRectangle(cornerRadius: 44)
+                                        .stroke(Color(.label), lineWidth: 1))
+                            }
+                            
+                            VStack(alignment: .leading) {
+                                // TODO
+                                // should be name
+                                Text(msg.sender)
+                                    .font(.system(size: 14,
+                                        weight: .bold))
+                                
+                                // TODO
+                                // should be the most recent person
+                                Text(msg.msg)
+                                    .font(.system(size: 14))
+                                    .foregroundColor(Color(
+                                        .lightGray))
+                            }
+                            Spacer()
+                            
+                            Text(timeFormatter(msg.timestamp._seconds))
+                                .font(.system(size: 14, weight:
+                                        .semibold))
                         }
-                        Spacer()
-                        
-                        Text(timeFormatter(msg.timestamp._seconds))
-                            .font(.system(size: 14, weight:
-                                    .semibold))
-                    }
+                    })
                     Divider()
                         .padding(.vertical, 8)
                 }.padding(.horizontal)
@@ -187,10 +212,13 @@ struct MainMessagesView: View {
 
 private func timeFormatter(_ ts: Int) -> String {
     let seconds = Int(NSDate().timeIntervalSince1970) - ts
+    let days = seconds / 86400
     let hours = seconds / 3600
     let min = (seconds % 3600) / 60
     let sec = (seconds % 3600) % 60
-    if hours >= 1 {
+    if days >= 1 {
+        return String(days) + "d"
+    } else if hours >= 1 {
         return String(hours) + "h"
     } else if min >= 1 {
         return String(min) + "m"
