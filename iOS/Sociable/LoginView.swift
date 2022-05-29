@@ -26,10 +26,10 @@ struct LoginView: View {
                     UsernamePasswordView(username: $username, password: $password, isSecureField: $isSecureField, isLoading: $isLoading, isLogin: $isLogin)
                     NavigationLink(destination: MainMessagesView(), tag: 1, selection: $selection) {
                         Button() {
-                            // .if !spoofNetworkCall() {
+                            if logInUser(username:username, password: password) {
                             // go to main screen / chat interface
                                 self.selection = 1
-                            // }
+                            }
                         }
                     label: {
                         HStack {
@@ -70,14 +70,26 @@ struct LoginView: View {
         }
     }
     
-    func spoofNetworkCall() -> Bool {
+    func logInUser(username: String, password: String) -> Bool {
         isLoading = true
         loginFail = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            isLoading = false
-            loginFail = false
-        }
-        return false
+        
+        let urlstring = "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/login?password=" + password + "&email=" + username
+        
+        let url = URL(string: urlstring)
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                isLoading = false
+                loginFail = true
+                fatalError("There was an error with your network request: \(error.localizedDescription)")
+            }
+            
+        }.resume()
+            
+        return true;
     }
 }
 
@@ -98,8 +110,11 @@ struct RegisterView: View {
                 DatePickerView()
                 NavigationLink(destination: EditProfileView(), tag: 1, selection: $selection) {
                     Button() {
-                        if !spoofNetworkCall() {
-                            // go to main screen / chat interface (remove !)
+    
+                        if registerUser(username: username, password: password) {
+                            // called the createUsers endpoint
+                            // go to main screen / chat interface
+                            // on success
                             self.selection = 1
                         }
                     } label: {
@@ -125,15 +140,27 @@ struct RegisterView: View {
             .padding(12)
         }
     }
-    
-    func spoofNetworkCall() -> Bool {
+
+    func registerUser(username: String, password: String) -> Bool {
         isLoading = true
         registerFail = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            isLoading = false
-            registerFail = true
-        }
-        return false
+        
+        let urlstring = "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/createUser?firstName=" + username + "&lastName=" + username + "&password=" + password + "&email=" + username + "&dob=1/1/1999"
+        
+        let url = URL(string: urlstring)
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                isLoading = false
+                registerFail = true
+                fatalError("There was an error with your network request: \(error.localizedDescription)")
+            }
+            
+        }.resume()
+            
+        return true;
     }
 }
 
