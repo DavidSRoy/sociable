@@ -2,12 +2,11 @@
 //  ContentView.swift
 //  Sociable
 //
-//  Created by Abas Hersi on 4/27/22.
+//  Created by Abas Hersi & Sulaiman Mahmood on 4/27/22.
 //
 
 import SwiftUI
 
-public var messages = [Msg]()
 public var loggedin = "john1"
 public var msgSet : Set<Msg> = []
 
@@ -23,132 +22,137 @@ struct Msg2Comp: Hashable, Codable {
     let timestamp: Timestamp
 }
 
-struct Timestamp: Hashable, Codable {
-    let _seconds: Int
-    let _nanoseconds: Int
-}
-
-public func deleteDuplicates() {
-
-}
-
-public func fetchMessages(user: String) {
-    let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/getMessages?uid=" + user)
-    var request = URLRequest(url: url!)
-    request.httpMethod = "GET"
-    request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
-    URLSession.shared.dataTask(with: request) { data, response, error in
-        if let error = error {
-            fatalError("There was an error with your network request: \(error.localizedDescription)")
-        }
-        
-        guard let data = data else {
-            return
-        }
-        
-        guard let response = response,
-              let httpResponse = response as?  HTTPURLResponse else {
-            return
-        }
-        
-        let decoder = JSONDecoder()
-        let decodedData = try! decoder.decode(Usr2Msg.self, from: data)
-        for msg in decodedData.msgs {
-            
-            let rs = UUID().uuidString
-            let message = Msg(id: rs,  text: msg.msg, recieved: loggedin.elementsEqual(msg.sender) ? false: true, time: Date())
-            var counter = 0
-            for mesg in messages {
-                if(mesg.text.isEqual(msg.msg)) {
-                    messages.remove(at: counter)
-                }
-                counter = counter + 1
-            }
-            messages.append(message)
-            messages = messages.sorted(by: { $0.time >= $1.time })
-        }
-    }.resume()
-}
-
-public func sendMessages(msg: String, recipient: String) {
-    let urlstring = "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/sendMessage?uid=jane1&msg=" + msg + "&sender=john1"
+private func sendMessage(msg: String, recipient: String, _ allMessages: inout Dictionary<String, Array<Msg>>) {
+    let sendBaseUrl = "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/sendMessage?"
+    let urlstring = sendBaseUrl + "uid=" + recipient + "&msg=" + msg + "&sender=" + loggedin
     let url = URL(string: urlstring)
     var request = URLRequest(url: url!)
     request.httpMethod = "POST"
     request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
     URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
-            fatalError("There was an error with your network request: \(error.localizedDescription)")
-        }
-        
-        guard let data = data else {
-            return
-        }
-        
-        guard let response = response,
-              let httpResponse = response as?  HTTPURLResponse else {
-            return
+            fatalError("Unable to send message: \(error.localizedDescription)")
         }
     }.resume()
-}
-
-public func updateSent(msg: String, recipient: String) {
-    let rs = UUID().uuidString
-    let message = Msg(id: rs, text: msg, recieved: false, time: Date())
-    var counter = 0
-    for mesg in messages {
-        if(mesg.text.isEqual(msg)) {
-            messages.remove(at: counter)
-        }
-        counter = counter + 1
-    }
-    messages.append(message)
-    messages = messages.sorted(by: { $0.time >= $1.time })
-    sendMessages(msg: msg, recipient: recipient)
-}
-
-
-
-class MsgContainer: ObservableObject {
-    
+    let message = Msg(id: loggedin, text: msg, recieved: false, time: Timestamp())
+    allMessages[recipient, default: []].append(message)
 }
 
 struct MessageContentView: View {
     @State private var message = ""
-    @State var ref: Bool = false
-    @StateObject var mm = MessageManager()
+    @Binding var recipient: ChatUser?
     
+    // Connects to MainMessagesView data
+    @ObservedObject private var vm = MainMessagesViewModel()
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     var body: some View {
         VStack {
-        VStack {
-            TitleRow()
-            ScrollView {
-                ForEach (mm.msgs, id: \.id) { msg in
-                    MessageBubble(msg: msg)
+            VStack {
+                // TODO
+                // basically needs getUsers endpoint
+                // Title Row
+                // let imgURL = URL(string: recipient.profileImageUrl)
+                let imgURL = URL(string: "https://ca.slack-edge.com/T039K0BN264-U038Y2U704A-0da3c7494a42-512")
+                let status = recipient?.status ?? "online"
+                let profile_insets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+                let backbtn_insets = EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
+                
+                HStack (spacing: 20) {
+                    
+                    Image(systemName: "arrow.backward.circle")
+                        .resizable()
+                        .foregroundColor(.white)
+                        .frame(width: 32.0, height: 32.0)
+                        .padding(backbtn_insets)
+                        .onTapGesture {
+                            presentationMode.wrappedValue.dismiss()
+                        }
+                    
+                    if (imgURL != nil) {
+                        AsyncImage(url: imgURL) { image in
+                            image.resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(50)
+                                .padding(profile_insets)
+                        }
+                    placeholder: {
+                        ProgressView()
+                    }
+                    } else {
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 44, weight: .heavy))
+                    }
+                    
+                    VStack (alignment: .leading) {
+                        Text((recipient?.name ?? recipient?.uid) ?? "").font(.title)
+                            .bold()
+                            .foregroundColor(.white)
+                        HStack {
+                            Circle()
+                                .foregroundColor(.green)
+                                .frame(width: 14, height: 14)
+                            Text(status).font(.caption)
+                                .foregroundColor(.white)
+                        }.padding(.top, -15)
+                    }
                 }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
             }
-            .padding(.top, 10)
-            .background(.white)
-            .cornerRadius(30)
+            
+            ScrollViewReader { scrollView in
+                ScrollView(.vertical) {
+                    ForEach(vm.allMessages[target] ?? [], id: \.self) { msg in
+                        MessageBubble(msg: msg)
+                            .padding(.top, -5)
+                    }
+                }
+                // TODO refactor
+                .onAppear {
+                    if !((vm.allMessages[target]) ?? []).isEmpty {
+                        scrollView.scrollTo((vm.allMessages[target]?.last)!)
+                    }
+                }
+                .onChange(of: vm.allMessages[target]?.last) { _ in
+                    withAnimation {
+                        scrollView.scrollTo((vm.allMessages[target]?.last)!)
+                    }
+                }
+                .background(.white)
+                .cornerRadius(30, corners: [.topLeft, .topRight])
+            }
         }
         .background(Color("msgblue"))
-            MessageField().environmentObject(mm)
-            .padding(.horizontal)
-            .padding(.vertical, 10)
-            .background(Color("gray"))
-            .cornerRadius(50)
-            .padding()
+        .navigationBarHidden(true)
+        
+        HStack {
+            SendForm(tmp: Text("Type your message here"), text: $message)
+            Button {
+                sendMessage(msg: message, recipient: target, &vm.allMessages)
+                message = ""
+            } label: {
+                Image(systemName: "paperplane.fill")
+                    .foregroundColor(.white)
+                    .padding(8)
+                    .background(Color("msgblue"))
+                    .cornerRadius(50)
+                    .padding(.trailing, -10)
+            }
         }
-
+        .padding(.horizontal, 25)
+        .background(Color("gray"))
+        .cornerRadius(50)
+        .frame(width: 380)
     }
 }
 
-struct MessagingView_Previews: PreviewProvider {
-    static var previews: some View {
-        MessageContentView()
-    }
-}
+//struct MessagingView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MessageContentView()
+//    }
+//}
 
 struct SendForm: View {
     var tmp: Text
@@ -165,5 +169,4 @@ struct SendForm: View {
             TextField("", text: $text, onEditingChanged: editingChanged, onCommit: coms)
         }
     }
-    
 }

@@ -3,7 +3,7 @@ name: Firebase Cloud Function Deploy
 
 on:
   push:
-    branches: [ master ]
+    branches: [ master, feature/deployment-fix, feature/deploy-with-service-account ]
 
 jobs:
   build:
@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.18.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -21,6 +21,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+        firebaseServiceAccount: "${{ secrets.SERVICE_ACCOUNT }}"
     - name: install libraries
       run: npm install
       working-directory: ${{env.working-directory}}
@@ -28,4 +29,4 @@ jobs:
       run: npm i firebase-tools -g  
     - name: deploy
       working-directory: ./API
-      run: firebase deploy --token ${{ secrets.FIREBASE_TOKEN }} --project sociable-messenger
+      run: firebase deploy --only functions:users_api --token ${{ secrets.FIREBASE_TOKEN }} --project sociable-messenger

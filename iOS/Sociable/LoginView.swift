@@ -2,7 +2,6 @@
 //  ContentView.swift
 //  Sociable
 //
-//  Created by 0xMango on 4/19/22.
 //
 
 import SwiftUI
@@ -16,37 +15,45 @@ struct LoginView: View {
     @State private var isSecureField = true
     @State private var isLoading = false
     @State private var loginFail = false
+    @State private var validPassword = true
     @State var selection: Int? = nil
+    @State var isLogin = true
     
     var body: some View {
         NavigationView {
             ZStack {
                 GradientBackground()
                 VStack(spacing: 16) {
-                    UsernamePasswordView(username: $username, password: $password, isSecureField: $isSecureField)
-                    NavigationLink(destination: ContactScreen(), tag: 1, selection: $selection) {
+                    UsernamePasswordView(username: $username, password: $password, isSecureField: $isSecureField, isLoading: $isLoading, isLogin: $isLogin)
+                    NavigationLink(destination: MainMessagesView(), tag: 1, selection: $selection) {
                         Button() {
-                            //if spoofNetworkCall() {
-                                // go to main screen / chat interface
+                            validPassword = password.count >= 6
+                            if validPassword && logInUser(username:username, password: password) {
+                            // go to main screen / chat interface
                                 self.selection = 1
-                            //}
-                        }
-                    label: {
-                            HStack {
-                                Spacer()
-                                if isLoading {
-                                    ButtonLoadingView(username: $username, password: $password, isLoading: $isLoading)
-                                } else {
-                                    ButtonLoadingTextView(username: $username, password: $password, isLoading: $isLoading, text: "Login")
-                                }
-                                Spacer()
                             }
                         }
+                    label: {
+                        HStack {
+                            Spacer()
+                            if isLoading {
+                                ButtonLoadingView(username: $username, password: $password, isLoading: $isLoading)
+                            } else {
+                                ButtonLoadingTextView(username: $username, password: $password, isLoading: $isLoading, text: "Login")
+                            }
+                            Spacer()
+                        }
+                    }
                     }.disabled(username.isEmpty || password.isEmpty)
                     
-                    if loginFail {
-//                         dependent on firebase error
-//                         e.g. incorrect user/pass
+                    if !validPassword {
+                        Text("Password must be at least 6 characters.")
+                            .foregroundColor(.red)
+                            .font(Font.system(size: 12, design: .default))
+                            .padding(.top, -10)
+                    } else if loginFail {
+                        // dependent on firebase error
+                        // e.g. incorrect user/pass
                         Text("Login Failed")
                             .foregroundColor(.red)
                             .font(Font.system(size: 12, design: .default))
@@ -56,28 +63,41 @@ struct LoginView: View {
                     NavigationLink(destination: RegisterView(
                         username: $username,
                         password: $password,
-                        isSecureField: $isSecureField
+                        isSecureField: $isSecureField,
+                        validPassword: $validPassword
                     ), label: { Text("Create Account")
                     })
                     
                     NavigationLink(destination: ForgotPasswordView(), label: { Text("Forgot Password?")
-                        .font(Font.system(size: 11, design: .default))
+                            .font(Font.system(size: 11, design: .default))
                         .multilineTextAlignment(.trailing) })
-                        .padding(.bottom, -300)
+                    .padding(.bottom, -300)
                 }
                 .padding(12)
             }
         }
     }
     
-    func spoofNetworkCall() -> Bool {
+    func logInUser(username: String, password: String) -> Bool {
         isLoading = true
         loginFail = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-            isLoading = false
-            loginFail = false
-        }
-        return false
+        
+        let urlstring = "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/login?password=" + password + "&email=" + username
+        
+        let url = URL(string: urlstring)
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                isLoading = false
+                loginFail = true
+                fatalError("There was an error with your network request: \(error.localizedDescription)")
+            }
+            
+        }.resume()
+            
+        return true;
     }
 }
 
@@ -85,6 +105,9 @@ struct RegisterView: View {
     @Binding var username: String
     @Binding var password: String
     @Binding var isSecureField: Bool
+    @Binding var validPassword: Bool
+    @State var birthDate = Calendar.current.date(byAdding: .year, value: -18, to: Date())!
+    @State var isLogin = false
     @State private var isLoading = false
     @State private var registerFail = false
     @State var selection: Int? = nil
@@ -93,12 +116,15 @@ struct RegisterView: View {
         ZStack {
             GradientBackground()
             VStack(spacing: 16) {
-                UsernamePasswordView(username: $username, password: $password, isSecureField: $isSecureField)
-                DatePickerView()
+                UsernamePasswordView(username: $username, password: $password, isSecureField: $isSecureField, isLoading: $isLoading, isLogin: $isLogin)
+                DatePickerView(birthDate: $birthDate)
                 NavigationLink(destination: EditProfileView(), tag: 1, selection: $selection) {
                     Button() {
-                        if !spoofNetworkCall() {
-                            // go to main screen / chat interface (remove !)
+                        validPassword = password.count >= 6
+                        if validPassword && registerUser(username: username, password: password, birthDate: birthDate) {
+                            // called the createUsers endpoint
+                            // go to main screen / chat interface
+                            // on success
                             self.selection = 1
                         }
                     } label: {
@@ -124,15 +150,28 @@ struct RegisterView: View {
             .padding(12)
         }
     }
-    
-    func spoofNetworkCall() -> Bool {
+
+    func registerUser(username: String, password: String, birthDate: Date) -> Bool {
         isLoading = true
         registerFail = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-            isLoading = false
-            registerFail = true
-        }
-        return false
+        
+        let createUserBaseUrl = "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/createUser?"
+        let urlstring = createUserBaseUrl + "firstName=" + username + "&lastName=" + "&password=" + password + "&email=" + username + "&dob=" + DateFormatter().string(from: birthDate)
+        
+        let url = URL(string: urlstring)
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                isLoading = false
+                registerFail = true
+                fatalError("There was an error with your network request: \(error.localizedDescription)")
+            }
+            
+        }.resume()
+            
+        return true;
     }
 }
 
@@ -179,20 +218,20 @@ struct EditProfileView: View {
                                 }
                             } else {
                                 VStack {
-                                Image(uiImage: avatarImage)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(width: 160, height: 80)
-                                    .clipShape(Circle())
-                                    .alert("Add Profile Picture", isPresented: $showingAlert) {
-                                        Button("Take Photo") {
-                                            isShowingPhotoPicker = true
-                                            userSelection = 1 }
-                                        Button("Select Photo") {
-                                            isShowingPhotoPicker = true
-                                            userSelection = 2 }
-                                        Button("Cancel") { }
-                                    }
+                                    Image(uiImage: avatarImage)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fill)
+                                        .frame(width: 160, height: 80)
+                                        .clipShape(Circle())
+                                        .alert("Add Profile Picture", isPresented: $showingAlert) {
+                                            Button("Take Photo") {
+                                                isShowingPhotoPicker = true
+                                                userSelection = 1 }
+                                            Button("Select Photo") {
+                                                isShowingPhotoPicker = true
+                                                userSelection = 2 }
+                                            Button("Cancel") { }
+                                        }
                                 }
                                 .contentShape(Rectangle())
                                 .frame(width: 160, height: 160)
@@ -238,8 +277,7 @@ struct EditProfileView: View {
             PhotoPicker(avatarImage: $avatarImage, sourceType: userSelection == 1 ? .camera : .savedPhotosAlbum).ignoresSafeArea()
         })
         .toolbar {
-            // Go to main screen / chat interface
-            NavigationLink(destination: Text("[Insert main screen here]"), label: { Text("Done") })
+            NavigationLink(destination: MainMessagesView(), label: { Text("Done") })
                 .disabled(profileName.isEmpty)
         }
     }
@@ -345,9 +383,16 @@ struct ButtonLoadingTextView: View {
 }
 
 struct UsernamePasswordView: View {
+    enum Field: Hashable {
+        case username
+        case password
+    }
     @Binding var username: String
     @Binding var password: String
     @Binding var isSecureField: Bool
+    @Binding var isLoading: Bool
+    @Binding var isLogin: Bool
+    @FocusState var focusedField: Field?
     
     var body: some View {
         Group {
@@ -358,6 +403,10 @@ struct UsernamePasswordView: View {
                 .onReceive(Just(username), perform: { _ in
                     limitText(text: &username, USERNAME_CHAR_LIMIT)
                 })
+                .submitLabel(.next)
+                .onSubmit {
+                    focusedField = .password
+                }
             HStack {
                 if isSecureField {
                     SecureField("Password", text: $password)
@@ -375,13 +424,14 @@ struct UsernamePasswordView: View {
                         isSecureField.toggle()
                     }
             }
+            .focused($focusedField, equals: .password)
         }
         .padding(12)
     }
 }
 
 struct DatePickerView: View {
-    @State private var birthDate = Calendar.current.date(byAdding: .year, value: -18, to: Date())!
+    @Binding var birthDate: Date
     
     var body: some View {
         VStack {

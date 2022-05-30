@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct Msg: Hashable, Codable, Identifiable {
+public struct Msg: Hashable, Codable, Identifiable, Comparable {
     public var id: String
     public var text: String
     public var recieved: Bool
