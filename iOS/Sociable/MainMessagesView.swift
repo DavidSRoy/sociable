@@ -13,6 +13,7 @@ class MainMessagesViewModel: ObservableObject {
     // * used namely for name + uid
     // (ChatUser*, most recent message in conversation)
     @Published var chatListData: Array<(ChatUser, Msg?)> = []
+    // K: recipient, V: entire convo between user and recipient
     @Published var allMessages: Dictionary<String, Array<Msg>> = [:]
     
     init() {
@@ -125,6 +126,7 @@ struct MainMessagesView: View {
     @State var showFullScreen = false
     @State var navigateToChatLogView = false
     @State var chatUser: ChatUser?
+    @State var selectedRecipient: ChatUser?
     
     
     @ObservedObject private var vm = MainMessagesViewModel()
@@ -203,9 +205,11 @@ struct MainMessagesView: View {
     
     private var messagesView: some View {
         ScrollView {
+            // (ChatUser, Msg)
             ForEach(vm.chatListData, id: \.0) { tuple in
                 VStack {
-                    NavigationLink(destination: MessageContentView(), label: {
+                    // MessagingScreen
+                    NavigationLink(destination: MessageContentView(recipient: $selectedRecipient), label: {
                         HStack(spacing: 16) {
                             // TODO
                             // need uid->url. msg.sender.profileImageUrl
@@ -231,7 +235,7 @@ struct MainMessagesView: View {
                             }
                             
                             VStack(alignment: .leading) {
-                                Text(tuple.0.name ?? tuple.0.uid!)
+                                Text((tuple.0.name ?? tuple.0.uid) ?? "")
                                     .font(.system(size: 14,
                                                   weight: .bold))
                                 
@@ -248,6 +252,8 @@ struct MainMessagesView: View {
                                         .semibold))
                         }
                         .padding(.top, 3)
+                    }).simultaneousGesture(TapGesture().onEnded {
+                        selectedRecipient = tuple.0
                     })
                     Divider()
                         .padding(.vertical, 8)
@@ -275,8 +281,8 @@ private func timeFormatter(_ ts: Int) -> String {
     }
 }
 
-struct MainMessagesView_Previews: PreviewProvider {
-    static var previews: some View {
-        MainMessagesView()
-    }
-}
+//struct MainMessagesView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MainMessagesView()
+//    }
+//}
