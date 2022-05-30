@@ -30,8 +30,7 @@ Parameters
 
 | Param | Description |
 |-------|-------------|
-| `firstName`   | [required]|
-| `lastName`   |  |
+| `displayName`   | [required]|
 | `password` | [required]|
 | `email`   | |
 | `phone`   |  |
@@ -52,6 +51,21 @@ Response
 |-------|-------------|
 | 200   | Valid password |
 | 403   | Invalid password |
+
+## `addFriend`
+Parameters
+
+| Param | Description |
+|-------|-------------|
+| `uid`   | uid of current user |
+| `friendUid`   | uid of friend to be added|
+
+## `getFriend`
+Parameters
+
+| Param | Description |
+|-------|-------------|
+| `uid`   | uid of current user |
 
 
 ## Testing
