@@ -53,12 +53,11 @@ struct MessageContentView: View {
     @ObservedObject private var vm = MainMessagesViewModel()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    var dexMsgs = ["Hey what's up. I'm excited to work on sociable. I love building apps.", "I'm glad that you've joined us! Excited for things to come! 🙂"]
-    var mexMsgs = ["Nice to meet you David, I'm also excited about working on Sociable!", " and likewise! 👌"]
-    
     var body: some View {
         VStack {
             VStack {
+                // TODO
+                // basically needs getUsers endpoint
                 // Title Row
                 var imgURL = URL(string: "https://ca.slack-edge.com/T039K0BN264-U038Y2U704A-0da3c7494a42-512")
                 var name = "David"
@@ -77,22 +76,33 @@ struct MessageContentView: View {
                             presentationMode.wrappedValue.dismiss()
                         }
                     
-                    AsyncImage(url: imgURL) { image in
-                        image.resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 50, height: 50)
-                            .cornerRadius(50)
-                            .padding(profile_insets)
+                    if (imgURL != nil) {
+                        AsyncImage(url: imgURL) { image in
+                            image.resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(50)
+                                .padding(profile_insets)
+                        }
+                    placeholder: {
+                        ProgressView()
                     }
-                placeholder: {
-                    ProgressView()
-                }
+                    } else {
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 44, weight: .heavy))
+                    }
+                    
                     VStack (alignment: .leading) {
                         Text(name).font(.title)
                             .bold()
                             .foregroundColor(.white)
-                        Text(status).font(.caption)
-                            .foregroundColor(.white)
+                        HStack {
+                            Circle()
+                                .foregroundColor(.green)
+                                .frame(width: 14, height: 14)
+                            Text(status).font(.caption)
+                                .foregroundColor(.white)
+                        }.padding(.top, -15)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)

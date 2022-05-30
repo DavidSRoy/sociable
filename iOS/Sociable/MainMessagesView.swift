@@ -9,9 +9,10 @@ import SDWebImageSwiftUI
 
 class MainMessagesViewModel: ObservableObject {
     
-    @Published var errorMessage = ""
     @Published var chatUser: ChatUser?
-    @Published var chatListData: Dictionary<String, Msg> = [:]
+    // * used namely for name + uid
+    // (ChatUser*, most recent message in conversation)
+    @Published var chatListData: Array<(ChatUser, Msg?)> = []
     @Published var allMessages: Dictionary<String, Array<Msg>> = [:]
     
     init() {
@@ -96,7 +97,7 @@ class MainMessagesViewModel: ObservableObject {
                 let decoder = JSONDecoder()
                 do {
                     let parsed = try decoder.decode(ChatUser.self, from: data)
-                    // All the ChatUsers that John has DMed
+                    // All the ChatUsers that user has DMed
                     self.chatUser = parsed
                     // print(parsed)
                 }
@@ -109,10 +110,12 @@ class MainMessagesViewModel: ObservableObject {
     
     // Assumes that messages are sorted in ascending timestamps
     private func extractChatListData() {
-        // Assumes sorted and uses most recent message sent
         for (uid, _) in allMessages {
-            chatListData[uid] = allMessages[uid]?.last
+            // TODO uid is username for now, but should be database-generated uid
+            chatListData.append((ChatUser(uid: uid), allMessages[uid]?.last))
         }
+        // most recent messages first
+        chatListData.sort(by: { $0.1! < $1.1! })
     }
 }
 
@@ -200,7 +203,7 @@ struct MainMessagesView: View {
     
     private var messagesView: some View {
         ScrollView {
-            ForEach(Array(vm.chatListData), id: \.key) { key, msg in
+            ForEach(vm.chatListData, id: \.0) { tuple in
                 VStack {
                     NavigationLink(destination: MessageContentView(), label: {
                         HStack(spacing: 16) {
@@ -228,25 +231,23 @@ struct MainMessagesView: View {
                             }
                             
                             VStack(alignment: .leading) {
-                                // TODO
-                                // should be name
-                                Text(key)
+                                Text(tuple.0.name ?? tuple.0.uid!)
                                     .font(.system(size: 14,
                                                   weight: .bold))
                                 
-                                // TODO
-                                // should be the most recent person
-                                Text(msg.text)
+                                Text((tuple.1?.text)!)
                                     .font(.system(size: 14))
                                     .foregroundColor(Color(
                                         .lightGray))
                             }
+                            
                             Spacer()
                             
-                            Text(timeFormatter(msg.time._seconds))
+                            Text(timeFormatter((tuple.1?.time._seconds)!))
                                 .font(.system(size: 14, weight:
                                         .semibold))
                         }
+                        .padding(.top, 3)
                     })
                     Divider()
                         .padding(.vertical, 8)

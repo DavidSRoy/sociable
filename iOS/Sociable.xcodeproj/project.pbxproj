@@ -164,6 +164,7 @@
 				DBB032C728403F34002A4D79 /* MainMessagesView.swift */,
 				DB0936652819135700378C5A /* PhotoPicker.swift */,
 				DB8E7C50280F6A68001415D2 /* Assets.xcassets */,
+				8D1C0F07281A638F006B0EB4 /* Extensions.swift */,
 				DB8E7C52280F6A68001415D2 /* Preview Content */,
 				8D7F0FE9281ACCCF00910356 /* ContactScreen.swift */,
 			);
@@ -173,7 +174,6 @@
 		DB8E7C52280F6A68001415D2 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				8D1C0F07281A638F006B0EB4 /* Extensions.swift */,
 				DB8E7C53280F6A68001415D2 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
