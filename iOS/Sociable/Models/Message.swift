@@ -12,4 +12,9 @@ public struct Msg: Hashable, Codable, Identifiable {
     public var text: String
     public var recieved: Bool
     public var time: Date
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(text)
+        hasher.combine(time)
+    }
 }

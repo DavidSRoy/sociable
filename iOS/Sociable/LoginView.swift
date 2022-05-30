@@ -24,7 +24,7 @@ struct LoginView: View {
                 GradientBackground()
                 VStack(spacing: 16) {
                     UsernamePasswordView(username: $username, password: $password, isSecureField: $isSecureField)
-                    NavigationLink(destination: MessageContentView(), tag: 1, selection: $selection) {
+                    NavigationLink(destination: ContactScreen(), tag: 1, selection: $selection) {
                         Button() {
                             //if spoofNetworkCall() {
                                 // go to main screen / chat interface
