@@ -131,9 +131,26 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		DB529E042841997A00F9528A /* MainMessages */ = {
+			isa = PBXGroup;
+			children = (
+				DB529E052841999000F9528A /* NewMessage */,
+			);
+			path = MainMessages;
+			sourceTree = "<group>";
+		};
+		DB529E052841999000F9528A /* NewMessage */ = {
+			isa = PBXGroup;
+			children = (
+				DB529E08284199B000F9528A /* CreateNewMessageView.swift */,
+			);
+			path = NewMessage;
+			sourceTree = "<group>";
+		};
 		DB8E7C40280F6A61001415D2 = {
 			isa = PBXGroup;
 			children = (
+				DB529E042841997A00F9528A /* MainMessages */,
 				DB8E7C4B280F6A62001415D2 /* Sociable */,
 				DB8E7C5C280F6A69001415D2 /* SociableTests */,
 				DB8E7C66280F6A69001415D2 /* SociableUITests */,

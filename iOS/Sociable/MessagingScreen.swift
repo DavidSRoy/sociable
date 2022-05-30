@@ -32,7 +32,6 @@ private func sendMessage(msg: String, recipient: String, _ allMessages: inout Di
         if let error = error {
             fatalError("Unable to send message: \(error.localizedDescription)")
         }
-        
     }.resume()
     let message = Msg(id: loggedin, text: msg, recieved: false, time: Timestamp())
     allMessages[recipient, default: []].append(message)
@@ -120,7 +119,6 @@ struct MessageContentView: View {
                         scrollView.scrollTo((vm.allMessages[target]?.last)!)
                     }
                 }
-                
                 .background(.white)
                 .cornerRadius(30, corners: [.topLeft, .topRight])
             }
