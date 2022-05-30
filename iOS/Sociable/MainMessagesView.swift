@@ -11,16 +11,69 @@ class MainMessagesViewModel: ObservableObject {
     
     @Published var errorMessage = ""
     @Published var chatUser: ChatUser?
-    @Published var chatListData: Array<Msg2Comp> = []
+    @Published var chatListData: Dictionary<String, Msg> = [:]
+    @Published var allMessages: Dictionary<String, Array<Msg>> = [:]
     
     init() {
         fetchCurrentUser()
-//        fetchMessages(user: "john1") { response in
-//            print(response)
-//        }
-//        fetchMessages(user: "jane1") { response in
-//            print(response)
-//        }
+        fetchUserConversations(user: loggedin) { done in
+            if done {
+                self.extractChatListData()
+            }
+        }
+    }
+    
+    private func fetchMessages(user: String, completion: (([Msg]) -> Void)? = nil ) {
+        var messages = [Msg]()
+        let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/getMessages?uid=" + user)
+        var request = URLRequest(url: url!)
+        request.httpMethod = "GET"
+        request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                fatalError("There was an error with your network request: \(error.localizedDescription)")
+            }
+            
+            guard let data = data else {
+                return
+            }
+            
+            let decoder = JSONDecoder()
+            let decodedData = try! decoder.decode(Usr2Msg.self, from: data)
+            for msg in decodedData.msgs {
+                let message = Msg(id: msg.sender, text: msg.msg, recieved: loggedin.elementsEqual(msg.sender) ? false : true, time: msg.timestamp)
+                messages.append(message)
+            }
+            messages = messages.sorted()
+            DispatchQueue.main.async {
+                completion?(messages)
+            }
+        }.resume()
+    }
+    
+    private func fetchUserConversations(user: String, completion: ((Bool) -> Void)? = nil) {
+        let dispatch = DispatchGroup()
+        // user = uid
+        fetchMessages(user: user) { MsgResponse in
+            // Reduce all received messages to respective uid to messages
+            for msg in MsgResponse {
+                self.allMessages[msg.id, default: []].append(msg)
+            }
+            // Append all sent messages from user to respective uid
+            for (uid, _) in self.allMessages {
+                dispatch.enter()
+                self.fetchMessages(user: uid) { userMsgs in
+                    for msg in userMsgs where msg.id == user {
+                        self.allMessages[uid]?.append(msg)
+                    }
+                    self.allMessages[uid]?.sort()
+                    dispatch.leave()
+                }
+            }
+            dispatch.notify(queue: .main) {
+                completion?(true)
+            }
+        }
     }
     
     private func fetchCurrentUser() {
@@ -45,11 +98,10 @@ class MainMessagesViewModel: ObservableObject {
                     let parsed = try decoder.decode(ChatUser.self, from: data)
                     // All the ChatUsers that John has DMed
                     self.chatUser = parsed
-                    self.extractChatListData()
-                    print(parsed)
+                    // print(parsed)
                 }
                 catch {
-                  print(error)
+                    print(error)
                 }
             }
         }.resume()
@@ -57,14 +109,9 @@ class MainMessagesViewModel: ObservableObject {
     
     // Assumes that messages are sorted in ascending timestamps
     private func extractChatListData() {
-        var seen: Set<String> = []
-        // iterates from bottom-up
-        if let reversedMsgs = chatUser?.msgs.reversed() {
-            for msg in reversedMsgs {
-                if seen.insert(msg.sender).inserted {
-                    chatListData.append(msg)
-                }
-            }
+        // Assumes sorted and uses most recent message sent
+        for (uid, _) in allMessages {
+            chatListData[uid] = allMessages[uid]?.last
         }
     }
 }
@@ -84,24 +131,24 @@ struct MainMessagesView: View {
             let imageUrl = vm.chatUser?.profileImageUrl
             if (imageUrl != nil) {
                 WebImage(url: URL(string:
-                    imageUrl ?? ""))
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 44, height: 44)
-                    .clipped()
-                    .cornerRadius(44)
-                    .overlay(RoundedRectangle(cornerRadius: 44)
-                        .stroke(Color(.label), lineWidth: 1))
-                    .shadow(radius: 5)
+                                    imageUrl ?? ""))
+                .resizable()
+                .scaledToFill()
+                .frame(width: 44, height: 44)
+                .clipped()
+                .cornerRadius(44)
+                .overlay(RoundedRectangle(cornerRadius: 44)
+                    .stroke(Color(.label), lineWidth: 1))
+                .shadow(radius: 5)
             } else {
                 Image(systemName: "person.fill")
                     .font(.system(size: 44, weight: .heavy))
             }
-
+            
             VStack(alignment: .leading, spacing: 4) {
                 // logic for email addresses
                 let strip = "\(vm.chatUser?.name ?? "")"
-                                .split(separator: "@")
+                    .split(separator: "@")
                 let displayName = strip.count > 0 ? strip[0] : ""
                 Text(displayName)
                     .font(.system(size: 24, weight: .bold))
@@ -150,10 +197,10 @@ struct MainMessagesView: View {
         }
         .navigationBarHidden(true)
     }
-        
+    
     private var messagesView: some View {
         ScrollView {
-            ForEach(vm.chatListData, id: \.self) { msg in
+            ForEach(Array(vm.chatListData), id: \.key) { key, msg in
                 VStack {
                     NavigationLink(destination: MessageContentView(), label: {
                         HStack(spacing: 16) {
@@ -163,15 +210,15 @@ struct MainMessagesView: View {
                             let imageUrl = vm.chatUser?.profileImageUrl
                             if (imageUrl != nil) {
                                 WebImage(url: URL(string:
-                                    imageUrl ?? ""))
-                                    .resizable()
-                                    .scaledToFill()
-                                    .frame(width: 32, height: 32)
-                                    .clipped()
-                                    .cornerRadius(44)
-                                    .overlay(RoundedRectangle(cornerRadius: 44)
-                                        .stroke(Color(.label), lineWidth: 1))
-                                    .shadow(radius: 5)
+                                                    imageUrl ?? ""))
+                                .resizable()
+                                .scaledToFill()
+                                .frame(width: 32, height: 32)
+                                .clipped()
+                                .cornerRadius(44)
+                                .overlay(RoundedRectangle(cornerRadius: 44)
+                                    .stroke(Color(.label), lineWidth: 1))
+                                .shadow(radius: 5)
                             } else {
                                 Image(systemName: "person.fill")
                                     .font(.system(size: 32))
@@ -183,20 +230,20 @@ struct MainMessagesView: View {
                             VStack(alignment: .leading) {
                                 // TODO
                                 // should be name
-                                Text(msg.sender)
+                                Text(key)
                                     .font(.system(size: 14,
-                                        weight: .bold))
+                                                  weight: .bold))
                                 
                                 // TODO
                                 // should be the most recent person
-                                Text(msg.msg)
+                                Text(msg.text)
                                     .font(.system(size: 14))
                                     .foregroundColor(Color(
                                         .lightGray))
                             }
                             Spacer()
                             
-                            Text(timeFormatter(msg.timestamp._seconds))
+                            Text(timeFormatter(msg.time._seconds))
                                 .font(.system(size: 14, weight:
                                         .semibold))
                         }

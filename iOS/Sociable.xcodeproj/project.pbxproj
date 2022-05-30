@@ -131,26 +131,9 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		DB529E042841997A00F9528A /* MainMessages */ = {
-			isa = PBXGroup;
-			children = (
-				DB529E052841999000F9528A /* NewMessage */,
-			);
-			path = MainMessages;
-			sourceTree = "<group>";
-		};
-		DB529E052841999000F9528A /* NewMessage */ = {
-			isa = PBXGroup;
-			children = (
-				DB529E08284199B000F9528A /* CreateNewMessageView.swift */,
-			);
-			path = NewMessage;
-			sourceTree = "<group>";
-		};
 		DB8E7C40280F6A61001415D2 = {
 			isa = PBXGroup;
 			children = (
-				DB529E042841997A00F9528A /* MainMessages */,
 				DB8E7C4B280F6A62001415D2 /* Sociable */,
 				DB8E7C5C280F6A69001415D2 /* SociableTests */,
 				DB8E7C66280F6A69001415D2 /* SociableUITests */,
@@ -175,6 +158,7 @@
 				8D1C0EFA281A62D3006B0EB4 /* Components */,
 				8D1C0EF9281A62CD006B0EB4 /* Models */,
 				DB8E7C4C280F6A62001415D2 /* SociableApp.swift */,
+				DB529E08284199B000F9528A /* CreateNewMessageView.swift */,
 				8D1C0F13281A7710006B0EB4 /* MessagingScreen.swift */,
 				DB8E7C4E280F6A62001415D2 /* LoginView.swift */,
 				DBB032C728403F34002A4D79 /* MainMessagesView.swift */,

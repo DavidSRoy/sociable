@@ -12,7 +12,7 @@ class CreateNewMessageViewModel: ObservableObject {
     @Published var errorMessage = ""
     
     init() {
-        fetchAllUsers()
+//        fetchAllUsers()
     }
     
     private func fetchAllUsers() {
