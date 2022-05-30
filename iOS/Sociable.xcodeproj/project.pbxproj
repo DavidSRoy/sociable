@@ -175,11 +175,13 @@
 				8D1C0EFA281A62D3006B0EB4 /* Components */,
 				8D1C0EF9281A62CD006B0EB4 /* Models */,
 				DB8E7C4C280F6A62001415D2 /* SociableApp.swift */,
+				DB529E08284199B000F9528A /* CreateNewMessageView.swift */,
 				8D1C0F13281A7710006B0EB4 /* MessagingScreen.swift */,
 				DB8E7C4E280F6A62001415D2 /* LoginView.swift */,
 				DBB032C728403F34002A4D79 /* MainMessagesView.swift */,
 				DB0936652819135700378C5A /* PhotoPicker.swift */,
 				DB8E7C50280F6A68001415D2 /* Assets.xcassets */,
+				8D1C0F07281A638F006B0EB4 /* Extensions.swift */,
 				DB8E7C52280F6A68001415D2 /* Preview Content */,
 				8D7F0FE9281ACCCF00910356 /* ContactScreen.swift */,
 			);
@@ -189,7 +191,6 @@
 		DB8E7C52280F6A68001415D2 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				8D1C0F07281A638F006B0EB4 /* Extensions.swift */,
 				DB8E7C53280F6A68001415D2 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
@@ -464,7 +465,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Sociable/Preview Content\"";
 				DEVELOPMENT_TEAM = X6V8TK6B35;
 				ENABLE_PREVIEWS = YES;
@@ -657,7 +658,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Sociable/Preview Content\"";
 				DEVELOPMENT_TEAM = X6V8TK6B35;
 				ENABLE_PREVIEWS = YES;
@@ -692,7 +693,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 5;
+				CURRENT_PROJECT_VERSION = 6;
 				DEVELOPMENT_ASSET_PATHS = "\"Sociable/Preview Content\"";
 				DEVELOPMENT_TEAM = X6V8TK6B35;
 				ENABLE_PREVIEWS = YES;
