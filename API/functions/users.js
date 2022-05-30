@@ -92,7 +92,6 @@ users_api.post('/createUser', async (request, response) => {
 
 
 /**
- * password: [required]
  * email:
  */
 users_api.post('/login', async (request, response) => {
@@ -127,11 +126,47 @@ users_api.post('/login', async (request, response) => {
 });
 
 /**
- * password: [required]
- * email:
+ * uid: current user uid
+ * friendUid: uid of friend to be added
  */
 users_api.post('/addFriend', async (request, response) => {
+  const req_key = request.get('auth');
+  if (req_key == KEY) {
+    const uid = request.query.uid;
+    const friendUid = request.query.friendUid;
 
+    USERS.doc(uid).update({
+      friends: FieldValue.arrayUnion(friendUid)
+    })
+    .then((userRecord) => {
+      response.status(200).send("OK");
+    }).catch((error) => {
+      console.log('Error adding friend:', error);
+      response.status(500).send("Internal Server Error");
+    });
+
+  } else {
+    response.status(401).send('Unauthorized');
+  }
+});
+
+/**
+ * uid: current user uid
+ */
+users_api.get('/getFriends', async (request, response) => {
+  const req_key = request.get('auth');
+  if (req_key == KEY) {
+    const uid = request.query.uid;
+    const doc = await USERS.doc(uid).get();
+    if (doc.exists) {
+      return await response.json(doc.data().friends);
+    } else {
+      return response.json({});
+    }
+
+  } else {
+    response.status(401).send('Unauthorized');
+  }
 });
 
 
