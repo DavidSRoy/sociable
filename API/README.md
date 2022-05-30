@@ -1,6 +1,6 @@
-# Sociable: Messaging API
 
-## Important Endpoints
+
+# Messaging API
 
 ## `sendMessage`
 Parameters
@@ -18,6 +18,40 @@ Parameters
 | Param | Description |
 |-------|-------------|
 | `uid`   | uid of interest |
+
+# Users API
+
+## 'getUsers'
+No Parameters
+returns everything about all users
+
+## `createUser`
+Parameters
+
+| Param | Description |
+|-------|-------------|
+| `firstName`   | [required]|
+| `lastName`   |  |
+| `password` | [required]|
+| `email`   | |
+| `phone`   |  |
+| `dob` | date of birth [required] |
+
+
+## `login`
+Parameters
+
+| Param | Description |
+|-------|-------------|
+| `uid`   | uid of interest |
+| `password`   | user's password |
+
+Response
+
+| Response | Description |
+|-------|-------------|
+| 200   | Valid password |
+| 403   | Invalid password |
 
 
 ## Testing

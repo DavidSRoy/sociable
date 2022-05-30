@@ -2,21 +2,12 @@ const admin = require('firebase-admin');
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 const functions = require('firebase-functions');
-const serviceAccount = require('/Users/athomas/Downloads/sociable/API/secrets/serviceAccount.json');
+const serviceAccount = require('/Users/davidroy/403/sociable/API/secrets/serviceAccount.json');
 const gc = require('@google-cloud/storage');
 //const fStorage = require('@firebase/storage'); 
 const express = require('express');
 const {v4: uuid} = require('uuid');
-//var gcloud = require('google-cloud');
-//const serviceAccount = getServiceAccountKey();
 
-// // Create and Deploy Your First Cloud Functions
-// // https://firebase.google.com/docs/functions/write-firebase-functions
-//
-// exports.helloWorld = functions.https.onRequest((request, response) => {
-//   functions.logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!"); 
-// });
 admin.initializeApp({storageBucket: "sociable-messenger.appspot.com",
 credential: admin.credential.cert(serviceAccount)
 });
@@ -31,27 +22,8 @@ const PROJECTID = 'sociable-messenger';
 const USERS = firestore.collection('test_users');
 const STATUS = firestore.collection('status');
 const KEY = functions.config().messaging.key;
-const { Octokit } = require("@octokit/core");
 
 const messaging_api = express();
-
-// async function getServiceAccountKey() {
-//   // Octokit.js
-//   // https://github.com/octokit/core.js#readme
-//   const octokit = new Octokit({
-//     auth: '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'
-//   })
-
-//   const snapshot = await octokit.request('GET /repos/DavidSRoy/sociable/actions/secrets/SERVICE_ACCOUNT', {
-//     owner: 'DavidSRoy',
-//     repo: 'sociable',
-//     secret_name: 'SERVICE_ACCOUNT'
-//   })
-
-//   console.log("DATA " + data);
-
-//   return snapshot.data;
-// }
 
 messaging_api.post('/sendMessage', async (request, response) => {
   
@@ -139,104 +111,50 @@ messaging_api.post('/uploadImage', async (request, response) => {
 });
 
 async function uploadImage(filePath, uid) {
-  console.log(filePath);
-  // get the name
-  const filename = filePath.split('/').pop();
-  console.log(filename);
+  try {
+    console.log(filePath);
+    // get the name
+    const filename = filePath.split('/').pop();
+    console.log(filename);
 
-  const metadata = {
-    metadata: {
-      // create a download token
-      firebaseStorageDownloadTokens: uuid()
-    },
-    contentType: 'image/png',
-    cacheControl: 'public, max-age=31536000',
-  }; 
+    const metadata = {
+      metadata: {
+        // create a download token
+        firebaseStorageDownloadTokens: uuid()
+      },
+      contentType: 'image/png',
+      cacheControl: 'public, max-age=31536000',
+    }; 
 
-  const options = {
-    destination: filename,
-    metadata: metadata
-  };
-  
-  //const storagePath = "";
+    const options = {
+      destination: filename,
+      metadata: metadata
+    };
+    
+    //const storagePath = "";
 
-  bucket.upload(String(filePath), options, function(err, file) {
-    // Your bucket now contains:
-    // - "new-image.png" (with the contents of `local-image.png')
-  
-    if (!err) {
-      //updateFilePath(file.fullPath);
-      // update firestore
-      const ref = STATUS
+    bucket.upload(String(filePath), options, function(err, file) {
+      // Your bucket now contains:
+      // - "new-image.png" (with the contents of `local-image.png')
+    
+      if (!err) {
+        //updateFilePath(file.fullPath);
+        // update firestore
+        const ref = STATUS
 
-      ref.doc(uid).set({
-        image: metadata.metadata.firebaseStorageDownloadTokens,
-        fileName: filename,
-        uid: uid
-      });
-    }
-  }); 
+        ref.doc(uid).set({
+          image: metadata.metadata.firebaseStorageDownloadTokens,
+          fileName: filename,
+          uid: uid
+        });
+      }
+    }); 
 
-
-  // // Uploads a local file to the bucket
-  // await bucket.upload(String(filePath), {
-  //   // Support for HTTP requests made with `Accept-Encoding: gzip`
-  //   gzip: true,
-  //   metadata: metadata,
-  // });
-
-  // // get the fullpath
-  // const filename = filePath.split('/').pop();
-  // console.log(filename);
-
-  // bucket.getFiles(function(err, files) {
-  //   if (!err) {
-  //     // files is an array of File objects.
-  //     console.log("length: " + files.length);
-  //     files.forEach(function(entry) {
-  //       console.log(entry);
-  //     });
-  //   }
-  // });
-
-  // Lists files in the bucket
-  // const getFilesOptions = {
-  //   directory: "images/",
-  // } 
-
-  // const [files] = await bucket.getFiles(getFilesOptions);
-
-  // console.log('Files:');
-  // files.forEach(file => {
-  //   console.log(file.name);
-  // });
-  //const imageRef = bucket.file("codingclub"); 
-  
-  // imageRef.exists(function(err, exists) {});
-  // // If the callback is omitted, then this function return a Promise.
-  // imageRef.exists().then(function(data) {
-  //   var exists = data[0];
-  // });
-  // console.log("file exists: " + exists);
-
-
-  
-  // Get metadata properties
-  //imageRef.getMetadata(function(err, imageMetadata, apiResponse) {});
-
-  //-
-  // If the callback is omitted, we'll return a Promise.
-  //-
-  // imageRef.getMetadata().then(function(data) {
-  //   const imageMetadata = data[0];
-  //   const apiResponse = data[1];
-  // });
-
-  console.log(`${filePath} uploaded.`);
+    console.log(`${filePath} uploaded.`);
+  } catch (e) {
+    console.log(e);
+  }
 }
-
-uploadImage().catch(console.error);
-
 
 //retrieve status-- image format
 messaging_api.get('/getImage', async (request, response) => {
@@ -253,22 +171,25 @@ messaging_api.get('/getImage', async (request, response) => {
 // get the image download url from storage
 // valid for 1 hour
 async function getImage(fileName) {
-  console.log(fileName);
+  try {
+    console.log(fileName);
  
-  const options = {
-    version: 'v2', // defaults to 'v2' if missing.
-    action: 'read',
-    expires: Date.now() + 1000 * 60 * 60, // one hour
-  };
+    const options = {
+      version: 'v2', // defaults to 'v2' if missing.
+      action: 'read',
+      expires: Date.now() + 1000 * 60 * 60, // one hour
+    };
+  
+    // Get a v2 signed URL for the file
+    const file = bucket.file(fileName);
+    const url = file.getSignedUrl(options);
+  
+    return url;
+  } catch (e) {
+    console.log(e)
+  }
+}
 
-  // Get a v2 signed URL for the file
-  const file = bucket.file(fileName);
-  const url = file.getSignedUrl(options);
-
-  return url;
-};
-
-getImage().catch(console.error);
 
 
 //check for new statuses of uid
