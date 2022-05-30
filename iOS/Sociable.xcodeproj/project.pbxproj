@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		8D1C0F08281A638F006B0EB4 /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1C0F07281A638F006B0EB4 /* Extensions.swift */; };
-		8D1C0F0A281A7534006B0EB4 /* TitleRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1C0F09281A7534006B0EB4 /* TitleRow.swift */; };
+		8D1C0F0A281A7534006B0EB4 /* TitleRowOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1C0F09281A7534006B0EB4 /* TitleRowOld.swift */; };
 		8D1C0F0C281A75AA006B0EB4 /* MessageField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1C0F0B281A75AA006B0EB4 /* MessageField.swift */; };
 		8D1C0F0E281A75F2006B0EB4 /* MessageBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1C0F0D281A75F2006B0EB4 /* MessageBubble.swift */; };
 		8D1C0F10281A7648006B0EB4 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D1C0F0F281A7648006B0EB4 /* Message.swift */; };
@@ -18,6 +18,8 @@
 		8D7F0FEA281ACCCF00910356 /* ContactScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7F0FE9281ACCCF00910356 /* ContactScreen.swift */; };
 		DB0936662819135700378C5A /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0936652819135700378C5A /* PhotoPicker.swift */; };
 		DB41B1E5284177FF0000E949 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = DB41B1E4284177FF0000E949 /* SDWebImageSwiftUI */; };
+		DB529E09284199B000F9528A /* CreateNewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB529E08284199B000F9528A /* CreateNewMessageView.swift */; };
+		DB5F1C8928434FCE000E0FEA /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB5F1C8828434FCE000E0FEA /* Timestamp.swift */; };
 		DB8E7C4D280F6A62001415D2 /* SociableApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8E7C4C280F6A62001415D2 /* SociableApp.swift */; };
 		DB8E7C4F280F6A62001415D2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8E7C4E280F6A62001415D2 /* LoginView.swift */; };
 		DB8E7C51280F6A68001415D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB8E7C50280F6A68001415D2 /* Assets.xcassets */; };
@@ -48,7 +50,7 @@
 
 /* Begin PBXFileReference section */
 		8D1C0F07281A638F006B0EB4 /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
-		8D1C0F09281A7534006B0EB4 /* TitleRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleRow.swift; sourceTree = "<group>"; };
+		8D1C0F09281A7534006B0EB4 /* TitleRowOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleRowOld.swift; sourceTree = "<group>"; };
 		8D1C0F0B281A75AA006B0EB4 /* MessageField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageField.swift; sourceTree = "<group>"; };
 		8D1C0F0D281A75F2006B0EB4 /* MessageBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageBubble.swift; sourceTree = "<group>"; };
 		8D1C0F0F281A7648006B0EB4 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
@@ -57,6 +59,8 @@
 		8D7F0FE7281AC2F800910356 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		8D7F0FE9281ACCCF00910356 /* ContactScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactScreen.swift; sourceTree = "<group>"; };
 		DB0936652819135700378C5A /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
+		DB529E08284199B000F9528A /* CreateNewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewMessageView.swift; sourceTree = "<group>"; };
+		DB5F1C8828434FCE000E0FEA /* Timestamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
 		DB8E7C49280F6A62001415D2 /* Sociable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sociable.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB8E7C4C280F6A62001415D2 /* SociableApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociableApp.swift; sourceTree = "<group>"; };
 		DB8E7C4E280F6A62001415D2 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -100,7 +104,9 @@
 		8D1C0EF9281A62CD006B0EB4 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				DBB032D2284073A4002A4D79 /* ChatUser.swift */,
 				8D1C0F0F281A7648006B0EB4 /* Message.swift */,
+				DB5F1C8828434FCE000E0FEA /* Timestamp.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -108,7 +114,7 @@
 		8D1C0EFA281A62D3006B0EB4 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				8D1C0F09281A7534006B0EB4 /* TitleRow.swift */,
+				8D1C0F09281A7534006B0EB4 /* TitleRowOld.swift */,
 				8D1C0F0B281A75AA006B0EB4 /* MessageField.swift */,
 				8D1C0F0D281A75F2006B0EB4 /* MessageBubble.swift */,
 				8D7F0FE5281AB83B00910356 /* ContactTitleRow.swift */,
@@ -125,9 +131,26 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		DB529E042841997A00F9528A /* MainMessages */ = {
+			isa = PBXGroup;
+			children = (
+				DB529E052841999000F9528A /* NewMessage */,
+			);
+			path = MainMessages;
+			sourceTree = "<group>";
+		};
+		DB529E052841999000F9528A /* NewMessage */ = {
+			isa = PBXGroup;
+			children = (
+				DB529E08284199B000F9528A /* CreateNewMessageView.swift */,
+			);
+			path = NewMessage;
+			sourceTree = "<group>";
+		};
 		DB8E7C40280F6A61001415D2 = {
 			isa = PBXGroup;
 			children = (
+				DB529E042841997A00F9528A /* MainMessages */,
 				DB8E7C4B280F6A62001415D2 /* Sociable */,
 				DB8E7C5C280F6A69001415D2 /* SociableTests */,
 				DB8E7C66280F6A69001415D2 /* SociableUITests */,
@@ -149,14 +172,13 @@
 		DB8E7C4B280F6A62001415D2 /* Sociable */ = {
 			isa = PBXGroup;
 			children = (
-				DBB032D128407390002A4D79 /* Model */,
 				8D1C0EFA281A62D3006B0EB4 /* Components */,
 				8D1C0EF9281A62CD006B0EB4 /* Models */,
 				DB8E7C4C280F6A62001415D2 /* SociableApp.swift */,
+				8D1C0F13281A7710006B0EB4 /* MessagingScreen.swift */,
 				DB8E7C4E280F6A62001415D2 /* LoginView.swift */,
 				DBB032C728403F34002A4D79 /* MainMessagesView.swift */,
 				DB0936652819135700378C5A /* PhotoPicker.swift */,
-				8D1C0F13281A7710006B0EB4 /* MessagingScreen.swift */,
 				DB8E7C50280F6A68001415D2 /* Assets.xcassets */,
 				DB8E7C52280F6A68001415D2 /* Preview Content */,
 				8D7F0FE9281ACCCF00910356 /* ContactScreen.swift */,
@@ -187,14 +209,6 @@
 				DB8E7C67280F6A69001415D2 /* SociableUITests.swift */,
 			);
 			path = SociableUITests;
-			sourceTree = "<group>";
-		};
-		DBB032D128407390002A4D79 /* Model */ = {
-			isa = PBXGroup;
-			children = (
-				DBB032D2284073A4002A4D79 /* ChatUser.swift */,
-			);
-			path = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -336,15 +350,17 @@
 				DB8E7C4F280F6A62001415D2 /* LoginView.swift in Sources */,
 				8D1C0F08281A638F006B0EB4 /* Extensions.swift in Sources */,
 				8D1C0F14281A7710006B0EB4 /* MessagingScreen.swift in Sources */,
+				DB529E09284199B000F9528A /* CreateNewMessageView.swift in Sources */,
 				8D1C0F0C281A75AA006B0EB4 /* MessageField.swift in Sources */,
 				DB8E7C4D280F6A62001415D2 /* SociableApp.swift in Sources */,
-				8D1C0F0A281A7534006B0EB4 /* TitleRow.swift in Sources */,
+				8D1C0F0A281A7534006B0EB4 /* TitleRowOld.swift in Sources */,
 				8D7F0FE8281AC2F800910356 /* Contact.swift in Sources */,
 				8D7F0FE6281AB83B00910356 /* ContactTitleRow.swift in Sources */,
 				DB0936662819135700378C5A /* PhotoPicker.swift in Sources */,
 				DBB032D3284073A4002A4D79 /* ChatUser.swift in Sources */,
 				8D1C0F0E281A75F2006B0EB4 /* MessageBubble.swift in Sources */,
 				DBB032CA284052B2002A4D79 /* NewMessageButton.swift in Sources */,
+				DB5F1C8928434FCE000E0FEA /* Timestamp.swift in Sources */,
 				DBB032C828403F34002A4D79 /* MainMessagesView.swift in Sources */,
 				8D7F0FEA281ACCCF00910356 /* ContactScreen.swift in Sources */,
 				8D1C0F10281A7648006B0EB4 /* Message.swift in Sources */,

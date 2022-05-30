@@ -7,9 +7,13 @@
 
 import Foundation
 
-public struct Msg: Hashable, Codable, Identifiable {
+public struct Msg: Hashable, Codable, Identifiable, Comparable {
     public var id: String
     public var text: String
     public var recieved: Bool
-    public var time: Date
+    public var time: Timestamp
+    
+    public static func < (lhs: Msg, rhs: Msg) -> Bool {
+        return lhs.time < rhs.time
+    }
 }
