@@ -3,7 +3,7 @@ name: Firebase Cloud Function Deploy
 
 on:
   push:
-    branches: [ master, feature/deployment-fix ]
+    branches: [ master, feature/deployment-fix, feature/deploy-with-service-account ]
 
 jobs:
   build:
@@ -21,6 +21,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
+        firebaseServiceAccount: "${{ secrets.SERVICE_ACCOUNT }}"
     - name: install libraries
       run: npm install
       working-directory: ${{env.working-directory}}
