@@ -191,7 +191,24 @@ async function getImage(fileName) {
   }
 }
 
-
+//validates user exists 
+messaging_api.get('/userExist', async (request, response) => {
+  const req_key = request.get('auth');
+  if (req_key == KEY) {
+     USERS.where(‘firstName’, ‘==‘, request.query.name)
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            return doc.id;
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+  } else {
+    response.status(401).send('Unauthorized');
+  } 
+});
 
 //check for new statuses of uid
 messaging_api.get('/getStatuses', async (request, response) => {
