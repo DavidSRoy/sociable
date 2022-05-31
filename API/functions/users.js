@@ -339,7 +339,7 @@ async function uploadImage(filePath, uid) {
 }
 
 //validates user exists 
-messaging_api.get('/userExist', async (request, response) => {
+users_api.get('/userExist', async (request, response) => {
   const req_key = request.get('auth');
   if (req_key == KEY) {
      USERS.where('firstName', '==', request.query.name)
