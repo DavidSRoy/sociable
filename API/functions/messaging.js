@@ -2,14 +2,15 @@ const admin = require('firebase-admin');
 const FieldValue = require('firebase-admin').firestore.FieldValue;
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 const functions = require('firebase-functions');
-const serviceAccount = require('/Users/davidroy/403/sociable/API/secrets/serviceAccount.json');
+//const serviceAccount = require('/Users/davidroy/403/sociable/API/secrets/serviceAccount.json');
 const gc = require('@google-cloud/storage');
 //const fStorage = require('@firebase/storage'); 
 const express = require('express');
 const {v4: uuid} = require('uuid');
 
-admin.initializeApp({storageBucket: "sociable-messenger.appspot.com",
-credential: admin.credential.cert(serviceAccount)
+admin.initializeApp(
+  {storageBucket: "sociable-messenger.appspot.com"
+//  credential: admin.credential.cert(serviceAccount)
 });
 // Get a reference to the storage service, which is used to create references in storage bucket
 const storage = admin.storage();

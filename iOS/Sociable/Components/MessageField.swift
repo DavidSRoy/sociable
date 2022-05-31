@@ -10,14 +10,15 @@ import SwiftUI
 struct MessageField: View {
     @State private var message = ""
     @Environment(\.colorScheme) var colorScheme
-    
+    @EnvironmentObject var mm: MessageManager
     var body: some View {
         HStack {
             SendFormm(tmp: Text("Type your message here"), text: $message)
-            Button {
-                print("Messaging not implemented yet")
-            }
-        label: {
+        Button {
+            mm.sendMessage(msg: message, recipient: "jane1")
+            message = ""
+        }
+    label: {
             Image(systemName: "paperplane.fill")
                 .foregroundColor(.white)
                 .padding(10)
@@ -35,7 +36,7 @@ struct MessageField: View {
 
 struct MessageField_Previews: PreviewProvider {
     static var previews: some View {
-        MessageField()
+        MessageField().environmentObject(MessageManager())
     }
 }
 
@@ -44,15 +45,15 @@ struct SendFormm: View {
     @Binding var text: String
     var editingChanged: (Bool) -> () = {_ in}
     var coms: () -> () = {}
-    
+
     var body: some View {
         ZStack (alignment: .leading) {
             if text.isEmpty {
                 tmp.opacity(0.5)
             }
-            
+
             TextField("", text: $text, onEditingChanged: editingChanged, onCommit: coms)
         }
     }
-    
+
 }

@@ -8,6 +8,7 @@
 import SwiftUI
 
 public var target = "jane1"
+public var msgSet : Set<Msg> = []
 
 struct Usr2Msg: Hashable, Codable {
     let name: String
@@ -31,7 +32,6 @@ private func sendMessage(msg: String, recipient: String, _ allMessages: inout Di
         if let error = error {
             fatalError("Unable to send message: \(error.localizedDescription)")
         }
-        
     }.resume()
     let message = Msg(id: loggedin, text: msg, recieved: false, time: Timestamp())
     allMessages[recipient, default: []].append(message)
@@ -45,10 +45,10 @@ private func setFriend(recipient: String, add: Bool, completion: ((Bool) -> Void
     request.httpMethod = "POST"
     request.setValue("7f5c4e71e19bdd8c793f1677867ef4db007988f6", forHTTPHeaderField: "auth")
     URLSession.shared.dataTask(with: request) { data, response, error in
-        
+
         let response1 = response as! HTTPURLResponse
         completion?(response1.statusCode == 200)
-        
+
         if let error = error {
             fatalError("Unable to add friend: \(error.localizedDescription)")
         }
@@ -61,12 +61,12 @@ struct MessageContentView: View {
     // @State var showingError = false
     @Binding var recipient: ChatUser?
     @Binding var friendStatus: String
-    
+
     // Connects to MainMessagesView data
     @ObservedObject private var vm = MainMessagesViewModel()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     @Environment(\.colorScheme) var colorScheme
-    
+
     var body: some View {
         VStack {
             VStack {
@@ -78,9 +78,9 @@ struct MessageContentView: View {
                 let status = recipient?.status ?? "online"
                 let profile_insets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
                 let backbtn_insets = EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
-                
+
                 HStack (spacing: 20) {
-                    
+
                     Image(systemName: "arrow.backward.circle")
                         .resizable()
                         .foregroundColor(.white)
@@ -89,7 +89,7 @@ struct MessageContentView: View {
                         .onTapGesture {
                             presentationMode.wrappedValue.dismiss()
                         }
-                    
+
                     if (imgURL != nil) {
                         AsyncImage(url: imgURL) { image in
                             image.resizable()
@@ -105,7 +105,7 @@ struct MessageContentView: View {
                         Image(systemName: "person.fill")
                             .font(.system(size: 44, weight: .heavy))
                     }
-                    
+
                     VStack (alignment: .leading) {
                         Text((recipient?.displayName ?? recipient?.uid) ?? "").font(.title)
                             .bold()
@@ -118,7 +118,7 @@ struct MessageContentView: View {
                                 .foregroundColor(.white)
                         }.padding(.top, -15)
                     }
-                    
+
                     Image(systemName: friendStatus)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -148,7 +148,7 @@ struct MessageContentView: View {
                 .padding()
             }
 
-            
+
             ScrollViewReader { scrollView in
                 ScrollView(.vertical) {
                     ForEach(Array((vm.allMessages[target] ?? []).enumerated()), id: \.element) { index, element in
@@ -178,12 +178,12 @@ struct MessageContentView: View {
                 .background(Color(UIColor.systemBackground))
                 .cornerRadius(30, corners: [.topLeft, .topRight])
             }
-            
+
         }
-        
+
         .background(Color("msgblue"))
         .navigationBarHidden(true)
-        
+
         HStack {
             SendForm(tmp: Text("Type your message here"), text: $message)
             Button {
@@ -217,13 +217,13 @@ struct SendForm: View {
     @Binding var text: String
     var editingChanged: (Bool) -> () = {_ in}
     var coms: () -> () = {}
-    
+
     var body: some View {
         ZStack (alignment: .leading) {
             if text.isEmpty {
                 tmp.opacity(0.5)
             }
-            
+
             TextField("", text: $text, onEditingChanged: editingChanged, onCommit: coms)
         }
     }

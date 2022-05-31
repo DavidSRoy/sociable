@@ -7,11 +7,11 @@
 import Foundation
 
 struct ChatUser: Identifiable, Codable, Hashable {
-    
+
     var id: String? { uid }
-    
+
     // getUserInfo endpoint
-    
+
     let uid: String?
     var email: String?
     var displayName: String?
@@ -20,7 +20,7 @@ struct ChatUser: Identifiable, Codable, Hashable {
     var status: String?
     var friends: Array<String>?
     var msgs: [Msg2Comp]?
-    
+
     // lhs ChatUser's values replaced by rhs ChatUser's non-nil values
     // after updating value, called by getUserInfo to get update local values
     func update(_ lhs: inout ChatUser, _ rhs: ChatUser) {
