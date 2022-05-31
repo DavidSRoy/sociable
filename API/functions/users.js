@@ -86,7 +86,7 @@ users_api.get('/getUserInfo', async (request, response) => {
  * 
  * displayName: [required]
  * password: [required]
- * email:
+ * email: [required]
  * phone:
  * dob: date of birth [required]
  */
@@ -120,6 +120,7 @@ users_api.post('/createUser', async (request, response) => {
       USERS.doc(userRecord.uid).set({
         displayName: displayName,
         password: password,
+        email: email,
         dob: dob
       });
       response.status(200).send("OK");
