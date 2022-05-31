@@ -16,14 +16,10 @@
 		8D7F0FE6281AB83B00910356 /* ContactTitleRow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7F0FE5281AB83B00910356 /* ContactTitleRow.swift */; };
 		8D7F0FE8281AC2F800910356 /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7F0FE7281AC2F800910356 /* Contact.swift */; };
 		8D7F0FEA281ACCCF00910356 /* ContactScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D7F0FE9281ACCCF00910356 /* ContactScreen.swift */; };
-		8D87C28A28329AE9000E134F /* MessageManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D87C28928329AE9000E134F /* MessageManager.swift */; };
-		8D87C28C28334F37000E134F /* Contact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D87C28B28334F37000E134F /* Contact.swift */; };
-		8D87C28E283355F0000E134F /* ContactBubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D87C28D283355F0000E134F /* ContactBubble.swift */; };
 		DB0936662819135700378C5A /* PhotoPicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB0936652819135700378C5A /* PhotoPicker.swift */; };
 		DB41B1E5284177FF0000E949 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = DB41B1E4284177FF0000E949 /* SDWebImageSwiftUI */; };
 		DB529E09284199B000F9528A /* CreateNewMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB529E08284199B000F9528A /* CreateNewMessageView.swift */; };
 		DB5F1C8928434FCE000E0FEA /* Timestamp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB5F1C8828434FCE000E0FEA /* Timestamp.swift */; };
-		DB7CBEA72845D07B00EBF9DF /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB7CBEA62845D07B00EBF9DF /* SettingsView.swift */; };
 		DB8E7C4D280F6A62001415D2 /* SociableApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8E7C4C280F6A62001415D2 /* SociableApp.swift */; };
 		DB8E7C4F280F6A62001415D2 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB8E7C4E280F6A62001415D2 /* LoginView.swift */; };
 		DB8E7C51280F6A68001415D2 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DB8E7C50280F6A68001415D2 /* Assets.xcassets */; };
@@ -62,13 +58,9 @@
 		8D7F0FE5281AB83B00910356 /* ContactTitleRow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactTitleRow.swift; sourceTree = "<group>"; };
 		8D7F0FE7281AC2F800910356 /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
 		8D7F0FE9281ACCCF00910356 /* ContactScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactScreen.swift; sourceTree = "<group>"; };
-		8D87C28928329AE9000E134F /* MessageManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageManager.swift; sourceTree = "<group>"; };
-		8D87C28B28334F37000E134F /* Contact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Contact.swift; sourceTree = "<group>"; };
-		8D87C28D283355F0000E134F /* ContactBubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContactBubble.swift; sourceTree = "<group>"; };
 		DB0936652819135700378C5A /* PhotoPicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoPicker.swift; sourceTree = "<group>"; };
 		DB529E08284199B000F9528A /* CreateNewMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateNewMessageView.swift; sourceTree = "<group>"; };
 		DB5F1C8828434FCE000E0FEA /* Timestamp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Timestamp.swift; sourceTree = "<group>"; };
-		DB7CBEA62845D07B00EBF9DF /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		DB8E7C49280F6A62001415D2 /* Sociable.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Sociable.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DB8E7C4C280F6A62001415D2 /* SociableApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SociableApp.swift; sourceTree = "<group>"; };
 		DB8E7C4E280F6A62001415D2 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
@@ -114,7 +106,7 @@
 			children = (
 				DBB032D2284073A4002A4D79 /* ChatUser.swift */,
 				8D1C0F0F281A7648006B0EB4 /* Message.swift */,
-				8D87C28B28334F37000E134F /* Contact.swift */,
+				DB5F1C8828434FCE000E0FEA /* Timestamp.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -127,7 +119,7 @@
 				8D1C0F0D281A75F2006B0EB4 /* MessageBubble.swift */,
 				8D7F0FE5281AB83B00910356 /* ContactTitleRow.swift */,
 				8D7F0FE7281AC2F800910356 /* Contact.swift */,
-				8D87C28D283355F0000E134F /* ContactBubble.swift */,
+				DBB032C9284052B2002A4D79 /* NewMessageButton.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -183,17 +175,13 @@
 				8D1C0EFA281A62D3006B0EB4 /* Components */,
 				8D1C0EF9281A62CD006B0EB4 /* Models */,
 				DB8E7C4C280F6A62001415D2 /* SociableApp.swift */,
-				DB7CBEA62845D07B00EBF9DF /* SettingsView.swift */,
-				DB529E08284199B000F9528A /* CreateNewMessageView.swift */,
 				8D1C0F13281A7710006B0EB4 /* MessagingScreen.swift */,
 				DB8E7C4E280F6A62001415D2 /* LoginView.swift */,
 				DBB032C728403F34002A4D79 /* MainMessagesView.swift */,
 				DB0936652819135700378C5A /* PhotoPicker.swift */,
 				DB8E7C50280F6A68001415D2 /* Assets.xcassets */,
-				8D1C0F07281A638F006B0EB4 /* Extensions.swift */,
 				DB8E7C52280F6A68001415D2 /* Preview Content */,
 				8D7F0FE9281ACCCF00910356 /* ContactScreen.swift */,
-				8D87C28928329AE9000E134F /* MessageManager.swift */,
 			);
 			path = Sociable;
 			sourceTree = "<group>";
@@ -201,6 +189,7 @@
 		DB8E7C52280F6A68001415D2 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
+				8D1C0F07281A638F006B0EB4 /* Extensions.swift */,
 				DB8E7C53280F6A68001415D2 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
@@ -359,16 +348,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB8E7C4F280F6A62001415D2 /* LoginView.swift in Sources */,
-				8D87C28E283355F0000E134F /* ContactBubble.swift in Sources */,
 				8D1C0F08281A638F006B0EB4 /* Extensions.swift in Sources */,
 				8D1C0F14281A7710006B0EB4 /* MessagingScreen.swift in Sources */,
-				DB7CBEA72845D07B00EBF9DF /* SettingsView.swift in Sources */,
 				DB529E09284199B000F9528A /* CreateNewMessageView.swift in Sources */,
 				8D1C0F0C281A75AA006B0EB4 /* MessageField.swift in Sources */,
 				DB8E7C4D280F6A62001415D2 /* SociableApp.swift in Sources */,
-				8D1C0F0A281A7534006B0EB4 /* TitleRow.swift in Sources */,
-				8D87C28C28334F37000E134F /* Contact.swift in Sources */,
-				8D87C28A28329AE9000E134F /* MessageManager.swift in Sources */,
+				8D1C0F0A281A7534006B0EB4 /* TitleRowOld.swift in Sources */,
 				8D7F0FE8281AC2F800910356 /* Contact.swift in Sources */,
 				8D7F0FE6281AB83B00910356 /* ContactTitleRow.swift in Sources */,
 				DB0936662819135700378C5A /* PhotoPicker.swift in Sources */,
@@ -479,7 +464,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"Sociable/Preview Content\"";
 				DEVELOPMENT_TEAM = X6V8TK6B35;
 				ENABLE_PREVIEWS = YES;
@@ -672,7 +657,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"Sociable/Preview Content\"";
 				DEVELOPMENT_TEAM = X6V8TK6B35;
 				ENABLE_PREVIEWS = YES;
@@ -707,7 +692,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 5;
 				DEVELOPMENT_ASSET_PATHS = "\"Sociable/Preview Content\"";
 				DEVELOPMENT_TEAM = X6V8TK6B35;
 				ENABLE_PREVIEWS = YES;
