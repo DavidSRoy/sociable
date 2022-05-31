@@ -361,11 +361,11 @@ struct MainMessagesView: View {
                     }).simultaneousGesture(TapGesture().onEnded {
                         selectedRecipient = tuple.0
                         friendStatus = vm.isFriend(selectedRecipient) ? "person.crop.circle.badge.plus" : "person.crop.circle.badge.plus"
-                        vm.fetchUserConversations(user: loggedin) { done in
-                            if done {
-                                vm.extractChatListData()
-                            }
-                        }
+//                        vm.fetchUserConversations(user: loggedin) { done in
+//                            if done {
+//                                vm.extractChatListData()
+//                            }
+//                        }
                     })
                     Divider()
                         .padding(.vertical, 8)
