@@ -11,10 +11,9 @@ public struct Msg: Hashable, Codable, Identifiable, Comparable {
     public var id: String
     public var text: String
     public var recieved: Bool
-    public var time: Date
+    public var time: Timestamp
     
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(text)
-        hasher.combine(time)
+    public static func < (lhs: Msg, rhs: Msg) -> Bool {
+        return lhs.time < rhs.time
     }
 }
