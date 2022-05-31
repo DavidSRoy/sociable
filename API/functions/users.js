@@ -339,5 +339,24 @@ async function uploadImage(filePath, uid) {
   }
 }
 
+//validates user exists 
+messaging_api.get('/userExist', async (request, response) => {
+  const req_key = request.get('auth');
+  if (req_key == KEY) {
+     USERS.where('firstName', '==', request.query.name)
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            return doc.id;
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+  } else {
+    response.status(401).send('Unauthorized');
+  } 
+});
+
 
 exports.users_api = functions.https.onRequest(users_api)
