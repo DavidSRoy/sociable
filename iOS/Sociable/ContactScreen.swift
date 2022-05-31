@@ -30,8 +30,6 @@ struct ContactScreen: View {
                         .clipShape(RoundedRectangle(cornerRadius: 15.0, style: .continuous))
                     }
                 }
-                .padding(.top, 10)
-                .background(.white)
             }
         .alert(item: $cvm.perme) {  h in
             Alert(
@@ -39,7 +37,7 @@ struct ContactScreen: View {
                 message: Text(cvm.perme?.desc ?? "Unknown Error"),
                 dismissButton:
                         .default(Text("OK"))
-
+                
             )
         }
         }
