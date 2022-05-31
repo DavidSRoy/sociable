@@ -18,5 +18,6 @@ struct ChatUser: Identifiable, Codable, Hashable {
     var dob: String?        //
     var profileImageUrl: String?
     var status: String?
-    var msgs: [Msg2Comp]
+    var msgs: [Msg2Comp]?
+
 }

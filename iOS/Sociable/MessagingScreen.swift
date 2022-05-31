@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-public var messages = [Msg]()
 public var loggedin = "john1"
+public var target = "jane1"
 
 struct Usr2Msg: Hashable, Codable {
     let name: String
@@ -21,88 +21,41 @@ struct Msg2Comp: Hashable, Codable {
     let timestamp: Timestamp
 }
 
-public func fetchMessages(user: String, completion: (([Msg]) -> Void)? = nil ) {
-    let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/getMessages?uid=" + user)
-    var request = URLRequest(url: url!)
-    request.httpMethod = "GET"
-    request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
-    URLSession.shared.dataTask(with: request) { data, response, error in
-        if let error = error {
-            fatalError("There was an error with your network request: \(error.localizedDescription)")
-        }
-        
-        guard let data = data else {
-            return
-        }
-        
-        guard let response = response,
-              let httpResponse = response as? HTTPURLResponse else {
-            return
-        }
-        
-        let decoder = JSONDecoder()
-        let decodedData = try! decoder.decode(Usr2Msg.self, from: data)
-        for msg in decodedData.msgs {
-            
-            let message = Msg(id: msg.sender, text: msg.msg, recieved: loggedin.elementsEqual(msg.sender) ? false : true, time: msg.timestamp)
-            messages.append(message)
-        }
-        messages = messages.sorted()
-        print(messages)
-        completion?(messages)
-    }.resume()
-}
-
-public func sendMessages(msg: String, recipient: String) {
-    let urlstring = "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/sendMessage?uid=jane1&msg=Sup&sender=john1"
+private func sendMessage(msg: String, recipient: String, _ allMessages: inout Dictionary<String, Array<Msg>>) {
+    let sendBaseUrl = "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/sendMessage?"
+    let urlstring = sendBaseUrl + "uid=" + recipient + "&msg=" + msg + "&sender=" + loggedin
     let url = URL(string: urlstring)
     var request = URLRequest(url: url!)
     request.httpMethod = "POST"
     request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
     URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
-            fatalError("There was an error with your network request: \(error.localizedDescription)")
+            fatalError("Unable to send message: \(error.localizedDescription)")
         }
-        
-        guard let data = data else {
-            return
-        }
-        
-        guard let response = response,
-              let httpResponse = response as?  HTTPURLResponse else {
-            return
-        }
-        
-        let message = Msg(id: "john1", text: msg, recieved: false, time: Timestamp())
-        messages.append(message)
     }.resume()
-}
-
-class MsgContainer: ObservableObject {
-    
+    let message = Msg(id: loggedin, text: msg, recieved: false, time: Timestamp())
+    allMessages[recipient, default: []].append(message)
 }
 
 struct MessageContentView: View {
     @State private var message = ""
-    @State var ref: Bool = false
+    @Binding var recipient: ChatUser?
     
+    // Connects to MainMessagesView data
+    @ObservedObject private var vm = MainMessagesViewModel()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    
-    var dexMsgs = ["Hey what's up. I'm excited to work on sociable. I love building apps.", "I'm glad that you've joined us! Excited for things to come! 🙂"]
-    var mexMsgs = ["Nice to meet you David, I'm also excited about working on Sociable!", " and likewise! 👌"]
-    var john = fetchMessages(user: "john1")
-    var jane = fetchMessages(user: "jane1")
-    
     
     var body: some View {
         VStack {
             VStack {
+                // TODO
+                // basically needs getUsers endpoint
                 // Title Row
-                var imgURL = URL(string: "https://ca.slack-edge.com/T039K0BN264-U038Y2U704A-0da3c7494a42-512")
-                var name = "David"
-                var status = "online"
-                var profile_insets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
-                var backbtn_insets = EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
+                // let imgURL = URL(string: recipient.profileImageUrl)
+                let imgURL = URL(string: "https://ca.slack-edge.com/T039K0BN264-U038Y2U704A-0da3c7494a42-512")
+                let status = recipient?.status ?? "online"
+                let profile_insets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
+                let backbtn_insets = EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
                 
                 HStack (spacing: 20) {
                     
@@ -115,22 +68,33 @@ struct MessageContentView: View {
                             presentationMode.wrappedValue.dismiss()
                         }
                     
-                    AsyncImage(url: imgURL) { image in
-                        image.resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: 50, height: 50)
-                            .cornerRadius(50)
-                            .padding(profile_insets)
+                    if (imgURL != nil) {
+                        AsyncImage(url: imgURL) { image in
+                            image.resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 50, height: 50)
+                                .cornerRadius(50)
+                                .padding(profile_insets)
+                        }
+                    placeholder: {
+                        ProgressView()
                     }
-                placeholder: {
-                    ProgressView()
-                }
+                    } else {
+                        Image(systemName: "person.fill")
+                            .font(.system(size: 44, weight: .heavy))
+                    }
+                    
                     VStack (alignment: .leading) {
-                        Text(name).font(.title)
+                        Text((recipient?.name ?? recipient?.uid) ?? "").font(.title)
                             .bold()
                             .foregroundColor(.white)
-                        Text(status).font(.caption)
-                            .foregroundColor(.white)
+                        HStack {
+                            Circle()
+                                .foregroundColor(.green)
+                                .frame(width: 14, height: 14)
+                            Text(status).font(.caption)
+                                .foregroundColor(.white)
+                        }.padding(.top, -15)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -139,14 +103,20 @@ struct MessageContentView: View {
             
             ScrollViewReader { scrollView in
                 ScrollView(.vertical) {
-                    ForEach (messages, id: \.self) { msg in
+                    ForEach(vm.allMessages[target] ?? [], id: \.self) { msg in
                         MessageBubble(msg: msg)
                             .padding(.top, -5)
                     }
                 }
+                // TODO refactor
                 .onAppear {
-                    if !messages.isEmpty {
-                        scrollView.scrollTo(messages[messages.endIndex - 1])
+                    if !((vm.allMessages[target]) ?? []).isEmpty {
+                        scrollView.scrollTo((vm.allMessages[target]?.last)!)
+                    }
+                }
+                .onChange(of: vm.allMessages[target]?.last) { _ in
+                    withAnimation {
+                        scrollView.scrollTo((vm.allMessages[target]?.last)!)
                     }
                 }
                 .background(.white)
@@ -154,12 +124,13 @@ struct MessageContentView: View {
             }
         }
         .background(Color("msgblue"))
+        .navigationBarHidden(true)
         
         HStack {
             SendForm(tmp: Text("Type your message here"), text: $message)
             Button {
-                sendMessages(msg: message, recipient: "jane1")
-                ref.toggle()
+                sendMessage(msg: message, recipient: target, &vm.allMessages)
+                message = ""
             } label: {
                 Image(systemName: "paperplane.fill")
                     .foregroundColor(.white)
@@ -176,11 +147,11 @@ struct MessageContentView: View {
     }
 }
 
-struct MessagingView_Previews: PreviewProvider {
-    static var previews: some View {
-        MessageContentView()
-    }
-}
+//struct MessagingView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        MessageContentView()
+//    }
+//}
 
 struct SendForm: View {
     var tmp: Text

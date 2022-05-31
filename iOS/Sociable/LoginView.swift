@@ -15,6 +15,7 @@ struct LoginView: View {
     @State private var isSecureField = true
     @State private var isLoading = false
     @State private var loginFail = false
+    @State private var validPassword = true
     @State var selection: Int? = nil
     @State var isLogin = true
     
@@ -26,7 +27,8 @@ struct LoginView: View {
                     UsernamePasswordView(username: $username, password: $password, isSecureField: $isSecureField, isLoading: $isLoading, isLogin: $isLogin)
                     NavigationLink(destination: MainMessagesView(), tag: 1, selection: $selection) {
                         Button() {
-                            if logInUser(username:username, password: password) {
+                            validPassword = password.count >= 6
+                            if validPassword && logInUser(username:username, password: password) {
                             // go to main screen / chat interface
                                 self.selection = 1
                             }
@@ -44,9 +46,14 @@ struct LoginView: View {
                     }
                     }.disabled(username.isEmpty || password.isEmpty)
                     
-                    if loginFail {
-                        //                         dependent on firebase error
-                        //                         e.g. incorrect user/pass
+                    if !validPassword {
+                        Text("Password must be at least 6 characters.")
+                            .foregroundColor(.red)
+                            .font(Font.system(size: 12, design: .default))
+                            .padding(.top, -10)
+                    } else if loginFail {
+                        // dependent on firebase error
+                        // e.g. incorrect user/pass
                         Text("Login Failed")
                             .foregroundColor(.red)
                             .font(Font.system(size: 12, design: .default))
@@ -56,7 +63,8 @@ struct LoginView: View {
                     NavigationLink(destination: RegisterView(
                         username: $username,
                         password: $password,
-                        isSecureField: $isSecureField
+                        isSecureField: $isSecureField,
+                        validPassword: $validPassword
                     ), label: { Text("Create Account")
                     })
                     
@@ -74,7 +82,7 @@ struct LoginView: View {
         isLoading = true
         loginFail = false
         
-        let urlstring = "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/login?password=" + password + "&email=" + username
+        let urlstring = "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/login?password=" + password + "&email=" + username
         
         let url = URL(string: urlstring)
         var request = URLRequest(url: url!)
@@ -97,6 +105,8 @@ struct RegisterView: View {
     @Binding var username: String
     @Binding var password: String
     @Binding var isSecureField: Bool
+    @Binding var validPassword: Bool
+    @State var birthDate = Calendar.current.date(byAdding: .year, value: -18, to: Date())!
     @State var isLogin = false
     @State private var isLoading = false
     @State private var registerFail = false
@@ -107,11 +117,11 @@ struct RegisterView: View {
             GradientBackground()
             VStack(spacing: 16) {
                 UsernamePasswordView(username: $username, password: $password, isSecureField: $isSecureField, isLoading: $isLoading, isLogin: $isLogin)
-                DatePickerView()
+                DatePickerView(birthDate: $birthDate)
                 NavigationLink(destination: EditProfileView(), tag: 1, selection: $selection) {
                     Button() {
-    
-                        if registerUser(username: username, password: password) {
+                        validPassword = password.count >= 6
+                        if validPassword && registerUser(username: username, password: password, birthDate: birthDate) {
                             // called the createUsers endpoint
                             // go to main screen / chat interface
                             // on success
@@ -141,11 +151,12 @@ struct RegisterView: View {
         }
     }
 
-    func registerUser(username: String, password: String) -> Bool {
+    func registerUser(username: String, password: String, birthDate: Date) -> Bool {
         isLoading = true
         registerFail = false
         
-        let urlstring = "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/createUser?firstName=" + username + "&lastName=" + username + "&password=" + password + "&email=" + username + "&dob=1/1/1999"
+        let createUserBaseUrl = "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/createUser?"
+        let urlstring = createUserBaseUrl + "firstName=" + username + "&lastName=" + "&password=" + password + "&email=" + username + "&dob=" + DateFormatter().string(from: birthDate)
         
         let url = URL(string: urlstring)
         var request = URLRequest(url: url!)
@@ -420,7 +431,7 @@ struct UsernamePasswordView: View {
 }
 
 struct DatePickerView: View {
-    @State private var birthDate = Calendar.current.date(byAdding: .year, value: -18, to: Date())!
+    @Binding var birthDate: Date
     
     var body: some View {
         VStack {
