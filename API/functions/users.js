@@ -24,7 +24,24 @@ const users_api = express();
 
 async function getUsers() {
     const snapshot = await USERS.get();
-    return snapshot.docs.map(doc => doc.data());
+    const docs = snapshot.docs.map(doc => doc.data());
+    const ids = snapshot.docs.map(doc => doc.id);
+
+    let users = []
+    let i = 0
+    docs.forEach(d => {
+      users.push({
+        displayName: d.displayName,
+        bio: d.bio,
+        friends: d.friends,
+        profilePic: d.profilePic,
+        email: d.email,
+        uid: ids[i]
+      });
+      i++;
+    });
+
+    return users;
   }
 
 users_api.get('/getUsers', async (request, response) => {
