@@ -20,7 +20,7 @@ class CreateNewMessageViewModel: ObservableObject {
         let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/getUsers")
         var request = URLRequest(url: url!)
         request.httpMethod = "GET"
-        request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
+        request.setValue("7f5c4e71e19bdd8c793f1677867ef4db007988f6", forHTTPHeaderField: "auth")
         URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {
                 fatalError("Failed to fetch users: \(error.localizedDescription)")

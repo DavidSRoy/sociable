@@ -12,21 +12,20 @@ struct ContactScreen: View {
     var names = ["David", "Sarah", "Marty"]
     var body: some View {
         VStack {
-        VStack {
-            ContactTitleRow()
-            ScrollView {
-                ForEach (names.indices) { value in
-                    Contact(imgURL: URL(string: profiles[value])!, name: names[value])
+            VStack {
+                ContactTitleRow()
+                ScrollView {
+                    ForEach (names.indices, id: \.self) { value in
+                        Contact(imgURL: URL(string: profiles[value])!, name: names[value])
+                    }
                 }
+                .padding(.top, 10)
+                .background(.white)
             }
-            .padding(.top, 10)
-            .background(.white)
+            .background(Color("msgblue"))
         }
-        .background(Color("msgblue"))
-        }
-        
     }
- }
+}
 
 struct ContactScreen_Previews: PreviewProvider {
     static var previews: some View {

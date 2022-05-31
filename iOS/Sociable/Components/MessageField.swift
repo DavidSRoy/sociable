@@ -9,27 +9,28 @@ import SwiftUI
 
 struct MessageField: View {
     @State private var message = ""
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         HStack {
             SendFormm(tmp: Text("Type your message here"), text: $message)
-        Button {
-        print("Messaging not implemented yet")
-        }
-    label: {
+            Button {
+                print("Messaging not implemented yet")
+            }
+        label: {
             Image(systemName: "paperplane.fill")
                 .foregroundColor(.white)
                 .padding(10)
                 .background(Color("msgblue"))
                 .cornerRadius(50)
         }
-      }
+        }
         .padding(.horizontal)
         .padding(.vertical, 10)
-        .background(Color("gray"))
+        .background(colorScheme == .dark ? Color.black : Color("gray"))
         .cornerRadius(50)
         .padding()
-   }
+    }
 }
 
 struct MessageField_Previews: PreviewProvider {

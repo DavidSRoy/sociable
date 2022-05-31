@@ -7,7 +7,6 @@
 
 import SwiftUI
 
-public var loggedin = "john1"
 public var target = "jane1"
 
 struct Usr2Msg: Hashable, Codable {
@@ -38,13 +37,35 @@ private func sendMessage(msg: String, recipient: String, _ allMessages: inout Di
     allMessages[recipient, default: []].append(message)
 }
 
+private func setFriend(recipient: String, add: Bool, completion: ((Bool) -> Void)? = nil) {
+    let baseUrl = "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/\(add ? "add" : "remove")Friend?"
+    let urlstring = baseUrl + "uid=" + loggedin + "&friendUid=" + recipient
+    let url = URL(string: urlstring)
+    var request = URLRequest(url: url!)
+    request.httpMethod = "POST"
+    request.setValue("7f5c4e71e19bdd8c793f1677867ef4db007988f6", forHTTPHeaderField: "auth")
+    URLSession.shared.dataTask(with: request) { data, response, error in
+        
+        let response1 = response as! HTTPURLResponse
+        completion?(response1.statusCode == 200)
+        
+        if let error = error {
+            fatalError("Unable to add friend: \(error.localizedDescription)")
+        }
+    }.resume()
+}
+
 struct MessageContentView: View {
     @State private var message = ""
+    @State var showingAlert = false
+    // @State var showingError = false
     @Binding var recipient: ChatUser?
+    @Binding var friendStatus: String
     
     // Connects to MainMessagesView data
     @ObservedObject private var vm = MainMessagesViewModel()
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
         VStack {
@@ -86,7 +107,7 @@ struct MessageContentView: View {
                     }
                     
                     VStack (alignment: .leading) {
-                        Text((recipient?.name ?? recipient?.uid) ?? "").font(.title)
+                        Text((recipient?.displayName ?? recipient?.uid) ?? "").font(.title)
                             .bold()
                             .foregroundColor(.white)
                         HStack {
@@ -97,16 +118,50 @@ struct MessageContentView: View {
                                 .foregroundColor(.white)
                         }.padding(.top, -15)
                     }
-                }
+                    
+                    Image(systemName: friendStatus)
+                        .resizable()
+                        .aspectRatio(contentMode: .fill)
+                        .frame(width: 36, height: 36)
+                        .padding(.leading, 100)
+                        .foregroundColor(.white)
+                        .onTapGesture {
+                            self.showingAlert = true
+                        }
+                }.alert(isPresented: $showingAlert, content: {
+                    Alert(title: Text("\((friendStatus == "person.crop.circle.badge.checkmark") ? "Remove" : "Add") Friend"),
+                          message: Text("Would you like to \((friendStatus == "person.crop.circle.badge.checkmark") ? "remove" : "add") \(recipient?.displayName ?? recipient?.uid ?? "them") as a friend?"),
+                          primaryButton: .default(
+                            Text("Cancel")),
+                          secondaryButton: .default(
+                            Text("Yes"),
+                            action: {
+                                DispatchQueue.main.async {
+                                    setFriend(recipient: (recipient?.uid)!, add: friendStatus != "person.crop.circle.badge.checkmark") { _ in
+                                        friendStatus = (friendStatus == "person.crop.circle.badge.checkmark") ? "person.crop.circle.badge.plus" : "person.crop.circle.badge.checkmark"
+                                    }
+                                }
+                            })
+                    )
+                })
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .padding()
             }
+
             
             ScrollViewReader { scrollView in
                 ScrollView(.vertical) {
-                    ForEach(vm.allMessages[target] ?? [], id: \.self) { msg in
-                        MessageBubble(msg: msg)
-                            .padding(.top, -5)
+                    ForEach(Array((vm.allMessages[target] ?? []).enumerated()), id: \.element) { index, element in
+                        if index == 0 {
+                            MessageBubble(msg: element)
+                                 .padding(.top, 5)
+                        } else if index == vm.allMessages[target]!.count-1 {
+                            MessageBubble(msg: element)
+                                 .padding(.bottom, 5)
+                        } else {
+                            MessageBubble(msg: element)
+                                .padding(.top, -5)
+                        }
                     }
                 }
                 // TODO refactor
@@ -115,16 +170,17 @@ struct MessageContentView: View {
                         scrollView.scrollTo((vm.allMessages[target]?.last)!)
                     }
                 }
-                .onChange(of: vm.allMessages[target]?.last) { _ in
+                .onChange(of: (vm.allMessages[target] ?? []).last) { _ in
                     withAnimation {
                         scrollView.scrollTo((vm.allMessages[target]?.last)!)
                     }
                 }
-                
-                .background(.white)
+                .background(Color(UIColor.systemBackground))
                 .cornerRadius(30, corners: [.topLeft, .topRight])
             }
+            
         }
+        
         .background(Color("msgblue"))
         .navigationBarHidden(true)
         
@@ -143,13 +199,14 @@ struct MessageContentView: View {
             }
         }
         .padding(.horizontal, 25)
-        .background(Color("gray"))
+        .background(colorScheme == .dark ? Color("darkgray") : Color("gray"))
         .cornerRadius(50)
         .frame(width: 380)
     }
 }
 
 //struct MessagingView_Previews: PreviewProvider {
+//    @ObservedObject private var vm = MainMessagesViewModel()
 //    static var previews: some View {
 //        MessageContentView()
 //    }

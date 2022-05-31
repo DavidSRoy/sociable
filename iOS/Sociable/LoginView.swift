@@ -7,15 +7,16 @@
 import SwiftUI
 import Combine
 
-let USERNAME_CHAR_LIMIT = 32
+let EMAIL_CHAR_LIMIT = 64
+public var loggedin: String = ""
 
 struct LoginView: View {
-    @State private var username = ""
+    @State private var email = ""
     @State private var password = ""
     @State private var isSecureField = true
     @State private var isLoading = false
-    @State private var loginFail = false
     @State private var validPassword = true
+    @State private var loginErrorMessage = ""
     @State var selection: Int? = nil
     @State var isLogin = true
     
@@ -24,44 +25,49 @@ struct LoginView: View {
             ZStack {
                 GradientBackground()
                 VStack(spacing: 16) {
-                    UsernamePasswordView(username: $username, password: $password, isSecureField: $isSecureField, isLoading: $isLoading, isLogin: $isLogin)
+                    EmailPasswordView(email: $email, password: $password, isSecureField: $isSecureField, isLoading: $isLoading, isLogin: $isLogin)
                     NavigationLink(destination: MainMessagesView(), tag: 1, selection: $selection) {
                         Button() {
                             validPassword = password.count >= 6
-                            if validPassword && logInUser(username:username, password: password) {
-                            // go to main screen / chat interface
-                                self.selection = 1
+                            if validPassword {
+                                loginUser(email: email, password: password) { status in
+                                    loginErrorMessage = status
+                                    if loginErrorMessage == "" {
+                                        // go to main screen / chat interface
+                                        loggedin = email
+                                        self.selection = 1
+                                    }
+                                }
                             }
-                        }
-                    label: {
-                        HStack {
-                            Spacer()
-                            if isLoading {
-                                ButtonLoadingView(username: $username, password: $password, isLoading: $isLoading)
-                            } else {
-                                ButtonLoadingTextView(username: $username, password: $password, isLoading: $isLoading, text: "Login")
+                        } label: {
+                                HStack {
+                                    Spacer()
+                                    if isLoading {
+                                        ButtonLoadingView(email: $email, password: $password, isLoading: $isLoading)
+                                    } else {
+                                        ButtonLoadingTextView(email: $email, password: $password, isLoading: $isLoading, text: "Login")
+                                    }
+                                    Spacer()
+                                }
                             }
-                            Spacer()
-                        }
-                    }
-                    }.disabled(username.isEmpty || password.isEmpty)
+                        }.disabled(email.isEmpty || password.isEmpty)
                     
                     if !validPassword {
                         Text("Password must be at least 6 characters.")
                             .foregroundColor(.red)
                             .font(Font.system(size: 12, design: .default))
                             .padding(.top, -10)
-                    } else if loginFail {
+                    } else if loginErrorMessage != "" {
                         // dependent on firebase error
                         // e.g. incorrect user/pass
-                        Text("Login Failed")
+                        Text(loginErrorMessage)
                             .foregroundColor(.red)
                             .font(Font.system(size: 12, design: .default))
                             .padding(.top, -10)
                     }
                     
                     NavigationLink(destination: RegisterView(
-                        username: $username,
+                        email: $email,
                         password: $password,
                         isSecureField: $isSecureField,
                         validPassword: $validPassword
@@ -78,72 +84,86 @@ struct LoginView: View {
         }
     }
     
-    func logInUser(username: String, password: String) -> Bool {
+    func loginUser(email: String, password: String, completion: ((String) -> Void)? = nil) {
         isLoading = true
-        loginFail = false
+        loginErrorMessage = ""
         
-        let urlstring = "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/login?password=" + password + "&email=" + username
+        let urlstring = "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/login?email=" + email + "&password=" + password
         
         let url = URL(string: urlstring)
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
-        request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
+        request.setValue("7f5c4e71e19bdd8c793f1677867ef4db007988f6", forHTTPHeaderField: "auth")
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 isLoading = false
-                loginFail = true
+                completion?("Login failed")
                 fatalError("There was an error with your network request: \(error.localizedDescription)")
             }
             
+            let response1 = response as! HTTPURLResponse
+            if response1.statusCode == 200 {
+                completion?("")
+            } else {
+                completion?("Incorrect email or password")
+            }
+            isLoading = false
         }.resume()
-            
-        return true;
     }
 }
 
 struct RegisterView: View {
-    @Binding var username: String
+    @Binding var email: String
     @Binding var password: String
     @Binding var isSecureField: Bool
     @Binding var validPassword: Bool
     @State var birthDate = Calendar.current.date(byAdding: .year, value: -18, to: Date())!
     @State var isLogin = false
     @State private var isLoading = false
-    @State private var registerFail = false
+    @State private var registerErrorMessage = ""
     @State var selection: Int? = nil
     
     var body: some View {
         ZStack {
             GradientBackground()
             VStack(spacing: 16) {
-                UsernamePasswordView(username: $username, password: $password, isSecureField: $isSecureField, isLoading: $isLoading, isLogin: $isLogin)
+                EmailPasswordView(email: $email, password: $password, isSecureField: $isSecureField, isLoading: $isLoading, isLogin: $isLogin)
                 DatePickerView(birthDate: $birthDate)
                 NavigationLink(destination: EditProfileView(), tag: 1, selection: $selection) {
                     Button() {
                         validPassword = password.count >= 6
-                        if validPassword && registerUser(username: username, password: password, birthDate: birthDate) {
-                            // called the createUsers endpoint
-                            // go to main screen / chat interface
-                            // on success
-                            self.selection = 1
+                        if validPassword {
+                            registerUser(email: email, password: password, birthDate: birthDate) { status in
+                                registerErrorMessage = status
+                                if registerErrorMessage == "" {
+                                    // go to main screen / chat interface
+                                    loggedin = email
+                                    self.selection = 1
+                                }
+                            }
                         }
                     } label: {
                         HStack {
                             Spacer()
                             if isLoading {
-                                ButtonLoadingView(username: $username, password: $password, isLoading: $isLoading)
+                                ButtonLoadingView(email: $email, password: $password, isLoading: $isLoading)
                             } else {
-                                ButtonLoadingTextView(username: $username, password: $password, isLoading: $isLoading, text: "Register")
+                                ButtonLoadingTextView(email: $email, password: $password, isLoading: $isLoading, text: "Register")
                             }
                             Spacer()
                         }
                     }
-                }.disabled(username.isEmpty || password.isEmpty)
+                }.disabled(email.isEmpty || password.isEmpty)
                 
-                if registerFail {
+                if !validPassword {
+                    Text("Password must be at least 6 characters.")
+                        .foregroundColor(.red)
+                        .font(Font.system(size: 12, design: .default))
+                        .padding(.top, -10)
+                } else if registerErrorMessage != "" {
                     // dependent on firebase error
                     // e.g. account exists already
-                    Text("Account Creation Failed")
+                    Text(registerErrorMessage)
                         .foregroundColor(.red)
                 }
             }
@@ -151,27 +171,32 @@ struct RegisterView: View {
         }
     }
 
-    func registerUser(username: String, password: String, birthDate: Date) -> Bool {
+    func registerUser(email: String, password: String, birthDate: Date, completion: ((String) -> Void)? = nil) {
         isLoading = true
-        registerFail = false
+        registerErrorMessage = ""
         
         let createUserBaseUrl = "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/createUser?"
-        let urlstring = createUserBaseUrl + "firstName=" + username + "&lastName=" + "&password=" + password + "&email=" + username + "&dob=" + DateFormatter().string(from: birthDate)
+        let urlstring = createUserBaseUrl + "displayName=" + email + "&password=" + password + "&email=" + email + "&dob=" + DateFormatter().string(from: birthDate)
         
         let url = URL(string: urlstring)
         var request = URLRequest(url: url!)
         request.httpMethod = "POST"
-        request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
+        request.setValue("7f5c4e71e19bdd8c793f1677867ef4db007988f6", forHTTPHeaderField: "auth")
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 isLoading = false
-                registerFail = true
+                completion?("Account creation failed")
                 fatalError("There was an error with your network request: \(error.localizedDescription)")
             }
             
+            let response1 = response as! HTTPURLResponse
+            if response1.statusCode == 200 {
+                completion?("")
+            } else {
+                completion?("Account already exists")
+            }
+            isLoading = false
         }.resume()
-            
-        return true;
     }
 }
 
@@ -183,6 +208,8 @@ struct EditProfileView: View {
     // you may need to download SF Symbols if error
     @State private var avatarImage = UIImage(systemName: "person.fill")!
     let PROFILE_NAME_CHAR_LIMIT = 25
+    
+    @ObservedObject private var vm = MainMessagesViewModel()
     
     var body: some View {
         NavigationView {
@@ -277,8 +304,10 @@ struct EditProfileView: View {
             PhotoPicker(avatarImage: $avatarImage, sourceType: userSelection == 1 ? .camera : .savedPhotosAlbum).ignoresSafeArea()
         })
         .toolbar {
-            NavigationLink(destination: MainMessagesView(), label: { Text("Done") })
-                .disabled(profileName.isEmpty)
+            NavigationButton(action: { vm.setDisplayName(email: loggedin, displayName: profileName) },
+                             destination: { MainMessagesView() },
+                             label: { Text("Done") })
+            .disabled(profileName.isEmpty)
         }
     }
 }
@@ -348,46 +377,46 @@ struct GradientBackground: View {
 }
 
 struct ButtonLoadingView: View {
-    @Binding var username: String
+    @Binding var email: String
     @Binding var password: String
     @Binding var isLoading: Bool
     
     var body: some View {
         ProgressView().progressViewStyle(CircularProgressViewStyle(tint: .gray))
-            .foregroundColor(username.isEmpty || password.isEmpty ? .gray : .black)
+            .foregroundColor(email.isEmpty || password.isEmpty ? .gray : .black)
             .padding(.vertical, isLoading ? 13 : 10)
             .frame(width: 180, height: 50)
             .background(
                 RoundedRectangle(cornerRadius: 30, style: .continuous)
-                    .fill(username.isEmpty || password.isEmpty ? Color.gray.opacity(0.3) : Color.green.opacity(0.3))
+                    .fill(email.isEmpty || password.isEmpty ? Color.gray.opacity(0.3) : Color.green.opacity(0.3))
             )
     }
 }
 
 struct ButtonLoadingTextView: View {
-    @Binding var username: String
+    @Binding var email: String
     @Binding var password: String
     @Binding var isLoading: Bool
     var text: String
     
     var body: some View {
         Text(text)
-            .foregroundColor(username.isEmpty || password.isEmpty ? .gray : .black)
+            .foregroundColor(email.isEmpty || password.isEmpty ? .gray : .black)
             .padding(.vertical, isLoading ? 13 : 10)
             .frame(width: 180, height: 50)
             .background(
                 RoundedRectangle(cornerRadius: 30, style: .continuous)
-                    .fill(username.isEmpty || password.isEmpty ? Color.gray.opacity(0.3) : Color.green.opacity(0.3))
+                    .fill(email.isEmpty || password.isEmpty ? Color.gray.opacity(0.3) : Color.green.opacity(0.3))
             )
     }
 }
 
-struct UsernamePasswordView: View {
+struct EmailPasswordView: View {
     enum Field: Hashable {
-        case username
+        case email
         case password
     }
-    @Binding var username: String
+    @Binding var email: String
     @Binding var password: String
     @Binding var isSecureField: Bool
     @Binding var isLoading: Bool
@@ -396,12 +425,12 @@ struct UsernamePasswordView: View {
     
     var body: some View {
         Group {
-            TextField("Username", text: $username)
+            TextField("email", text: $email)
                 .keyboardType(.asciiCapable)
                 .autocapitalization(.none)
                 .disableAutocorrection(true)
-                .onReceive(Just(username), perform: { _ in
-                    limitText(text: &username, USERNAME_CHAR_LIMIT)
+                .onReceive(Just(email), perform: { _ in
+                    limitText(text: &email, EMAIL_CHAR_LIMIT)
                 })
                 .submitLabel(.next)
                 .onSubmit {
