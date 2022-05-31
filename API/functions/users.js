@@ -232,7 +232,6 @@ users_api.post('/setDisplayName', async (request, response) => {
   if (req_key == KEY) {
     const uid = request.query.uid;
     const displayName = request.query.displayName;
-
     USERS.doc(uid).update({
       displayName: displayName
     })
