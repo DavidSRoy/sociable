@@ -34,7 +34,7 @@ private func sendMessage(msg: String, recipient: String, _ allMessages: inout Di
             fatalError("Unable to send message: \(error.localizedDescription)")
         }
     }.resume()
-    let message = Msg(id: loggedin, text: msg, recieved: false, time: Timestamp())
+    let message = Msg(id: recipient, text: msg, recieved: false, time: Timestamp())
     allMessages[recipient, default: []].append(message)
 }
 
@@ -188,11 +188,11 @@ struct MessageContentView: View {
             SendForm(tmp: Text("Type your message here"), text: $message)
             Button {
                 sendMessage(msg: message, recipient: target, &vm.allMessages)
+                print(target)
                 vm.fetchUserConversations(user: user_uid) { done in
                     if done {
                         vm.extractChatListData()
                     }
-                    print(user_uid)
                 }
                 message = ""
             } label: {

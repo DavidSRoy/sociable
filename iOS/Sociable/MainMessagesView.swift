@@ -128,9 +128,15 @@ class MainMessagesViewModel: ObservableObject {
     
     // Assumes that messages are sorted in ascending timestamps
     func extractChatListData() {
+        let dispatch = DispatchGroup()
         for (uid, _) in allMessages {
-            chatListData.append((ChatUser(uid: uid), allMessages[uid]?.last))
+            dispatch.enter()
+            getUserInfo(uid: uid) { ret in
+                // since api doesn't give back UID
+                self.chatListData.append((ChatUser(uid: uid, email: ret.email, displayName: ret.displayName, dob: ret.dob, profilePic: ret.profilePic, bio: ret.bio, friends: ret.friends, msgs: ret.msgs), self.allMessages[uid]?.last))
+            }
         }
+        dispatch.leave()
         // most recent messages first
         chatListData.sort(by: { $0.1! < $1.1! })
     }
@@ -321,10 +327,9 @@ struct MainMessagesView: View {
             .fullScreenCover(isPresented: $showFullScreen) {
                 CreateNewMessageView(didSelectNewUser: { user in
                     self.selectedRecipient = user
-                    target = (self.selectedRecipient?.displayName)!
+                    target = (self.selectedRecipient?.uid)!
                     friendStatus = vm.isFriend(selectedRecipient) ? "person.crop.circle.badge.plus" : "person.crop.circle.badge.plus"
                     self.navigateToSelectedRecipientChat.toggle()
-                    print(user.uid!)
                 })
             }
         }
@@ -370,7 +375,7 @@ struct MainMessagesView: View {
         .onAppear {
             vm.getUsers() { chatUsers in
                 let dispatch = DispatchGroup()
-                print(loggedin)
+                print(loggedin) // email
                 for user in chatUsers {
                     dispatch.enter()
                     if user.email == loggedin {
@@ -391,7 +396,7 @@ struct MainMessagesView: View {
                         for msg in messages {
                             if msg.id == user_uid {
                                 // should be uid
-                                vm.allMessages[(user.displayName)!, default: []].append(msg)
+                                vm.allMessages[(user.uid)!, default: []].append(msg)
                             }
                         }
                         vm.extractChatListData()
@@ -465,7 +470,7 @@ struct MainMessagesView: View {
                         // Tapping on a chat box
                     }).simultaneousGesture(TapGesture().onEnded {
                         selectedRecipient = tuple.0
-                        target = selectedRecipient?.displayName ?? ""
+                        target = selectedRecipient?.uid ?? ""
                         friendStatus = vm.isFriend(selectedRecipient) ? "person.crop.circle.badge.plus" : "person.crop.circle.badge.plus"
                     })
                     Divider()

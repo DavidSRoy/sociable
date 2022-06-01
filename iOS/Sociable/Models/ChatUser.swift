@@ -12,7 +12,7 @@ struct ChatUser: Identifiable, Codable, Hashable {
 
     // getUserInfo endpoint
 
-    let uid: String?
+    var uid: String?
     var email: String?
     var displayName: String?
     var dob: String?
