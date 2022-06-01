@@ -24,7 +24,7 @@ struct Msg2Comp: Hashable, Codable {
 
 private func sendMessage(msg: String, recipient: String, _ allMessages: inout Dictionary<String, Array<Msg>>) {
     let sendBaseUrl = "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/sendMessage?"
-    let urlstring = sendBaseUrl + "uid=" + recipient + "&msg=" + msg.replacingOccurrences(of: " ", with: "_") + "&sender=" + user_uid
+    let urlstring = sendBaseUrl + "uid=" + recipient + "&msg=" + msg + "&sender=" + user_uid
     let url = URL(string: urlstring)
     var request = URLRequest(url: url!)
     request.httpMethod = "POST"
@@ -36,6 +36,7 @@ private func sendMessage(msg: String, recipient: String, _ allMessages: inout Di
     }.resume()
     let message = Msg(id: recipient, text: msg, recieved: false, time: Timestamp())
     allMessages[recipient, default: []].append(message)
+    print(allMessages)
 }
 
 private func setFriend(recipient: String, add: Bool, completion: ((Bool) -> Void)? = nil) {
@@ -110,8 +111,8 @@ struct MessageContentView: View {
                             .font(.title)
                             .bold()
                             .foregroundColor(.white)
-                            .scaledToFit()
-                            .minimumScaleFactor(0.01)
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: false)
                         HStack {
                             Circle()
                                 .foregroundColor(.green)
