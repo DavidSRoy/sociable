@@ -117,7 +117,7 @@ struct MessageContentView: View {
                             Circle()
                                 .foregroundColor(.green)
                                 .frame(width: 14, height: 14)
-                            Text(bio).font(.caption)
+                            Text(bio ).font(.caption)
                                 .foregroundColor(.white)
                         }.padding(.top, -15)
                     }
