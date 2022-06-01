@@ -29,14 +29,14 @@ class MainMessagesViewModel: ObservableObject {
     @Published var allUsers = [ChatUser]()
     
     init() {
-        if user_uid == "" { return }
-        getUserInfo(uid: user_uid)
-        fetchCurrentUserFriends()
-        fetchUserConversations(user: user_uid) { done in
-            if done {
-                self.extractChatListData()
-            }
-        }
+//        if user_uid == "" { return }
+//        getUserInfo(uid: user_uid)
+//        fetchCurrentUserFriends()
+//        fetchUserConversations(user: user_uid) { done in
+//            if done {
+//                self.extractChatListData()
+//            }
+//        }
     }
     
     func fetchMessages(user: String, completion: (([Msg]) -> Void)? = nil ) {
@@ -136,7 +136,6 @@ class MainMessagesViewModel: ObservableObject {
                 self.chatListData.append((ChatUser(uid: uid, email: ret.email, displayName: ret.displayName, dob: ret.dob, profilePic: ret.profilePic, bio: ret.bio, friends: ret.friends, msgs: ret.msgs), self.allMessages[uid]?.last))
             }
         }
-        dispatch.leave()
         // most recent messages first
         chatListData.sort(by: { $0.1! < $1.1! })
     }
@@ -297,10 +296,6 @@ struct MainMessagesView: View {
             }
             
             VStack(alignment: .leading, spacing: 4) {
-                // logic for email addresses
-                let strip = "\(vm.chatUser?.displayName ?? "")"
-                    .split(separator: "@")
-                let displayName = strip.count > 0 ? strip[0] : ""
                 Text(displayName)
                     .font(.system(size: 24, weight: .bold))
                     .scaledToFit()
@@ -310,7 +305,6 @@ struct MainMessagesView: View {
                     Circle()
                         .foregroundColor(.green)
                         .frame(width: 14, height: 14)
-                    // TODO need bio from endpoint
                     Text(vm.chatUser?.bio ?? bio)
                         .font(.system(size: 12))
                         .foregroundColor(Color(.lightGray))
@@ -380,14 +374,13 @@ struct MainMessagesView: View {
                     dispatch.enter()
                     if user.email == loggedin {
                         user_uid = user.uid ?? ""
-                        displayName = user.displayName ?? ""
+                        if (displayName == "") {
+                            displayName = user.displayName ?? ""
+                        }
                         break
                     }
                 }
-                dispatch.leave()
                 vm.allUsers = chatUsers
-                
-                print("done", user_uid)
                 
                 // ** EXPENSIVE OPERATION **
                 for user in vm.allUsers {
@@ -395,7 +388,6 @@ struct MainMessagesView: View {
                     vm.fetchMessages(user: (user.uid)!) { messages in
                         for msg in messages {
                             if msg.id == user_uid {
-                                // should be uid
                                 vm.allMessages[(user.uid)!, default: []].append(msg)
                             }
                         }
@@ -408,6 +400,7 @@ struct MainMessagesView: View {
                     self.chatUser = chatUser
                 }
                 
+                print(user_uid)
                 if displayName != "" {
                     vm.setDisplayName(uid: user_uid, displayName: displayName)
                 }
@@ -419,6 +412,7 @@ struct MainMessagesView: View {
                         vm.chatUser?.profilePic?.url = url
                     }
                 }
+                dispatch.leave()
             }
         }
     }

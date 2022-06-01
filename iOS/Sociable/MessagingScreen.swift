@@ -36,6 +36,7 @@ private func sendMessage(msg: String, recipient: String, _ allMessages: inout Di
     }.resume()
     let message = Msg(id: recipient, text: msg, recieved: false, time: Timestamp())
     allMessages[recipient, default: []].append(message)
+    print(allMessages)
 }
 
 private func setFriend(recipient: String, add: Bool, completion: ((Bool) -> Void)? = nil) {
@@ -107,9 +108,12 @@ struct MessageContentView: View {
                     }
 
                     VStack (alignment: .leading) {
-                        Text((recipient?.displayName ?? recipient?.uid) ?? "").font(.title)
+                        Text((recipient?.displayName ?? recipient?.uid) ?? "")
+                            .font(.title)
                             .bold()
                             .foregroundColor(.white)
+                            .lineLimit(1)
+                            .fixedSize(horizontal: true, vertical: false)
                         HStack {
                             Circle()
                                 .foregroundColor(.green)
@@ -188,7 +192,6 @@ struct MessageContentView: View {
             SendForm(tmp: Text("Type your message here"), text: $message)
             Button {
                 sendMessage(msg: message, recipient: target, &vm.allMessages)
-                print(target)
                 vm.fetchUserConversations(user: user_uid) { done in
                     if done {
                         vm.extractChatListData()
