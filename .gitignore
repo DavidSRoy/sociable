@@ -5,5 +5,5 @@ firebase-debug.log
 .github/secrets/decrypt_secrets.sh
 iOS/ExportOptions-AdHoc.plist
 iOS/ExportOptions.plist
-iOS/Sociable.xcodeproj/project.xcworkspace/xcuserdata/stlp.xcuserdatad/UserInterfaceState.xcuserstate
+iOS/Sociable.xcodeproj/project.xcworkspace/xcuserdata/
 iOS/Sociable.xcodeproj/project.xcworkspace/xcshareddata/swiftpm/

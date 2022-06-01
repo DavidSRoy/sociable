@@ -7,6 +7,16 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+// testing purposes
+public var user_uid : String {
+    get {
+        return UserDefaults.standard.string(forKey: "savedUid") ?? ""
+    }
+    set {
+        UserDefaults.standard.set(newValue, forKey: "savedUid")
+    }
+}
+
 class MainMessagesViewModel: ObservableObject {
     
     @Published var chatUser: ChatUser?
@@ -15,45 +25,63 @@ class MainMessagesViewModel: ObservableObject {
     @Published var chatListData: Array<(ChatUser, Msg?)> = []
     // K: recipient, V: entire convo between user and recipient
     @Published var allMessages: Dictionary<String, Array<Msg>> = [:]
+    @Published var friendsList: Array<String> = []
+    @Published var allUsers = [ChatUser]()
     
     init() {
-        fetchCurrentUser()
-        fetchUserConversations(user: loggedin) { done in
-            if done {
-                self.extractChatListData()
-            }
-        }
+//        if user_uid == "" { return }
+//        getUserInfo(uid: user_uid)
+//        fetchCurrentUserFriends()
+//        fetchUserConversations(user: user_uid) { done in
+//            if done {
+//                self.extractChatListData()
+//            }
+//        }
     }
     
-    private func fetchMessages(user: String, completion: (([Msg]) -> Void)? = nil ) {
+    func fetchMessages(user: String, completion: (([Msg]) -> Void)? = nil ) {
+        if user == "" { return }
         var messages = [Msg]()
         let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/getMessages?uid=" + user)
         var request = URLRequest(url: url!)
         request.httpMethod = "GET"
-        request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
+        request.setValue("7f5c4e71e19bdd8c793f1677867ef4db007988f6", forHTTPHeaderField: "auth")
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
                 fatalError("There was an error with your network request: \(error.localizedDescription)")
+            }
+            
+            let response1 = response as! HTTPURLResponse
+            if (response1.statusCode != 200) {
+                print("Unable to fetch messages for \(user): error " + String(response1.statusCode))
+                return
             }
             
             guard let data = data else {
                 return
             }
             
-            let decoder = JSONDecoder()
-            let decodedData = try! decoder.decode(Usr2Msg.self, from: data)
-            for msg in decodedData.msgs {
-                let message = Msg(id: msg.sender, text: msg.msg, recieved: loggedin.elementsEqual(msg.sender) ? false : true, time: msg.timestamp)
-                messages.append(message)
-            }
-            messages = messages.sorted()
-            DispatchQueue.main.async {
-                completion?(messages)
+            do {
+                let decoder = JSONDecoder()
+                let decodedData = try decoder.decode(Usr2Msg.self, from: data)
+                for msg in decodedData.msgs {
+                    let message = Msg(id: msg.sender, text: msg.msg, recieved: loggedin.elementsEqual(msg.sender) ? false : true, time: msg.timestamp)
+                    messages.append(message)
+                }
+                messages = messages.sorted()
+                DispatchQueue.main.async {
+                    completion?(messages)
+                }
+            } catch Swift.DecodingError.dataCorrupted(let context) {
+                print("JSON Parse Error at fetchMessages()\nError: \(context.debugDescription)")
+            } catch let context {
+                // print("Error at fetchMessages(): \(context.localizedDescription)")
             }
         }.resume()
     }
     
-    private func fetchUserConversations(user: String, completion: ((Bool) -> Void)? = nil) {
+    func fetchUserConversations(user: String, completion: ((Bool) -> Void)? = nil) {
+        if user == "" { return }
         let dispatch = DispatchGroup()
         // user = uid
         fetchMessages(user: user) { MsgResponse in
@@ -78,17 +106,49 @@ class MainMessagesViewModel: ObservableObject {
         }
     }
     
-    private func fetchCurrentUser() {
-        // TODO
-        // need to convert username/email->uid to use for other endpoints
-        // as uid is not generated locally
-        let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/getMessages?uid=" + "john1") //username/email
+    private func fetchCurrentUserFriends() {
+        let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/getFriends?uid=" + user_uid)
         var request = URLRequest(url: url!)
         request.httpMethod = "GET"
-        request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
+        request.setValue("7f5c4e71e19bdd8c793f1677867ef4db007988f6", forHTTPHeaderField: "auth")
         URLSession.shared.dataTask(with: request) { data, _, error in
             if let error = error {
-                fatalError("Failed to get current user information: \(error.localizedDescription)")
+                fatalError("Failed to get current user friends: \(error.localizedDescription)")
+            }
+            
+            guard let data = data else {
+                return
+            }
+            // Does not use JSON
+            DispatchQueue.main.async {
+                self.friendsList = (try? JSONSerialization.jsonObject(with: data, options: []) as? [String]) ?? []
+            }
+        }.resume()
+    }
+    
+    // Assumes that messages are sorted in ascending timestamps
+    func extractChatListData() {
+        let dispatch = DispatchGroup()
+        for (uid, _) in allMessages {
+            dispatch.enter()
+            getUserInfo(uid: uid) { ret in
+                // since api doesn't give back UID
+                self.chatListData.append((ChatUser(uid: uid, email: ret.email, displayName: ret.displayName, dob: ret.dob, profilePic: ret.profilePic, bio: ret.bio, friends: ret.friends, msgs: ret.msgs), self.allMessages[uid]?.last))
+            }
+        }
+        // most recent messages first
+        chatListData.sort(by: { $0.1! < $1.1! })
+    }
+    
+    func getUsers(completion: (([ChatUser]) -> Void)? = nil) {
+        // currently fetches ALL users on app
+        let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/getUsers")
+        var request = URLRequest(url: url!)
+        request.httpMethod = "GET"
+        request.setValue("7f5c4e71e19bdd8c793f1677867ef4db007988f6", forHTTPHeaderField: "auth")
+        URLSession.shared.dataTask(with: request) { data, _, error in
+            if let error = error {
+                fatalError("Failed to fetch users: \(error.localizedDescription)")
             }
             
             guard let data = data else {
@@ -97,10 +157,8 @@ class MainMessagesViewModel: ObservableObject {
             DispatchQueue.main.async {
                 let decoder = JSONDecoder()
                 do {
-                    let parsed = try decoder.decode(ChatUser.self, from: data)
-                    // All the ChatUsers that user has DMed
-                    self.chatUser = parsed
-                    // print(parsed)
+                    let parsed = try decoder.decode([ChatUser].self, from: data)
+                    completion?(parsed)
                 }
                 catch {
                     print(error)
@@ -109,11 +167,102 @@ class MainMessagesViewModel: ObservableObject {
         }.resume()
     }
     
-    // Assumes that messages are sorted in ascending timestamps
-    private func extractChatListData() {
-        for (uid, _) in allMessages {
-            // TODO uid is username for now, but should be database-generated uid
-            chatListData.append((ChatUser(uid: uid), allMessages[uid]?.last))
+    func getUserInfo(uid: String, completion: ((ChatUser) -> Void)? = nil) {
+        let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/getUserInfo?uid=" + uid)
+        var request = URLRequest(url: url!)
+        request.httpMethod = "GET"
+        request.setValue("7f5c4e71e19bdd8c793f1677867ef4db007988f6", forHTTPHeaderField: "auth")
+        URLSession.shared.dataTask(with: request) { data, _, _ in
+            // Show no error message for setting display name
+            
+            guard let data = data else {
+                return
+            }
+            DispatchQueue.main.async {
+                let decoder = JSONDecoder()
+                do {
+                    let parsed = try decoder.decode(ChatUser.self, from: data)
+                    completion?(parsed)
+                }
+                catch {
+                    print(error)
+                }
+            }
+            
+        }.resume()
+    }
+    
+    // uid = autogenerated string
+    func setDisplayName(uid: String, displayName: String) {
+        let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/setDisplayName?uid=" + uid + "&displayName=" + displayName)
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.setValue("7f5c4e71e19bdd8c793f1677867ef4db007988f6", forHTTPHeaderField: "auth")
+        URLSession.shared.dataTask(with: request) { _, response, _ in
+            // Show no error message for setting display name
+            
+            let response1 = response as! HTTPURLResponse
+            if (response1.statusCode == 200) {
+                self.getUserInfo(uid: uid) { updatedUser in
+                    self.updateLocalUser(updatedUser)
+                }
+            } else {
+                print("Failed to set display name \(displayName)")
+            }
+        }.resume()
+    }
+    
+    func setProfilePhoto(uid: String, filePath: String, completion: ((Bool) -> Void)? = nil) {
+        let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/setProfilePhoto?uid=" + uid + "&filePath=" + filePath)
+        var request = URLRequest(url: url!)
+        request.httpMethod = "POST"
+        request.setValue("7f5c4e71e19bdd8c793f1677867ef4db007988f6", forHTTPHeaderField: "auth")
+        URLSession.shared.dataTask(with: request) { _, response, error in
+            
+            if let error = error {
+                fatalError("ERROR - setProfilePhoto: \(error.localizedDescription)")
+            }
+            
+            let response1 = response as! HTTPURLResponse
+            if (response1.statusCode == 200) {
+                completion?(true)
+                self.getUserInfo(uid: uid) { updatedUser in
+                    self.updateLocalUser(updatedUser)
+                }
+            } else {
+                print("Failed to set profile photo - path: \(filePath)")
+                completion?(false)
+            }
+        }.resume()
+    }
+    
+    func getProfilePhoto(filename: String, completion: ((String) -> Void)? = nil) {
+        let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/getImage?filename=" + filename)
+        var request = URLRequest(url: url!)
+        request.httpMethod = "GET"
+        request.setValue("7f5c4e71e19bdd8c793f1677867ef4db007988f6", forHTTPHeaderField: "auth")
+        URLSession.shared.dataTask(with: request) { data, response, _ in
+            
+            let response1 = response as! HTTPURLResponse
+            if (response1.statusCode == 200) {
+                let outputStr = String(data: data!, encoding: String.Encoding.utf8)
+                completion?(outputStr!)
+            } else {
+                print("Failed to get profile photo - filename: \(filename)")
+            }
+        }.resume()
+    }
+    
+    // ideally would store as variable but not sure how to call only once (such as with init())
+    func isFriend(_ recipient: ChatUser?) -> Bool {
+        return self.friendsList.contains(recipient?.uid ?? "")
+    }
+    
+    func updateLocalUser(_ updatedUser: ChatUser) {
+        if self.chatUser == nil {
+            self.chatUser = updatedUser
+        } else {
+            self.chatUser!.update(&chatUser!, updatedUser)
         }
         // most recent messages first
         chatListData.sort(by: { $0.1! < $1.1! })
@@ -122,21 +271,19 @@ class MainMessagesViewModel: ObservableObject {
 
 struct MainMessagesView: View {
     
-    @State var status = "online"
+    @State var bio = "online"
     @State var showFullScreen = false
-    @State var navigateToChatLogView = false
     @State var chatUser: ChatUser?
     @State var selectedRecipient: ChatUser?
-    
+    @State var friendStatus = ""
+    @State var navigateToSelectedRecipientChat = false
     
     @ObservedObject private var vm = MainMessagesViewModel()
     
     private var customNavBar: some View {
         HStack(spacing: 16) {
-            let imageUrl = vm.chatUser?.profileImageUrl
-            if (imageUrl != nil) {
-                WebImage(url: URL(string:
-                                    imageUrl ?? ""))
+            if (vm.chatUser?.profilePic != nil) {
+                WebImage(url: URL(string: (vm.chatUser?.profilePic!.url)!))
                 .resizable()
                 .scaledToFill()
                 .frame(width: 44, height: 44)
@@ -151,10 +298,6 @@ struct MainMessagesView: View {
             }
             
             VStack(alignment: .leading, spacing: 4) {
-                // logic for email addresses
-                let strip = "\(vm.chatUser?.name ?? "")"
-                    .split(separator: "@")
-                let displayName = strip.count > 0 ? strip[0] : ""
                 Text(displayName)
                     .font(.system(size: 24, weight: .bold))
                     .scaledToFit()
@@ -164,8 +307,7 @@ struct MainMessagesView: View {
                     Circle()
                         .foregroundColor(.green)
                         .frame(width: 14, height: 14)
-                    // TODO need status from endpoint
-                    Text(vm.chatUser?.status ?? status)
+                    Text(vm.chatUser?.bio ?? bio)
                         .font(.system(size: 12))
                         .foregroundColor(Color(.lightGray))
                 }
@@ -180,27 +322,101 @@ struct MainMessagesView: View {
             }
             .fullScreenCover(isPresented: $showFullScreen) {
                 CreateNewMessageView(didSelectNewUser: { user in
-                    self.navigateToChatLogView.toggle()
-                    self.chatUser = user
+                    self.selectedRecipient = user
+                    target = (self.selectedRecipient?.uid)!
+                    friendStatus = vm.isFriend(selectedRecipient) ? "person.crop.circle.badge.plus" : "person.crop.circle.badge.plus"
+                    self.navigateToSelectedRecipientChat.toggle()
                 })
             }
         }
         .padding()
     }
     
+    init() {
+        UITabBar.appearance().backgroundColor = UIColor.systemBackground
+    }
+    
+    // iOS 15 bug causes temporary view shift...apparently
     var body: some View {
         NavigationView {
-            VStack {
-                customNavBar
-                messagesView
-                
-                NavigationLink("", isActive: $navigateToChatLogView) {
-                    Text("Chat Log View")
+            TabView {
+                VStack {
+                    customNavBar
+                    messagesView
+                    NavigationLink("", isActive: $navigateToSelectedRecipientChat) {
+                        MessageContentView(recipient: $selectedRecipient, friendStatus: $friendStatus)
+                    }
                 }
-            }
-            .navigationBarHidden(true)
+                .accentColor(.none)
+                .navigationBarHidden(true)
+                .tabItem {
+                    Text("Home")
+                    Image(systemName: "house").renderingMode(.template)
+                }.tag(1)
+                
+                VStack {
+                    ContactScreen()
+                }
+                .accentColor(.none)
+                .navigationBarHidden(true)
+                .tabItem {
+                    Text("Contacts")
+                    Image(systemName: "person.crop.circle").renderingMode(.template)
+                        
+                }.tag(2)
+            }.accentColor(.black)
         }
         .navigationBarHidden(true)
+        // When user arrives to main screen
+        .onAppear {
+            vm.getUsers() { chatUsers in
+                let dispatch = DispatchGroup()
+                print(loggedin) // email
+                for user in chatUsers {
+                    dispatch.enter()
+                    if user.email == loggedin {
+                        user_uid = user.uid ?? ""
+                        if (displayName == "") {
+                            displayName = user.displayName ?? ""
+                        }
+                        break
+                    }
+                }
+                vm.allUsers = chatUsers
+                
+                // ** EXPENSIVE OPERATION **
+                for user in vm.allUsers {
+                    dispatch.enter()
+                    vm.fetchMessages(user: (user.uid)!) { messages in
+                        for msg in messages {
+                            if msg.id == user_uid {
+                                vm.allMessages[(user.uid)!, default: []].append(msg)
+                            }
+                        }
+                        vm.extractChatListData()
+                        dispatch.leave()
+                    }
+                }
+                
+                vm.getUserInfo(uid: user_uid) { chatUser in
+                    self.chatUser = chatUser
+                }
+                
+                print(user_uid)
+                if displayName != "" {
+                    vm.setDisplayName(uid: user_uid, displayName: displayName)
+                }
+                if profileImageURLString != "" {
+                    vm.setProfilePhoto(uid: user_uid, filePath: profileImageURLString)
+                }
+                if vm.chatUser?.profilePic != nil { 
+                    vm.getProfilePhoto(filename: (vm.chatUser?.profilePic!.fileName)!) { url in
+                        vm.chatUser?.profilePic?.url = url
+                    }
+                }
+                dispatch.leave()
+            }
+        }
     }
     
     private var messagesView: some View {
@@ -209,15 +425,10 @@ struct MainMessagesView: View {
             ForEach(vm.chatListData, id: \.0) { tuple in
                 VStack {
                     // MessagingScreen
-                    NavigationLink(destination: MessageContentView(recipient: $selectedRecipient), label: {
+                    NavigationLink(destination: MessageContentView(recipient: $selectedRecipient, friendStatus: $friendStatus), label: {
                         HStack(spacing: 16) {
-                            // TODO
-                            // need uid->url. msg.sender.profileImageUrl
-                            // technically possible with getMessages(uid)
-                            let imageUrl = vm.chatUser?.profileImageUrl
-                            if (imageUrl != nil) {
-                                WebImage(url: URL(string:
-                                                    imageUrl ?? ""))
+                            if (vm.chatUser?.profilePic != nil) {
+                                WebImage(url: URL(string: (vm.chatUser?.profilePic!.fileName)!))
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 32, height: 32)
@@ -235,7 +446,7 @@ struct MainMessagesView: View {
                             }
                             
                             VStack(alignment: .leading) {
-                                Text((tuple.0.name ?? tuple.0.uid) ?? "")
+                                Text((tuple.0.displayName ?? tuple.0.uid) ?? "")
                                     .font(.system(size: 14,
                                                   weight: .bold))
                                 
@@ -252,8 +463,11 @@ struct MainMessagesView: View {
                                         .semibold))
                         }
                         .padding(.top, 3)
+                        // Tapping on a chat box
                     }).simultaneousGesture(TapGesture().onEnded {
                         selectedRecipient = tuple.0
+                        target = selectedRecipient?.uid ?? ""
+                        friendStatus = vm.isFriend(selectedRecipient) ? "person.crop.circle.badge.plus" : "person.crop.circle.badge.plus"
                     })
                     Divider()
                         .padding(.vertical, 8)
