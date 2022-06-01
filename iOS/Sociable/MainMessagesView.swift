@@ -19,6 +19,7 @@ public var user_uid : String {
 
 class MainMessagesViewModel: ObservableObject {
     
+    @State var didAppear = false
     @Published var chatUser: ChatUser?
     // * used namely for name + uid
     // (ChatUser*, most recent message in conversation)
@@ -29,14 +30,16 @@ class MainMessagesViewModel: ObservableObject {
     @Published var allUsers = [ChatUser]()
     
     init() {
-//        if user_uid == "" { return }
-//        getUserInfo(uid: user_uid)
-//        fetchCurrentUserFriends()
-//        fetchUserConversations(user: user_uid) { done in
-//            if done {
-//                self.extractChatListData()
-//            }
-//        }
+        if user_uid == "" { return }
+        getUserInfo(uid: user_uid) { user in
+            self.chatUser = user
+        }
+        fetchCurrentUserFriends()
+        fetchUserConversations(user: user_uid) { done in
+            if done {
+                self.extractChatListData()
+            }
+        }
     }
     
     func fetchMessages(user: String, completion: (([Msg]) -> Void)? = nil ) {
@@ -65,7 +68,8 @@ class MainMessagesViewModel: ObservableObject {
                 let decoder = JSONDecoder()
                 let decodedData = try decoder.decode(Usr2Msg.self, from: data)
                 for msg in decodedData.msgs {
-                    let message = Msg(id: msg.sender, text: msg.msg, recieved: loggedin.elementsEqual(msg.sender) ? false : true, time: msg.timestamp)
+                    var message = Msg(id: msg.sender, text: msg.msg, recieved: loggedin.elementsEqual(msg.sender) ? false : true, time: msg.timestamp)
+                    message.text = message.text.replacingOccurrences(of: "_", with: " ")
                     messages.append(message)
                 }
                 messages = messages.sorted()
@@ -82,7 +86,6 @@ class MainMessagesViewModel: ObservableObject {
     
     func fetchUserConversations(user: String, completion: ((Bool) -> Void)? = nil) {
         if user == "" { return }
-        let dispatch = DispatchGroup()
         // user = uid
         fetchMessages(user: user) { MsgResponse in
             // Reduce all received messages to respective uid to messages
@@ -91,22 +94,18 @@ class MainMessagesViewModel: ObservableObject {
             }
             // Append all sent messages from user to respective uid
             for (uid, _) in self.allMessages {
-                dispatch.enter()
                 self.fetchMessages(user: uid) { userMsgs in
                     for msg in userMsgs where msg.id == user {
                         self.allMessages[uid]?.append(msg)
                     }
                     self.allMessages[uid]?.sort()
-                    dispatch.leave()
                 }
             }
-            dispatch.notify(queue: .main) {
-                completion?(true)
-            }
+            completion?(true)
         }
     }
     
-    private func fetchCurrentUserFriends() {
+    func fetchCurrentUserFriends() {
         let url = URL(string: "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/getFriends?uid=" + user_uid)
         var request = URLRequest(url: url!)
         request.httpMethod = "GET"
@@ -128,12 +127,12 @@ class MainMessagesViewModel: ObservableObject {
     
     // Assumes that messages are sorted in ascending timestamps
     func extractChatListData() {
-        let dispatch = DispatchGroup()
         for (uid, _) in allMessages {
-            dispatch.enter()
             getUserInfo(uid: uid) { ret in
                 // since api doesn't give back UID
-                self.chatListData.append((ChatUser(uid: uid, email: ret.email, displayName: ret.displayName, dob: ret.dob, profilePic: ret.profilePic, bio: ret.bio, friends: ret.friends, msgs: ret.msgs), self.allMessages[uid]?.last))
+                var user = ret
+                user.uid = uid
+                self.chatListData.append((user, self.allMessages[uid]?.last))
             }
         }
         // most recent messages first
@@ -284,14 +283,14 @@ struct MainMessagesView: View {
         HStack(spacing: 16) {
             if (vm.chatUser?.profilePic != nil) {
                 WebImage(url: URL(string: (vm.chatUser?.profilePic!.url)!))
-                .resizable()
-                .scaledToFill()
-                .frame(width: 44, height: 44)
-                .clipped()
-                .cornerRadius(44)
-                .overlay(RoundedRectangle(cornerRadius: 44)
-                    .stroke(Color(.label), lineWidth: 1))
-                .shadow(radius: 5)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 44, height: 44)
+                    .clipped()
+                    .cornerRadius(44)
+                    .overlay(RoundedRectangle(cornerRadius: 44)
+                        .stroke(Color(.label), lineWidth: 1))
+                    .shadow(radius: 5)
             } else {
                 Image(systemName: "person.fill")
                     .font(.system(size: 44, weight: .heavy))
@@ -362,81 +361,79 @@ struct MainMessagesView: View {
                 .tabItem {
                     Text("Contacts")
                     Image(systemName: "person.crop.circle").renderingMode(.template)
-                        
+                    
                 }.tag(2)
             }.accentColor(.black)
         }
         .navigationBarHidden(true)
         // When user arrives to main screen
         .onAppear {
-            vm.getUsers() { chatUsers in
-                let dispatch = DispatchGroup()
-                print(loggedin) // email
-                for user in chatUsers {
-                    dispatch.enter()
-                    if user.email == loggedin {
-                        user_uid = user.uid ?? ""
-                        if (displayName == "") {
+                if vm.didAppear { return }
+                vm.didAppear.toggle()
+                vm.getUsers() { chatUsers in
+                    print(loggedin)
+                    for user in chatUsers {
+                        if user.email == loggedin {
+                            user_uid = user.uid ?? ""
                             displayName = user.displayName ?? ""
+                            break
                         }
-                        break
                     }
-                }
-                vm.allUsers = chatUsers
-                
-                // ** EXPENSIVE OPERATION **
-                for user in vm.allUsers {
-                    dispatch.enter()
-                    vm.fetchMessages(user: (user.uid)!) { messages in
-                        for msg in messages {
-                            if msg.id == user_uid {
-                                vm.allMessages[(user.uid)!, default: []].append(msg)
-                            }
+                    vm.allUsers = chatUsers
+                    
+                    print("done", user_uid)
+                    
+                    // ** EXPENSIVE OPERATION **
+                    // needed to retrieve user's outbox
+//                    for user in vm.allUsers {
+//                        vm.fetchMessages(user: (user.uid)!) { messages in
+//                            for msg in messages {
+//                                if msg.id == user_uid {
+//                                    // should be uid
+//                                    vm.allMessages[(user.displayName)!, default: []].append(msg)
+//                                }
+//                            }
+//                        }
+//                    }
+//                    vm.extractChatListData()
+                    
+                    vm.getUserInfo(uid: user_uid) { chatUser in
+                        self.chatUser = chatUser
+                    }
+                    
+                    if displayName != "" {
+                        vm.setDisplayName(uid: user_uid, displayName: displayName)
+                    }
+                    if profileImageURLString != "" {
+                        vm.setProfilePhoto(uid: user_uid, filePath: profileImageURLString)
+                    }
+                    if vm.chatUser?.profilePic != nil {
+                        vm.getProfilePhoto(filename: (vm.chatUser?.profilePic!.fileName)!) { url in
+                            vm.chatUser?.profilePic?.url = url
                         }
-                        vm.extractChatListData()
-                        dispatch.leave()
                     }
                 }
-                
-                vm.getUserInfo(uid: user_uid) { chatUser in
-                    self.chatUser = chatUser
-                }
-                
-                print(user_uid)
-                if displayName != "" {
-                    vm.setDisplayName(uid: user_uid, displayName: displayName)
-                }
-                if profileImageURLString != "" {
-                    vm.setProfilePhoto(uid: user_uid, filePath: profileImageURLString)
-                }
-                if vm.chatUser?.profilePic != nil { 
-                    vm.getProfilePhoto(filename: (vm.chatUser?.profilePic!.fileName)!) { url in
-                        vm.chatUser?.profilePic?.url = url
-                    }
-                }
-                dispatch.leave()
             }
         }
-    }
     
     private var messagesView: some View {
         ScrollView {
             // (ChatUser, Msg)
             ForEach(vm.chatListData, id: \.0) { tuple in
                 VStack {
-                    // MessagingScreen
+                    // Chat box to MessagingScreen
                     NavigationLink(destination: MessageContentView(recipient: $selectedRecipient, friendStatus: $friendStatus), label: {
                         HStack(spacing: 16) {
                             if (vm.chatUser?.profilePic != nil) {
                                 WebImage(url: URL(string: (vm.chatUser?.profilePic!.fileName)!))
-                                .resizable()
-                                .scaledToFill()
-                                .frame(width: 32, height: 32)
-                                .clipped()
-                                .cornerRadius(44)
-                                .overlay(RoundedRectangle(cornerRadius: 44)
-                                    .stroke(Color(.label), lineWidth: 1))
-                                .shadow(radius: 5)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 32, height: 32)
+                                    .clipped()
+                                    .cornerRadius(44)
+                                    .overlay(RoundedRectangle(cornerRadius: 44)
+                                        .stroke(Color(.label), lineWidth: 1))
+                                    .shadow(radius: 5)
                             } else {
                                 Image(systemName: "person.fill")
                                     .font(.system(size: 32))
