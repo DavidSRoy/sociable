@@ -8,7 +8,31 @@ import SwiftUI
 import Combine
 
 let EMAIL_CHAR_LIMIT = 64
-public var loggedin: String = ""
+// email
+public var loggedin : String {
+    get {
+        return UserDefaults.standard.string(forKey: "savedLoggedin") ?? ""
+    }
+    set {
+        UserDefaults.standard.set(newValue, forKey: "savedLoggedin")
+    }
+}
+public var displayName : String {
+    get {
+        return UserDefaults.standard.string(forKey: "savedDisplayName") ?? ""
+    }
+    set {
+        UserDefaults.standard.set(newValue, forKey: "savedDisplayName")
+    }
+}
+public var profileImageURLString : String {
+    get {
+        return UserDefaults.standard.string(forKey: "savedprofileImageURLString") ?? ""
+    }
+    set {
+        UserDefaults.standard.set(newValue, forKey: "savedprofileImageURLString")
+    }
+}
 
 struct LoginView: View {
     @State private var email = ""
@@ -21,68 +45,73 @@ struct LoginView: View {
     @State var isLogin = true
     
     var body: some View {
-        NavigationView {
-            ZStack {
-                GradientBackground()
-                VStack(spacing: 16) {
-                    EmailPasswordView(email: $email, password: $password, isSecureField: $isSecureField, isLoading: $isLoading, isLogin: $isLogin)
-                    NavigationLink(destination: MainMessagesView(), tag: 1, selection: $selection) {
-                        Button() {
-                            validPassword = password.count >= 6
-                            if validPassword {
-                                loginUser(email: email, password: password) { status in
-                                    loginErrorMessage = status
-                                    if loginErrorMessage == "" {
-                                        // go to main screen / chat interface
-                                        loggedin = email
-                                        self.selection = 1
+        if loggedin != "" {
+            MainMessagesView()
+        } else {
+            NavigationView {
+                ZStack {
+                    GradientBackground()
+                    VStack(spacing: 16) {
+                        EmailPasswordView(email: $email, password: $password, isSecureField: $isSecureField, isLoading: $isLoading, isLogin: $isLogin)
+                        NavigationLink(destination: MainMessagesView(), tag: 1, selection: $selection) {
+                            Button() {
+                                validPassword = password.count >= 6
+                                if validPassword {
+                                    loginUser(email: email, password: password) { status in
+                                        loginErrorMessage = status
+                                        if loginErrorMessage == "" {
+                                            // go to main screen / chat interface
+                                            loggedin = email
+                                            self.selection = 1
+                                        }
                                     }
                                 }
-                            }
-                        } label: {
-                                HStack {
-                                    Spacer()
-                                    if isLoading {
-                                        ButtonLoadingView(email: $email, password: $password, isLoading: $isLoading)
-                                    } else {
-                                        ButtonLoadingTextView(email: $email, password: $password, isLoading: $isLoading, text: "Login")
+                            } label: {
+                                    HStack {
+                                        Spacer()
+                                        if isLoading {
+                                            ButtonLoadingView(email: $email, password: $password, isLoading: $isLoading)
+                                        } else {
+                                            ButtonLoadingTextView(email: $email, password: $password, isLoading: $isLoading, text: "Login")
+                                        }
+                                        Spacer()
                                     }
-                                    Spacer()
                                 }
-                            }
-                        }.disabled(email.isEmpty || password.isEmpty)
-                    
-                    if !validPassword {
-                        Text("Password must be at least 6 characters.")
-                            .foregroundColor(.red)
-                            .font(Font.system(size: 12, design: .default))
-                            .padding(.top, -10)
-                    } else if loginErrorMessage != "" {
-                        // dependent on firebase error
-                        // e.g. incorrect user/pass
-                        Text(loginErrorMessage)
-                            .foregroundColor(.red)
-                            .font(Font.system(size: 12, design: .default))
-                            .padding(.top, -10)
+                            }.disabled(email.isEmpty || password.isEmpty)
+                        
+                        if !validPassword {
+                            Text("Password must be at least 6 characters.")
+                                .foregroundColor(.red)
+                                .font(Font.system(size: 12, design: .default))
+                                .padding(.top, -10)
+                        } else if loginErrorMessage != "" {
+                            // dependent on firebase error
+                            // e.g. incorrect user/pass
+                            Text(loginErrorMessage)
+                                .foregroundColor(.red)
+                                .font(Font.system(size: 12, design: .default))
+                                .padding(.top, -10)
+                        }
+                        
+                        NavigationLink(destination: RegisterView(
+                            email: $email,
+                            password: $password,
+                            isSecureField: $isSecureField,
+                            validPassword: $validPassword
+                        ), label: { Text("Create Account")
+                        })
+                        
+                        NavigationLink(destination: ForgotPasswordView(), label: { Text("Forgot Password?")
+                                .font(Font.system(size: 11, design: .default))
+                            .multilineTextAlignment(.trailing) })
+                        .padding(.bottom, -300)
                     }
-                    
-                    NavigationLink(destination: RegisterView(
-                        email: $email,
-                        password: $password,
-                        isSecureField: $isSecureField,
-                        validPassword: $validPassword
-                    ), label: { Text("Create Account")
-                    })
-                    
-                    NavigationLink(destination: ForgotPasswordView(), label: { Text("Forgot Password?")
-                            .font(Font.system(size: 11, design: .default))
-                        .multilineTextAlignment(.trailing) })
-                    .padding(.bottom, -300)
+                    .padding(12)
                 }
-                .padding(12)
             }
         }
-    }
+        }
+        
     
     func loginUser(email: String, password: String, completion: ((String) -> Void)? = nil) {
         isLoading = true
@@ -205,8 +234,8 @@ struct EditProfileView: View {
     @State private var isShowingPhotoPicker = false
     @State private var showingAlert = false
     @State private var userSelection = 0
+    @State var imageUrlString = ""
     // you may need to download SF Symbols if error
-    @State private var avatarImage = UIImage(systemName: "person.fill")!
     let PROFILE_NAME_CHAR_LIMIT = 25
     
     @ObservedObject private var vm = MainMessagesViewModel()
@@ -219,7 +248,7 @@ struct EditProfileView: View {
                     VStack() {
                         Spacer()
                         HStack {
-                            if avatarImage == UIImage(systemName: "person.fill")! {
+                            if imageUrlString == "" {
                                 VStack {
                                     Text("add\n photo")
                                         .foregroundColor(.blue)
@@ -245,7 +274,7 @@ struct EditProfileView: View {
                                 }
                             } else {
                                 VStack {
-                                    Image(uiImage: avatarImage)
+                                    Image(uiImage: UIImage(contentsOfFile: imageUrlString)!)
                                         .resizable()
                                         .aspectRatio(contentMode: .fill)
                                         .frame(width: 160, height: 80)
@@ -301,12 +330,15 @@ struct EditProfileView: View {
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .sheet(isPresented: $isShowingPhotoPicker, content: {
-            PhotoPicker(avatarImage: $avatarImage, sourceType: userSelection == 1 ? .camera : .savedPhotosAlbum).ignoresSafeArea()
+            PhotoPicker(imageUrlString: $imageUrlString, sourceType: userSelection == 1 ? .camera : .savedPhotosAlbum).ignoresSafeArea()
         })
         .toolbar {
-            NavigationButton(action: { vm.setDisplayName(email: loggedin, displayName: profileName) },
-                             destination: { MainMessagesView() },
-                             label: { Text("Done") })
+            NavigationButton(action: {
+                displayName = profileName
+                profileImageURLString = imageUrlString
+            },
+             destination: { MainMessagesView() },
+             label: { Text("Done") })
             .disabled(profileName.isEmpty)
         }
     }

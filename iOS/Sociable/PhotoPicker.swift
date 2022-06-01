@@ -9,7 +9,7 @@ import SwiftUI
 
 struct PhotoPicker: UIViewControllerRepresentable {
     
-    @Binding var avatarImage: UIImage
+    @Binding var imageUrlString: String
     var sourceType: UIImagePickerController.SourceType = .photoLibrary
     
     func makeUIViewController(context: Context) -> UIImagePickerController {
@@ -29,21 +29,37 @@ struct PhotoPicker: UIViewControllerRepresentable {
     final class Coordinator: NSObject, UINavigationControllerDelegate, UIImagePickerControllerDelegate {
         
         let photoPicker: PhotoPicker
+        @ObservedObject var vm = MainMessagesViewModel()
         
         init(photoPicker: PhotoPicker) {
             self.photoPicker = photoPicker
         }
         
         func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-            if let image = info[.editedImage] as? UIImage {
-                guard let data = image.jpegData(compressionQuality: 0.8), let compressedImage = UIImage(data: data) else {
-                    // show error or alert
-                    return
-                }
-                photoPicker.avatarImage = compressedImage
-            } else {
-                // return an error show an alert
+            guard let imageUrl = info[.imageURL] as? URL else {
+                return
             }
+            
+            photoPicker.imageUrlString = imageUrl.path
+
+//
+//            do {
+//                let tempDirectory = URL(fileURLWithPath: NSTemporaryDirectory())
+//                    .appendingPathComponent("uploads")
+//                
+//                try FileManager.default.createDirectory(at: tempDirectory, withIntermediateDirectories: true, attributes: nil)
+//                
+//                let fileURL = tempDirectory
+//                    .appendingPathComponent(UUID().uuidString)
+//                    .appendingPathComponent(imageUrl.pathExtension)
+//                
+//                try FileManager.default.copyItem(at: imageUrl, to: fileURL)
+//                
+//                // when done, clean up (presumably in the completion handler of the async upload routine)
+//                // FileManager.default.removeItem(at: fileURL)
+//            } catch {
+//                print(error)
+//            }
             picker.dismiss(animated: true)
         }
     }

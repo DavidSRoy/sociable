@@ -6,12 +6,13 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
-public var target = "jane1"
+public var target: String = ""
 public var msgSet : Set<Msg> = []
 
 struct Usr2Msg: Hashable, Codable {
-    let name: String
+    let displayName: String
     let msgs: [Msg2Comp]
 }
 
@@ -23,11 +24,11 @@ struct Msg2Comp: Hashable, Codable {
 
 private func sendMessage(msg: String, recipient: String, _ allMessages: inout Dictionary<String, Array<Msg>>) {
     let sendBaseUrl = "https://us-central1-sociable-messenger.cloudfunctions.net/messaging_api/sendMessage?"
-    let urlstring = sendBaseUrl + "uid=" + recipient + "&msg=" + msg + "&sender=" + loggedin
+    let urlstring = sendBaseUrl + "uid=" + recipient + "&msg=" + msg + "&sender=" + user_uid
     let url = URL(string: urlstring)
     var request = URLRequest(url: url!)
     request.httpMethod = "POST"
-    request.setValue("16d72d0de3fae399fe58d0ee0747cb7f5898f12c", forHTTPHeaderField: "auth")
+    request.setValue("7f5c4e71e19bdd8c793f1677867ef4db007988f6", forHTTPHeaderField: "auth")
     URLSession.shared.dataTask(with: request) { data, response, error in
         if let error = error {
             fatalError("Unable to send message: \(error.localizedDescription)")
@@ -39,7 +40,7 @@ private func sendMessage(msg: String, recipient: String, _ allMessages: inout Di
 
 private func setFriend(recipient: String, add: Bool, completion: ((Bool) -> Void)? = nil) {
     let baseUrl = "https://us-central1-sociable-messenger.cloudfunctions.net/users_api/\(add ? "add" : "remove")Friend?"
-    let urlstring = baseUrl + "uid=" + loggedin + "&friendUid=" + recipient
+    let urlstring = baseUrl + "uid=" + user_uid + "&friendUid=" + recipient
     let url = URL(string: urlstring)
     var request = URLRequest(url: url!)
     request.httpMethod = "POST"
@@ -70,12 +71,7 @@ struct MessageContentView: View {
     var body: some View {
         VStack {
             VStack {
-                // TODO
-                // basically needs getUsers endpoint
-                // Title Row
-                // let imgURL = URL(string: recipient.profileImageUrl)
-                let imgURL = URL(string: "https://ca.slack-edge.com/T039K0BN264-U038Y2U704A-0da3c7494a42-512")
-                let status = recipient?.status ?? "online"
+                let bio = recipient?.bio ?? "online"
                 let profile_insets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
                 let backbtn_insets = EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
 
@@ -89,9 +85,9 @@ struct MessageContentView: View {
                         .onTapGesture {
                             presentationMode.wrappedValue.dismiss()
                         }
-
-                    if (imgURL != nil) {
-                        AsyncImage(url: imgURL) { image in
+                    
+                    if (recipient?.profilePic != nil && recipient?.profilePic!.url != nil) {
+                        AsyncImage(url: URL(string: (recipient?.profilePic!.url)!)) { image in
                             image.resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 50, height: 50)
@@ -103,7 +99,11 @@ struct MessageContentView: View {
                     }
                     } else {
                         Image(systemName: "person.fill")
-                            .font(.system(size: 44, weight: .heavy))
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: 50, height: 50)
+                            .cornerRadius(50)
+                            .padding(profile_insets)
                     }
 
                     VStack (alignment: .leading) {
@@ -114,7 +114,7 @@ struct MessageContentView: View {
                             Circle()
                                 .foregroundColor(.green)
                                 .frame(width: 14, height: 14)
-                            Text(status).font(.caption)
+                            Text(bio).font(.caption)
                                 .foregroundColor(.white)
                         }.padding(.top, -15)
                     }
@@ -188,6 +188,12 @@ struct MessageContentView: View {
             SendForm(tmp: Text("Type your message here"), text: $message)
             Button {
                 sendMessage(msg: message, recipient: target, &vm.allMessages)
+                vm.fetchUserConversations(user: user_uid) { done in
+                    if done {
+                        vm.extractChatListData()
+                    }
+                    print(user_uid)
+                }
                 message = ""
             } label: {
                 Image(systemName: "paperplane.fill")

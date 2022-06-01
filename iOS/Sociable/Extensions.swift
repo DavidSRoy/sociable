@@ -33,11 +33,11 @@ struct KeyboardModifier: ViewModifier {
     @Binding var keyboardYOffset: CGFloat
     let keyboardWillAppearPublisher = NotificationCenter.default.publisher(for: UIResponder.keyboardWillShowNotification)
     let keyboardWillHidePublisher = NotificationCenter.default.publisher(for: UIResponder.keyboardWillHideNotification)
-
+    
     init(_ offset: Binding<CGFloat>) {
         _keyboardYOffset = offset
     }
-
+    
     func body(content: Content) -> some View {
         return content.offset(x: 0, y: -$keyboardYOffset.wrappedValue)
             .animation(.easeInOut(duration: 0.33))
@@ -49,15 +49,15 @@ struct KeyboardModifier: ViewModifier {
                     .first?.windows
                     .filter { $0.isKeyWindow }
                     .first
-
+                
                 let yOffset = keyWindow?.safeAreaInsets.bottom ?? 0
-
+                
                 let keyboardFrame = (notification.userInfo![UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue ?? .zero
-
+                
                 self.$keyboardYOffset.wrappedValue = keyboardFrame.height - yOffset
-        }.onReceive(keyboardWillHidePublisher) { _ in
-            self.$keyboardYOffset.wrappedValue = 0
-        }
+            }.onReceive(keyboardWillHidePublisher) { _ in
+                self.$keyboardYOffset.wrappedValue = 0
+            }
     }
 }
 
@@ -66,21 +66,21 @@ struct NavigationButton<Destination: View, Label: View>: View {
     var action: () -> Void = { }
     var destination: () -> Destination
     var label: () -> Label
-
+    
     @State private var isActive: Bool = false
-
+    
     var body: some View {
         Button(action: {
             self.action()
             self.isActive.toggle()
         }) {
             self.label()
-              .background(
-                ScrollView { // Fixes a bug where the navigation bar may become hidden on the pushed view
-                    NavigationLink(destination: LazyDestination { self.destination() },
-                                                 isActive: self.$isActive) { EmptyView() }
-                }
-              )
+                .background(
+                    ScrollView { // Fixes a bug where the navigation bar may become hidden on the pushed view
+                        NavigationLink(destination: LazyDestination { self.destination() },
+                                       isActive: self.$isActive) { EmptyView() }
+                    }
+                )
         }
     }
 }
