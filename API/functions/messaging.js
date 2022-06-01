@@ -3,14 +3,16 @@ const FieldValue = require('firebase-admin').firestore.FieldValue;
 const Timestamp = require('firebase-admin').firestore.Timestamp;
 const functions = require('firebase-functions');
 //const serviceAccount = require('/Users/davidroy/403/sociable/API/secrets/serviceAccount.json');
+
+//const serviceAccount = require('/Users/owner/Downloads/serviceAccount.json');
 const gc = require('@google-cloud/storage');
 //const fStorage = require('@firebase/storage'); 
 const express = require('express');
 const {v4: uuid} = require('uuid');
 
 admin.initializeApp(
-  {storageBucket: "sociable-messenger.appspot.com"
-//  credential: admin.credential.cert(serviceAccount)
+  {storageBucket: "sociable-messenger.appspot.com",
+  //credential: admin.credential.cert(serviceAccount)
 });
 // Get a reference to the storage service, which is used to create references in storage bucket
 const storage = admin.storage();
@@ -34,9 +36,9 @@ messaging_api.post('/sendMessage', async (request, response) => {
     const msg = request.query.msg;
     const senderUid = request.query.sender;
 
-    const ref = USERS.doc(uid)
+    const ref = USERS.doc(uid);
     console.log("UID = " + uid);
-    console.log('msg = ' + msg)
+    console.log('msg = ' + msg);
     console.log('senderUid = ' + senderUid);
 
     await ref.update({
@@ -190,8 +192,6 @@ async function getImage(fileName) {
     console.log(e)
   }
 }
-
-
 
 //check for new statuses of uid
 messaging_api.get('/getStatuses', async (request, response) => {

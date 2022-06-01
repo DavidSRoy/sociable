@@ -106,7 +106,34 @@ struct LoginView: View {
                             .multilineTextAlignment(.trailing) })
                         .padding(.bottom, -300)
                     }
-                    .padding(12)
+                    }.disabled(username.isEmpty || password.isEmpty)
+                    
+                    if !validPassword {
+                        Text("Password must be at least 6 characters.")
+                            .foregroundColor(.red)
+                            .font(Font.system(size: 12, design: .default))
+                            .padding(.top, -10)
+                    } else if loginFail {
+                        // dependent on firebase error
+                        // e.g. incorrect user/pass
+                        Text("Login Failed")
+                            .foregroundColor(.red)
+                            .font(Font.system(size: 12, design: .default))
+                            .padding(.top, -10)
+                    }
+                    
+                    NavigationLink(destination: RegisterView(
+                        username: $username,
+                        password: $password,
+                        isSecureField: $isSecureField,
+                        validPassword: $validPassword
+                    ), label: { Text("Create Account")
+                    })
+                    
+                    NavigationLink(destination: ForgotPasswordView(), label: { Text("Forgot Password?")
+                            .font(Font.system(size: 11, design: .default))
+                        .multilineTextAlignment(.trailing) })
+                    .padding(.bottom, -300)
                 }
             }
         }

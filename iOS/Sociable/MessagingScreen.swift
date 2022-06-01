@@ -75,7 +75,6 @@ struct MessageContentView: View {
                 let bio = recipient?.bio ?? "online"
                 let profile_insets = EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
                 let backbtn_insets = EdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
-
                 HStack (spacing: 20) {
 
                     Image(systemName: "arrow.backward.circle")
@@ -197,6 +196,7 @@ struct MessageContentView: View {
                         vm.extractChatListData()
                     }
                 }
+
                 message = ""
             } label: {
                 Image(systemName: "paperplane.fill")

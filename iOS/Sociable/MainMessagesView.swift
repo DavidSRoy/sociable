@@ -161,7 +161,7 @@ class MainMessagesViewModel: ObservableObject {
                     completion?(parsed)
                 }
                 catch {
-                  print(error)
+                    print(error)
                 }
             }
         }.resume()
@@ -264,6 +264,8 @@ class MainMessagesViewModel: ObservableObject {
         } else {
             self.chatUser!.update(&chatUser!, updatedUser)
         }
+        // most recent messages first
+        chatListData.sort(by: { $0.1! < $1.1! })
     }
 }
 
