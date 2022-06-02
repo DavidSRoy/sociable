@@ -1,4 +1,4 @@
-# Status Report 7: `06/01/2022`
+# Status Report 8: `06/01/2022`
 
 ## Team Status
 We have released our app (version 7). We are using TestFlight to distribute our final release (ie. there is no public link, as this would require a review by the App Store and would take extra time.) We were able to address most of the issues addressed during our peer review, including messages not sending and disfunctional login.
